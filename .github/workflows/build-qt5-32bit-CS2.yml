@@ -36,7 +36,7 @@ jobs:
           MXE_PATH: ${{ github.workspace }}/mxe
         run: |
           export PATH=$MXE_PATH/usr/bin:$PATH
-          export QT_QMAKE=$MXE_PATH/usr/x86_64-w64-mingw32.static/qt5/bin/qmake
+          export QT_QMAKE=$MXE_PATH/usr/i686-w64-mingw32.static/qt5/bin/qmake
           cd app
           mkdir build
           cd build
