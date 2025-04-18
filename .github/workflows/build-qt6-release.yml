@@ -63,7 +63,7 @@ jobs:
           git clone https://github.com/mxe/mxe.git
           cd mxe
           # 必要であれば特定のコミットやブランチに固定可能
-          git checkout 6ec5a235
+          git checkout ed3a4af0
 
       - name: Enable Qt6 packages (experimental)
         run: |
