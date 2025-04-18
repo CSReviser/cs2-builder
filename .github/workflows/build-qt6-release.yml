@@ -72,7 +72,7 @@ jobs:
 
       - name: Archive MXE
         run: |
-          tar -czf mxe-qt6-x86_64.tar.gz
+          tar -czf mxe-qt6-x86_64.tar.gz mxe
 
       - name: Create GitHub Release and Upload
         uses: softprops/action-gh-release@v1
