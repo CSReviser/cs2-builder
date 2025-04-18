@@ -1,0 +1,49 @@
+name: Build MXE Qt6 32bit and Upload to Releases
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            autoconf automake autopoint bash bison bzip2 flex g++ g++-multilib \
+            gettext git gperf intltool libc6-dev-i386 libclang-dev libgdk-pixbuf2.0-dev \
+            libltdl-dev libgl-dev libpcre2-dev libssl-dev libtool-bin libxml-parser-perl \
+            lzip make openssl p7zip-full patch perl python3 python3-mako python3-packaging \
+            python3-pkg-resources python3-setuptools python-is-python3 ruby sed sqlite3 \
+            unzip wget xz-utils \
+            g++-multilib \
+            libc6-dev-i386
+
+      - name: Clone MXE
+        run: |
+          git clone https://github.com/mxe/mxe.git
+          cd mxe
+          git checkout 6ec5a235
+
+      - name: Build MXE with Qt6 (32bit static)
+        run: |
+          cd mxe
+          make qtbase qttools cmake
+
+      - name: Package MXE Qt6 32bit
+        run: |
+          tar -czf mxe-qt6-x86_64.tar.gz --dereference -C ./ mxe
+
+      - name: Upload to GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: mxe-qt6.5.3-i686-v1
+          name: MXE Qt6 32bit Static v1
+          files: mxe-qt6-i686-static.tar.gz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
