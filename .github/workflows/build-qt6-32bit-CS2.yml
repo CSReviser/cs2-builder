@@ -39,7 +39,7 @@ jobs:
           mkdir build
           cd build
           i686-w64-mingw32.static-cmake \
-          -DCMAKE_PREFIX_PATH=/mxe/usr/i686-w64-mingw32.static/qt6 \
+          -DCMAKE_TOOLCHAIN_FILE=/mxe/usr/i686-w64-mingw32.static/share/cmake/mxe-conf.cmake \
           -S .. -B .
           make -j$(nproc)
 
