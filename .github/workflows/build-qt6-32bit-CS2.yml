@@ -35,6 +35,10 @@ jobs:
         run: |
           export PATH=$(pwd)/mxe/usr/bin:$PATH
           export QT_CAKE=$MXE_PATH/usr/i686-w64-mingw32.static/qt6/bin/qt-cmake
+cmake \
+  -DCMAKE_TOOLCHAIN_FILE=/mxe/usr/x86_64-w64-mingw32.static/share/cmake/mxe-conf.cmake \
+  -DCMAKE_PREFIX_PATH=/mxe/usr/x86_64-w64-mingw32.static/qt6 \
+  ..
           cd app
           mkdir build
           cd build
