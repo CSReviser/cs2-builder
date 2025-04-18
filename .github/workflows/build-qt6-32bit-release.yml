@@ -62,7 +62,7 @@ jobs:
         run: |
           git clone https://github.com/mxe/mxe.git
           cd mxe
-          git checkout ffc214fd
+#          git checkout ffc214fd
 
       - name: Build MXE with Qt6 (32bit static)
         run: |
@@ -76,8 +76,8 @@ jobs:
       - name: Upload to GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: mxe-qt6.6-i686-v1
-          name: MXE Qt6.6 32bit Static v1
+          tag_name: mxe-qt6.9-i686-v1
+          name: MXE Qt6.9 32bit Static v1
           files: mxe-qt6-i686-static.tar.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
