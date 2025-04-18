@@ -1,0 +1,53 @@
+name: Build CS2 QT5 32bit with MXE
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-app:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout mxe-builder repository
+        uses: actions/checkout@v4
+
+      - name: Clone CaptureStream2 repository
+        run: |
+          git clone --depth=1 https://github.com/CSReviser/CaptureStream2.git app
+
+      - name: Install GitHub CLI
+        run: sudo apt-get update && sudo apt-get install -y gh
+
+      - name: Download MXE artifact from Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release download  mxe-qt5-i686-v1 \
+            --repo ${{ github.repository }} \
+            --pattern "mxe-qt6-x86_64.tar.gz"
+
+      - name: Extract MXE environment
+        run: |
+          mkdir mxe
+          tar -xzf mxe-qt5-i686-static.tar.gz -C ./mxe --strip-components=1
+
+      - name: Build CaptureStream2 with qmake (MXE)
+        env:
+          MXE_PATH: ${{ github.workspace }}/mxe
+        run: |
+          export PATH=$MXE_PATH/usr/bin:$PATH
+          export QT_QMAKE=$MXE_PATH/usr/x86_64-w64-mingw32.static/qt5/bin/qmake
+          cd app
+          mkdir build
+          cd build
+          $QT_QMAKE ../CaptureStream2.pro
+          make -j$(nproc)
+
+      - name: Tar files
+        run: tar cvf CaptureStream2.tar app/build/release/*.exe
+
+      - name: Upload built app
+        uses: actions/upload-artifact@v4
+        with:
+          name: capturestream2-windows-qt5-32bit
+          path: CaptureStream2.tar
