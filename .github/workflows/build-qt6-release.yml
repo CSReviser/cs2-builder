@@ -63,12 +63,7 @@ jobs:
           git clone https://github.com/mxe/mxe.git
           cd mxe
           # 必要であれば特定のコミットやブランチに固定可能
-          git checkout ffc214fd
-
-      - name: Enable Qt6 packages (experimental)
-        run: |
-          cd mxe
-          echo 'MXE_PLUGIN_DIRS += plugins/apps/qt6' >> settings.mk
+          git checkout 4cedcf05
 
       - name: Build MXE with Qt6
         run: |
