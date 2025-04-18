@@ -38,7 +38,7 @@ jobs:
           cd app
           mkdir build
           cd build
-          i686-w64-mingw32.static-cmake ..
+          QT_CAKE ..
           make -j$(nproc)
 
       - name: Upload built app
