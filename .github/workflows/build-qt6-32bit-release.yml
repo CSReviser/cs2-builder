@@ -69,15 +69,15 @@ jobs:
           cd mxe
           make qtbase qttools cmake
 
-      - name: Package MXE Qt6 32bit
+      - name: Package MXE Qt5 32bit
         run: |
-          tar -czf mxe-qt6-x86_64.tar.gz --dereference -C ./ mxe
+          tar -czf mxe-qt6-i686-static.tar.gz mxe
 
       - name: Upload to GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: mxe-qt6.5.3-i686-v1
-          name: MXE Qt6 32bit Static v1
+          tag_name: mxe-qt6.6-i686-v1
+          name: MXE Qt6.6 32bit Static v1
           files: mxe-qt6-i686-static.tar.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
