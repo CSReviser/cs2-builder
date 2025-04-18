@@ -69,7 +69,7 @@ jobs:
           cd mxe
           make qt6-qtbase qt6-qttools gcc cmake MXE_TARGETS='i686-w64-mingw32.static' -j$(nproc)
 
-      - name: Package MXE Qt5 32bit
+      - name: Package MXE Qt6 32bit
         run: |
           tar -czf mxe-qt6-i686-static.tar.gz mxe
 
