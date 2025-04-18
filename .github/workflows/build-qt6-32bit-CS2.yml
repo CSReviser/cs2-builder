@@ -41,7 +41,7 @@ jobs:
           i686-w64-mingw32.static-cmake \
           -DCMAKE_TOOLCHAIN_FILE=/mxe/usr/i686-w64-mingw32.static/share/cmake/mxe-conf.cmake \
           -DCMAKE_PREFIX_PATH=/mxe/usr/i686-w64-mingw32.static/qt6 \
-          ..
+          -S .. -B .
           make -j$(nproc)
 
       - name: Upload built app
