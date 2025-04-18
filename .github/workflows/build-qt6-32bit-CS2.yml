@@ -31,28 +31,17 @@ jobs:
           mkdir mxe
           tar -xzf mxe-qt6-i686-static.tar.gz -C ./mxe --strip-components=1
 
-      - name: Build CaptureStream2 with qmake (MXE)
-        env:
-          MXE_PATH: ${{ github.workspace }}/mxe
+      - name: Build CaptureStream2 with MXE
         run: |
           export PATH=$(pwd)/mxe/usr/bin:$PATH
-          export QT_CAKE=$MXE_PATH/usr/i686-w64-mingw32.static/qt6/bin/qmake6
+          export QT_CAKE=$MXE_PATH/usr/i686-w64-mingw32.static/qt6/bin/qt-cmake
           cd app
           mkdir build
           cd build
-          $QT_QMAKE ../CaptureStream2.pro
+          i686-w64-mingw32.static-cmake \
+          -DCMAKE_PREFIX_PATH=/mxe/usr/i686-w64-mingw32.static/qt6 \
+          -S .. -B .
           make -j$(nproc)
-#      - name: Build CaptureStream2 with MXE
-#        run: |
-#          export PATH=$(pwd)/mxe/usr/bin:$PATH
-#          export QT_CAKE=$MXE_PATH/usr/i686-w64-mingw32.static/qt6/bin/qt-cmake
-#          cd app
-#          mkdir build
-#          cd build
-#          i686-w64-mingw32.static-cmake \
-#          -DCMAKE_PREFIX_PATH=/mxe/usr/i686-w64-mingw32.static/qt6 \
-#          -S .. -B .
-#          make -j$(nproc)
 
       - name: Upload built app
         uses: actions/upload-artifact@v4
