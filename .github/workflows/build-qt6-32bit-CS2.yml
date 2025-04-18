@@ -38,11 +38,11 @@ jobs:
           cd app
           mkdir build
           cd build
-          QT_CAKE \
+          i686-w64-mingw32.static-cmake \
           -DCMAKE_TOOLCHAIN_FILE=/mxe/usr/i686-w64-mingw32.static/share/cmake/mxe-conf.cmake \
           -S .. -B .
           make -j$(nproc)
-#          i686-w64-mingw32.static-cmake \
+
       - name: Upload built app
         uses: actions/upload-artifact@v4
         with:
