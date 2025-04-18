@@ -15,12 +15,48 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y \
-            autoconf automake autopoint bash bison bzip2 flex g++ g++-multilib \
-            gettext git gperf intltool libc6-dev-i386 libclang-dev libgdk-pixbuf2.0-dev \
-            libltdl-dev libgl-dev libpcre2-dev libssl-dev libtool-bin libxml-parser-perl \
-            lzip make openssl p7zip-full patch perl python3 python3-mako python3-packaging \
-            python3-pkg-resources python3-setuptools python-is-python3 ruby sed sqlite3 \
-            unzip wget xz-utils \
+          sudo apt-get update
+          sudo apt-get install -y \
+              autoconf \
+              automake \
+              autopoint \
+              bash \
+              bison \
+              bzip2 \
+              flex \
+              g++ \
+              g++-multilib \
+              gettext \
+              git \
+              gperf \
+              intltool \
+              libc6-dev-i386 \
+              libclang-dev \
+              libgdk-pixbuf2.0-dev \
+              libltdl-dev \
+              libgl-dev \
+              libpcre2-dev \
+              libssl-dev \
+              libtool-bin \
+              libxml-parser-perl \
+              lzip \
+              make \
+              openssl \
+              p7zip-full \
+              patch \
+              perl \
+              python3 \
+              python3-mako \
+              python3-packaging \
+              python3-pkg-resources \
+              python3-setuptools \
+              python-is-python3 \
+              ruby \
+              sed \
+              sqlite3 \
+              unzip \
+              wget \
+              xz-utils \
             g++-multilib \
             libc6-dev-i386
 
