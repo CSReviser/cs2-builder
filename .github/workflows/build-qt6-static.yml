@@ -1,0 +1,97 @@
+name: Build Qt 6.9 Static and Upload to Release
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            libgl1-mesa-dev \
+            libxcb-xinerama0-dev \
+            libxkbcommon-dev \
+            libxcb-cursor-dev \
+            libxcb-icccm4-dev \
+            libxcb-image0-dev \
+            libxcb-keysyms1-dev \
+            libxcb-render-util0-dev \
+            libxcb-xinput-dev \
+            libxcb-xfixes0-dev \
+            ninja-build \
+            python3 \
+            perl \
+            cmake \
+            curl \
+            git \
+            libfontconfig1-dev \
+            libfreetype-dev \
+            libgtk-3-dev \
+            libx11-dev \
+            libx11-xcb-dev \
+            libxcb-randr0-dev \
+            libxcb-shape0-dev \
+            libxcb-shm0-dev \
+            libxcb-sync-dev \
+            libxrender-dev
+            sudo apt install clang llvm-dev libclang-dev
+            sudo apt-get install protobuf-compiler libprotobuf-dev
+            sudo apt install -y libxcb1-dev libxcb-glx0-dev libxcb-keysyms1-dev libxcb-image0-dev libxcb-shm0-dev libxcb-icccm4-dev \
+            libxcb-sync-dev libxcb-xfixes0-dev libxcb-shape0-dev libxcb-randr0-dev libxcb-render-util0-dev libxcb-xinerama0-dev \
+            libx11-xcb-dev libxkbcommon-x11-dev
+
+
+      - name: Download Qt 6.5 source
+        run: |
+          curl -LO https://download.qt.io/official_releases/qt/6.9/6.9.0/single/qt-everywhere-src-6.9.0.tar.xz
+          tar xf qt-everywhere-src-6.9.0.tar.xz
+
+      - name: Configure and build Qt statically (make version)
+        run: |
+          mkdir qt-build
+          cd  qt-build
+          /home/runner/work/mxe-builder/mxe-builder/qt-everywhere-src-6.9.0/configure \
+            -prefix ../qt-build/qt6-static-install \
+            -static \
+            -release \
+            -nomake examples \
+            -nomake tests \
+            -opensource -confirm-license \
+            -skip qtwebchannel -skip qtwebengine -skip qtwebview \
+            -skip qttranslations \
+            -skip qtdoc \
+            -platform linux-clang
+          cmake --build . --parallel
+          cmake --install .
+
+#            -platform linux-g++ \
+#            -c++std c++20 \
+#            -skip qtimageformats -skip qtwebengine \
+#            -skip qt3d -skip qt5compat -skip qtactiveqt -skip qtcharts -skip qtcoap -skip qtconnectivity \
+#            -skip qtdatavis3d -skip qtdoc -skip qtlottie -skip qtmqtt -skip qtnetworkauth -skip qtopcua \
+#            -skip qtserialport -skip qtpositioning -skip qtquicktimeline -skip qtquick3d -skip qtremoteobjects \
+#            -skip qtscxml -skip qtsensors -skip qtserialbus -skip qtvirtualkeyboard \
+#            -skip qtwebchannel -skip qtwebengine -skip qtwebview -skip qtquick3dphysics -skip qtspeech -skip qtlocation \
+#            -skip qthttpserver
+
+      - name: Package Qt
+        run: |
+          cd qt-build
+          tar -czf qt6.9.0-linux-static.tar.gz qt6-static-install
+
+      - name: Upload to GitHub Releases
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: qt6.9.0-static-linux
+          name: Qt 6.9.0 Static Linux
+          files: qt-build/qt6.9.0-linux-static.tar.gz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
