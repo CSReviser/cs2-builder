@@ -44,10 +44,6 @@ jobs:
             libxrender-dev
             sudo apt install clang llvm-dev libclang-dev
             sudo apt-get install protobuf-compiler libprotobuf-dev
-            sudo apt install -y libxcb1-dev libxcb-glx0-dev libxcb-keysyms1-dev libxcb-image0-dev libxcb-shm0-dev libxcb-icccm4-dev \
-            libxcb-sync-dev libxcb-xfixes0-dev libxcb-shape0-dev libxcb-randr0-dev libxcb-render-util0-dev libxcb-xinerama0-dev \
-            libx11-xcb-dev libxkbcommon-x11-dev
-
 
       - name: Download Qt 6.9 source
         run: |
@@ -58,7 +54,7 @@ jobs:
         run: |
           mkdir qt-build
           cd  qt-build
-           /home/runner/work/mxe-builder/mxe-builder/qt-everywhere-src-6.9.0/configure \
+          /home/runner/work/mxe-builder/mxe-builder/qt-everywhere-src-6.9.0/configure \
             -prefix ../qt-build/qt6-static-install \
             -static \
             -release \
@@ -70,7 +66,7 @@ jobs:
             -skip qtdoc \
             -platform linux-clang
           cmake --build . --parallel
-          cmake --install .
+          make install
 
 #            -platform linux-g++ \
 #            -c++std c++20 \
@@ -85,7 +81,7 @@ jobs:
       - name: Package Qt
         run: |
           cd qt-build
-          tar -czf qt6.9.0-linux-static.tar.gz qt6-static-install
+          tar -czf qt6.5.0-linux-static.tar.gz qt6-static-install
 
       - name: Upload to GitHub Releases
         uses: softprops/action-gh-release@v1
