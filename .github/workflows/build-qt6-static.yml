@@ -49,7 +49,7 @@ jobs:
             libx11-xcb-dev libxkbcommon-x11-dev
 
 
-      - name: Download Qt 6.5 source
+      - name: Download Qt 6.9 source
         run: |
           curl -LO https://download.qt.io/official_releases/qt/6.9/6.9.0/single/qt-everywhere-src-6.9.0.tar.xz
           tar xf qt-everywhere-src-6.9.0.tar.xz
@@ -58,7 +58,7 @@ jobs:
         run: |
           mkdir qt-build
           cd  qt-build
-           ../configure \
+           /home/runner/work/mxe-builder/mxe-builder/qt-everywhere-src-6.8.3/configure \
             -prefix ../qt-build/qt6-static-install \
             -static \
             -release \
