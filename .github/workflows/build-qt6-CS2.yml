@@ -1,4 +1,4 @@
-name: Build CS2 QT6 32bit with MXE
+name: Build CS2 QT6 with MXE
 
 on:
   workflow_dispatch:
