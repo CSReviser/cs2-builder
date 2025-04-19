@@ -62,7 +62,7 @@ jobs:
         run: |
           git clone https://github.com/mxe/mxe.git
           cd mxe
-#          git checkout ffc214fd
+          git checkout 01243f96
 
       - name: Build MXE with Qt6 (32bit static)
         run: |
