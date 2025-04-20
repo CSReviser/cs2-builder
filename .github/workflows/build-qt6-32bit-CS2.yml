@@ -34,12 +34,11 @@ jobs:
       - name: Build CaptureStream2 with MXE
         run: |
           export PATH=$(pwd)/mxe/usr/bin:$PATH
-          export QT_CAKE=$MXE_PATH/usr/i686-w64-mingw32.static/qt6/bin/qt-cmake
+          export QT_QMAKE=$MXE_PATH/usr/i686-w64-mingw32.static/qt6/bin/qt-cmake
           cd app
           mkdir build
           cd build
-          qt-cmake \
-          -S .. -B .
+          $QT_QMAKE ..
           make -j$(nproc)
 
       - name: Upload built app
