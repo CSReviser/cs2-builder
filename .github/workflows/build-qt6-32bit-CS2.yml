@@ -32,6 +32,8 @@ jobs:
           tar -xzf mxe-qt6-i686-static.tar.gz -C ./mxe --strip-components=1
 
       - name: Build CaptureStream2 with MXE
+        env:
+          MXE_PATH: ${{ github.workspace }}/mxe
         run: |
           export PATH=$(pwd)/mxe/usr/bin:$PATH
           export QT_QMAKE=$MXE_PATH/usr/i686-w64-mingw32.static/qt6/bin/qt-cmake
