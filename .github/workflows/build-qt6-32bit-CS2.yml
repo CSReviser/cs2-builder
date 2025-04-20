@@ -22,7 +22,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release download  mxe-qt6.6-i686-v1 \
+          gh release download  mxe-qt6.9-i686-v1 \
             --repo ${{ github.repository }} \
             --pattern "mxe-qt6-i686-static.tar.gz"
 
