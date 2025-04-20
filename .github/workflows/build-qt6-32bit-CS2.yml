@@ -38,7 +38,7 @@ jobs:
           cd app
           mkdir build
           cd build
-          QT_CAKE \
+          qt-cmake \
           -S .. -B .
           make -j$(nproc)
 
