@@ -71,7 +71,6 @@ jobs:
           cmake --build . --parallel
           cmake --install .
 
-
       - name: Package Qt
         run: |
           cd qt-build
