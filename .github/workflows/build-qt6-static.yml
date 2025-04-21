@@ -88,12 +88,11 @@ jobs:
             -qt-doubleconversion \
             -dbus \
             -platform linux-g++ \
-            -feature-xcb -qt-xcb \
             -c++std c++20 
 
           cmake --build . --parallel
           cmake --install .
-
+#            -feature-xcb -qt-xcb \
 #            -platform linux-g++ \
 #            -c++std c++20 \
 #            -skip qtimageformats -skip qtwebengine \
