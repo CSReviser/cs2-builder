@@ -89,6 +89,7 @@ jobs:
             -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets \
             -skip qtwebview -skip qtwinextras -skip qtlottie -skip qtmultimedia \
             -skip qtshadertools -skip qtpositioning -skip qtquicktimeline \
+            -skip qtquick3d \
             -no-pch \
             -qt-harfbuzz \
             -qt-freetype \
