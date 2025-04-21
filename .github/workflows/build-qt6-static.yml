@@ -41,8 +41,8 @@ jobs:
             libxcb-render-util0-dev libxcb-shape0-dev libxcb-shm0-dev libxcb-sync-dev \
             libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-xkb-dev libxrender-dev \
             libxkbcommon-dev libxkbcommon-x11-dev libxcb-ewmh-dev \
-            libxext-dev libxfixes-dev libxrandr-dev ibxi-dev libxcomposite-dev \
-            libxcursor-dev libxdamage-dev libxtst-dev ibxss-dev ibxv-dev libglu1-mesa-dev \
+            libxext-dev libxfixes-dev libxrandr-dev libxcomposite-dev \
+            libxcursor-dev libxdamage-dev libxtst-dev libglu1-mesa-dev \
             libxcb-util0-dev libgbm-dev libxcb-dri3-dev libxcb-present-dev libxcb-glx0-dev \
             libssl-dev \
             libwayland-dev \
