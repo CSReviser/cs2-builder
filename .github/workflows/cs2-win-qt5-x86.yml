@@ -64,7 +64,7 @@ jobs:
       - name: Upload ZIP to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: build/CaptureStream-qt5-x86-${{ github.event.inputs.yyyymmdd }}.zip
+          files: build/CaptureStream2-Windows-qt5-x86-${{ github.event.inputs.yyyymmdd }}.zip
           tag_name: ${{ github.event.inputs.yyyymmdd }}
           name: ${{ steps.format_date.outputs.title }}
           body: "Static build for Windows (Qt 6.9.0, MXE)"
