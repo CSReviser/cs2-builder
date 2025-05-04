@@ -1,7 +1,11 @@
-name: 2. Build CaptureStream2 with MXE
+name: 2-1. Build CaptureStream2 with MXE
 
 on:
   workflow_dispatch:
+    inputs:
+      yyyymmdd:
+        description: 'Date string for release (yyyymmdd)'
+        required: true
 
 jobs:
   build:
@@ -38,11 +42,28 @@ jobs:
       - name: Build
         run: cmake --build build --parallel
 
-      - name: Install
-        run: cmake --install build
+      - name: Create WinCaptureStream2 directory and move exe
+        run: |
+          mkdir -p build/WinCaptureStream2
+          mv build/CaptureStream2.exe build/WinCaptureStream2/
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
+      - name: Create ZIP file
+        run: |
+          cd build
+          zip -r "CaptureStream-x64-${{ github.event.inputs.yyyymmdd }}.zip" WinCaptureStream2
+
+      - name: Format release title
+        id: format_date
+        run: |
+          yyyy=${{ github.event.inputs.yyyymmdd }}
+          echo "title=${yyyy:0:4}/${yyyy:4:2}/${yyyy:6:2}版リリース" >> "$GITHUB_OUTPUT"
+
+      - name: Upload ZIP to GitHub Release
+        uses: softprops/action-gh-release@v2
         with:
-          name: capturestream2-windows-static
-          path: build/*.exe
+          files: build/CaptureStream-x64-${{ github.event.inputs.yyyymmdd }}.zip
+          tag_name: ${{ github.event.inputs.yyyymmdd }}
+          name: ${{ steps.format_date.outputs.title }}
+          body: "Static build for Windows (Qt 6.9.0, MXE)"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
