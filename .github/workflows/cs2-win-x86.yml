@@ -2,6 +2,10 @@ name: 2-2. Win Qt6 32bit Static Build (MXE)
 
 on:
   workflow_dispatch:
+    inputs:
+      yyyymmdd:
+        description: 'Date string for release (yyyymmdd)'
+        required: true
 
 jobs:
   build:
@@ -25,15 +29,44 @@ jobs:
 
       - name: Configure with CMake
         run: >
-          /opt/mxe/usr/i686-w64-mingw32.static/qt6/bin/qt-cmake
+          /opt/mxe/usr/x86_64-w64-mingw32.static/qt6/bin/qt-cmake
           -S CaptureStream2
           -B build
+          -DCMAKE_BUILD_TYPE=Release
+          -DCMAKE_PREFIX_PATH="/opt/mxe/usr/x86_64-w64-mingw32.static/qt6/bin"
+          -DCMAKE_FIND_ROOT_PATH="/opt/mxe/usr/x86_64-w64-mingw32.static"
+          -DCMAKE_SYSTEM_NAME=Windows
+          -DCMAKE_INSTALL_PREFIX=install
+          -DQT_HOST_PATH="/opt/mxe/usr/x86_64-w64-mingw32.static/qt6"
 
       - name: Build
         run: cmake --build build --parallel
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
+      - name: Create WinCaptureStream2 directory and move exe
+        shell: bash
+        run: |
+          mkdir -p build/WinCaptureStream2
+          mv build/CaptureStream2.exe build/WinCaptureStream2/
+          cp ./CaptureStream2/qss_files/stylesheet-win.qss build/WinCaptureStream2/
+
+      - name: Create ZIP file
+        run: |
+          cd build
+          zip -r "CaptureStream-x64-${{ github.event.inputs.yyyymmdd }}.zip" WinCaptureStream2
+
+      - name: Format release title
+        id: format_date
+        shell: bash
+        run: |
+          yyyy="${{ github.event.inputs.yyyymmdd }}"
+          echo "title=${yyyy:0:4}/${yyyy:4:2}/${yyyy:6:2}版リリース" >> "$GITHUB_OUTPUT"
+
+      - name: Upload ZIP to GitHub Release
+        uses: softprops/action-gh-release@v2
         with:
-          name: capturestream2-windows-qt6-x86-static
-          path: build/*.exe
+          files: build/CaptureStream-x64-${{ github.event.inputs.yyyymmdd }}.zip
+          tag_name: ${{ github.event.inputs.yyyymmdd }}
+          name: ${{ steps.format_date.outputs.title }}
+          body: "Static build for Windows (Qt 6.9.0, MXE)"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
