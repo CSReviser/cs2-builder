@@ -30,7 +30,7 @@ jobs:
     # CMakeでビルド構成を生成
     - name: Configure CMake
       run: |
-          mdir build
+          mkdir build
           cmake -S CaptureStream2 -B build -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"
 
     # Makeでビルド
