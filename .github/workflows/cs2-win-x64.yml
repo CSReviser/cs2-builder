@@ -4,11 +4,13 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-app:
+  build:
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/csreviser/qt6-mxe-static:6.9.0
 
     steps:
-      - name: Checkout mxe-builder repository
+      - name: Checkout this repo
         uses: actions/checkout@v4
 
       - name: Clone CaptureStream2
@@ -18,33 +20,29 @@ jobs:
           git checkout feature
           git submodule update --init --recursive
 
-      - name: Install GitHub CLI
-        run: sudo apt-get update && sudo apt-get install -y gh
+      - name: Create build directory
+        run: mkdir -p build
 
-      - name: Download MXE artifact from Release
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh release download  mxe-qt6-v1 \
-            --repo ${{ github.repository }} \
-            --pattern "mxe-qt6-x86_64.tar.gz"
+      - name: Configure with CMake
+        run: >
+          /opt/mxe/usr/x86_64-w64-mingw32.static/qt6/bin/qt-cmake
+          -S CaptureStream2
+          -B build
+          -DCMAKE_BUILD_TYPE=Release
+          -DCMAKE_PREFIX_PATH="/opt/mxe/usr/x86_64-w64-mingw32.static/qt6/bin"
+          -DCMAKE_FIND_ROOT_PATH="/opt/mxe/usr/x86_64-w64-mingw32.static"
+          -DCMAKE_SYSTEM_NAME=Windows
+          -DCMAKE_INSTALL_PREFIX=install
+          -DQT_HOST_PATH="/opt/mxe/usr/x86_64-w64-mingw32.static/qt6"
 
-      - name: Extract MXE environment
-        run: |
-          mkdir mxe
-          tar -xzf mxe-qt6-x86_64.tar.gz -C ./mxe --strip-components=1
+      - name: Build
+        run: cmake --build build --parallel
 
-      - name: Build CaptureStream2 with MXE
-        run: |
-          export PATH=$(pwd)/mxe/usr/bin:$PATH
-          cd CaptureStream2
-          mkdir build
-          cd build
-          x86_64-w64-mingw32.static-cmake ..
-          make -j$(nproc)
+      - name: Install
+        run: cmake --install build
 
-      - name: Upload built app
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: capturestream2-windows
-          path: CaptureStream2/build/*.exe
+          name: capturestream2-windows-static
+          path: build/*.exe
