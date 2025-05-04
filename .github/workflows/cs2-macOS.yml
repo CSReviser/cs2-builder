@@ -1,0 +1,72 @@
+name: 1. MacOS qt6.9 Universal cmake C/C++ CI
+
+on:
+  workflow_dispatch:
+    inputs:
+      yyyymmdd:
+        description: 'Date string for release (yyyymmdd)'
+        required: true
+
+jobs:
+  build:
+    runs-on: macos-14
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v4
+      with:
+        version: 6.9.*
+        modules: 'qtcharts'
+        extra: '--external 7z'
+
+    - name: Clone CaptureStream2
+      run: |
+        git clone https://github.com/CSReviser/CaptureStream2.git
+        cd CaptureStream2
+        git checkout feature
+        git submodule update --init --recursive
+
+    - name: Configure CMake
+      run: |
+        mkdir build
+        cmake -S CaptureStream2 -B build -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"
+
+    - name: Build with Make
+      run: cmake --build build --parallel
+
+    - name: Prepare CaptureStream2 executable
+      run: |
+        wget -qO FFmpeg.7z https://evermeet.cx/ffmpeg/ffmpeg-7.1.1.7z || { echo "Failed to download FFmpeg"; exit 1; }
+        7z e FFmpeg.7z ffmpeg -o./build/CaptureStream2.app/Contents/MacOS/ || { echo "Failed to extract FFmpeg"; exit 1; }
+        chmod -R 755 build/CaptureStream2.app
+
+    - name: Create MacCaptureStream2 directory
+      run: |
+        mkdir -p build/MacCaptureStream2
+        mv build/CaptureStream2.app build/MacCaptureStream2/
+
+    - name: Create DMG file
+      run: |
+        hdiutil create -volname CaptureStream2 \
+                      -srcfolder build/MacCaptureStream2 \
+                      -ov -format UDZO \
+                      "build/CaptureStream2-MacOS-${{ github.event.inputs.yyyymmdd }}.dmg"
+
+    - name: Format release title
+      id: format_date
+      run: |
+        yyyy=${{ github.event.inputs.yyyymmdd }} 
+        echo "title=${yyyy:0:4}/${yyyy:4:2}/${yyyy:6:2}版リリース" >> "$GITHUB_OUTPUT"
+
+    - name: Upload DMG to GitHub Release
+      uses: softprops/action-gh-release@v2
+      with:
+        files: build/CaptureStream2-MacOS-${{ github.event.inputs.yyyymmdd }}.dmg
+        tag_name: ${{ github.event.inputs.yyyymmdd }}
+        name: ${{ steps.format_date.outputs.title }}
+        body: "Universal Qt 6.9 build for macOS"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
