@@ -11,9 +11,8 @@ jobs:
       - name: Checkout mxe-builder repository
         uses: actions/checkout@v4
 
-
-    - name: Clone CaptureStream2
-      run: |
+      - name: Clone CaptureStream2
+        run: |
           git clone https://github.com/CSReviser/CaptureStream2.git
           cd CaptureStream2
           git checkout feature
