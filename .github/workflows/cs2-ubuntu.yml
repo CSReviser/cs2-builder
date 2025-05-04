@@ -23,6 +23,7 @@ jobs:
         run: |
           git clone https://github.com/CSReviser/CaptureStream2.git
           cd CaptureStream2
+          git checkout feature
           git submodule update --init --recursive
       - name: Get UID and GID
         id: userinfo
