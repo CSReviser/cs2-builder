@@ -43,6 +43,7 @@ jobs:
         run: cmake --build build --parallel
 
       - name: Create WinCaptureStream2 directory and move exe
+        shell: bash
         run: |
           mkdir -p build/WinCaptureStream2
           mv build/CaptureStream2.exe build/WinCaptureStream2/
