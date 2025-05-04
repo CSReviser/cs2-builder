@@ -52,7 +52,7 @@ jobs:
       - name: Create ZIP file
         run: |
           cd build
-          zip -r "CaptureStream-x64-${{ github.event.inputs.yyyymmdd }}.zip" WinCaptureStream2
+          zip -r "CaptureStream-Windows-x86-${{ github.event.inputs.yyyymmdd }}.zip" WinCaptureStream2
 
       - name: Format release title
         id: format_date
