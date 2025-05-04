@@ -159,15 +159,15 @@ jobs:
 
       - name: Configure with CMake
         run: >
-          /opt/mxe/usr/x86_64-w64-mingw32.static/qt6/bin/qt-cmake
+          /opt/mxe/usr/i686-w64-mingw32.static/qt6/bin/qt-cmake
           -S CaptureStream2
           -B build
           -DCMAKE_BUILD_TYPE=Release
-          -DCMAKE_PREFIX_PATH="/opt/mxe/usr/x86_64-w64-mingw32.static/qt6/bin"
-          -DCMAKE_FIND_ROOT_PATH="/opt/mxe/usr/x86_64-w64-mingw32.static"
+          -DCMAKE_PREFIX_PATH="/opt/mxe/usr/i686-w64-mingw32.static/qt6/bin"
+          -DCMAKE_FIND_ROOT_PATH="/opt/mxe/usr/i686-w64-mingw32.static"
           -DCMAKE_SYSTEM_NAME=Windows
           -DCMAKE_INSTALL_PREFIX=install
-          -DQT_HOST_PATH="/opt/mxe/usr/x86_64-w64-mingw32.static/qt6"
+          -DQT_HOST_PATH="/opt/mxe/usr/i686-w64-mingw32.static/qt6"
 
       - name: Build
         run: cmake --build build --parallel
@@ -182,24 +182,15 @@ jobs:
       - name: Create ZIP file
         run: |
           cd build
-          zip -r "CaptureStream-Windows-x86-${{ github.event.inputs.yyyymmdd }}.zip" WinCaptureStream2
+          zip -r "CaptureStream2-Windows-x86-${{ github.event.inputs.yyyymmdd }}.zip" WinCaptureStream2
 
-      - name: Format release title
-        id: format_date
-        shell: bash
-        run: |
-          yyyy="${{ github.event.inputs.yyyymmdd }}"
-          echo "title=${yyyy:0:4}/${yyyy:4:2}/${yyyy:6:2}版リリース" >> "$GITHUB_OUTPUT"
-
-      - name: Upload ZIP to GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: build/CaptureStream2-Windows-x86-${{ github.event.inputs.yyyymmdd }}.zip
-          tag_name: ${{ github.event.inputs.yyyymmdd }}
-          name: ${{ steps.format_date.outputs.title }}
+      - name: Upload Windows binary to existing release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload "${{ needs.mac_build.outputs.tag }}" \
+            "CaptureStream2-Windows-x86-${{ github.event.inputs.yyyymmdd }}.zip" \
+            --clobber
 
   wim_qt5_build:
     runs-on: ubuntu-latest
@@ -246,22 +237,14 @@ jobs:
       - name: Create ZIP file
         run: |
           cd build
-          zip -r "CaptureStream-Windows-x86-${{ github.event.inputs.yyyymmdd }}.zip" WinCaptureStream2
+          zip -r "CaptureStream2-Windows-x64-qt5-${{ github.event.inputs.yyyymmdd }}.zip" WinCaptureStream2
 
-      - name: Format release title
-        id: format_date
-        shell: bash
-        run: |
-          yyyy="${{ github.event.inputs.yyyymmdd }}"
-          echo "title=${yyyy:0:4}/${yyyy:4:2}/${yyyy:6:2}版リリース" >> "$GITHUB_OUTPUT"
-
-      - name: Upload ZIP to GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: build/CaptureStream2-Windows-qt5-x86-${{ github.event.inputs.yyyymmdd }}.zip
-          tag_name: ${{ github.event.inputs.yyyymmdd }}
-          name: ${{ steps.format_date.outputs.title }}
-          body: "Static build for Windows (Qt 6.9.0, MXE)"
+      - name: Upload Windows binary to existing release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload "${{ needs.mac_build.outputs.tag }}" \
+            "CaptureStream2-Windows-x64-qt5-${{ github.event.inputs.yyyymmdd }}.zip" \
+            --clobber
+
  
