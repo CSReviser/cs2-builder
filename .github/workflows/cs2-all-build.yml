@@ -26,32 +26,69 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Build macOS binary (仮の手順)
-        run: |
-          mkdir -p MacCaptureStream2
-          echo "This is a macOS dummy binary" > MacCaptureStream2/CaptureStream2
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: 6.9.*
+          modules: 'qtcharts'
+          extra: '--external 7z'
 
-      - name: Create zip
+      - name: Clone CaptureStream2
         run: |
-          zip -r MacCaptureStream2-${{ github.event.inputs.yyyymmdd }}.zip MacCaptureStream2
+          git clone https://github.com/CSReviser/CaptureStream2.git
+          cd CaptureStream2
+          git checkout feature
+          git submodule update --init --recursive
 
-      - name: Create release and upload mac file
+      - name: Configure CMake
+        run: |
+          mkdir build
+          cmake -S CaptureStream2 -B build -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"
+
+      - name: Build with Make
+        run: cmake --build build --parallel
+
+      - name: Prepare CaptureStream2 executable
+        run: |
+          wget -qO FFmpeg.7z https://evermeet.cx/ffmpeg/ffmpeg-7.1.1.7z || { echo "Failed to download FFmpeg"; exit 1; }
+          7z e FFmpeg.7z ffmpeg -o./build/CaptureStream2.app/Contents/MacOS/ || { echo "Failed to extract FFmpeg"; exit 1; }
+          cp ./icon.icns ./CaptureStream2.app/Contents/Resources/
+          cp ./qss_files/stylesheet-mac.qss ./CaptureStream2.app/Contents/MacOS/
+
+      - name: Create MacCaptureStream2 directory
+        run: |
+          mkdir -p build/MacCaptureStream2
+          mv build/CaptureStream2.app build/MacCaptureStream2/
+      - name: Create DMG file
+        run: |
+          hdiutil create -volname CaptureStream2 \
+                      -srcfolder build/MacCaptureStream2 \
+                      -ov -format UDZO \
+                      "build/CaptureStream2-MacOS-${{ github.event.inputs.yyyymmdd }}.dmg"
+
+      - name: Format release title
+        id: format_date
+        run: |
+          yyyy=${{ github.event.inputs.yyyymmdd }} 
+          echo "title=${yyyy:0:4}/${yyyy:4:2}/${yyyy:6:2}版リリース" >> "$GITHUB_OUTPUT"
+
+      - name: Upload DMG to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build/CaptureStream2-MacOS-${{ github.event.inputs.yyyymmdd }}.dmg
+          tag_name: ${{ github.event.inputs.yyyymmdd }}
+          name: ${{ steps.format_date.outputs.title }}
+          body: "Universal Qt 6.9 build for macOS"
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh release create "${{ steps.setvars.outputs.tag }}" \
-            "MacCaptureStream2-${{ github.event.inputs.yyyymmdd }}.zip" \
-            --title "${{ steps.setvars.outputs.title }}" \
-            --notes "### CaptureStream2 リリース\n\n- **macOS版**: `MacCaptureStream2-${{ github.event.inputs.yyyymmdd }}.zip` を含みます。\n\n※Windows版はこの後追加されます。"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   win_build:
     runs-on: ubuntu-latest
-    needs: mac_build
     container:
       image: ghcr.io/csreviser/qt6-mxe-static:6.9.0
 
     steps:
-      - name: Checkout
+      - name: Checkout this repo
         uses: actions/checkout@v4
 
       - name: Clone CaptureStream2
@@ -79,16 +116,157 @@ jobs:
       - name: Build
         run: cmake --build build --parallel
 
-      - name: Prepare artifact folder and zip
+      - name: Create WinCaptureStream2 directory and move exe
+        shell: bash
         run: |
-          mkdir -p WinCaptureStream2
-          cp build/CaptureStream2.exe WinCaptureStream2/
-          zip -r CaptureStream-x64-${{ github.event.inputs.yyyymmdd }}.zip WinCaptureStream2
+          mkdir -p build/WinCaptureStream2
+          mv build/CaptureStream2.exe build/WinCaptureStream2/
+          cp ./CaptureStream2/qss_files/stylesheet-win.qss build/WinCaptureStream2/
 
-      - name: Upload Windows binary to existing release
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create ZIP file
         run: |
-          gh release upload "${{ needs.mac_build.outputs.tag }}" \
-            "CaptureStream-x64-${{ github.event.inputs.yyyymmdd }}.zip" \
-            --clobber
+          cd build
+          zip -r "CaptureStream-x64-${{ github.event.inputs.yyyymmdd }}.zip" WinCaptureStream2
+
+      - name: Format release title
+        id: format_date
+        shell: bash
+        run: |
+          yyyy="${{ github.event.inputs.yyyymmdd }}"
+          echo "title=${yyyy:0:4}/${yyyy:4:2}/${yyyy:6:2}版リリース" >> "$GITHUB_OUTPUT"
+
+      - name: Upload ZIP to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build/CaptureStream2-Windows-x64-${{ github.event.inputs.yyyymmdd }}.zip
+          tag_name: ${{ github.event.inputs.yyyymmdd }}
+          name: ${{ steps.format_date.outputs.title }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  win32_build:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/csreviser/qt6-mxe-x86-static:6.9.0
+
+    steps:
+      - name: Checkout this repo
+        uses: actions/checkout@v4
+
+      - name: Clone CaptureStream2
+        run: |
+          git clone https://github.com/CSReviser/CaptureStream2.git
+          cd CaptureStream2
+          git checkout feature
+          git submodule update --init --recursive
+
+      - name: Create build directory
+        run: mkdir -p build
+
+      - name: Configure with CMake
+        run: >
+          /opt/mxe/usr/x86_64-w64-mingw32.static/qt6/bin/qt-cmake
+          -S CaptureStream2
+          -B build
+          -DCMAKE_BUILD_TYPE=Release
+          -DCMAKE_PREFIX_PATH="/opt/mxe/usr/x86_64-w64-mingw32.static/qt6/bin"
+          -DCMAKE_FIND_ROOT_PATH="/opt/mxe/usr/x86_64-w64-mingw32.static"
+          -DCMAKE_SYSTEM_NAME=Windows
+          -DCMAKE_INSTALL_PREFIX=install
+          -DQT_HOST_PATH="/opt/mxe/usr/x86_64-w64-mingw32.static/qt6"
+
+      - name: Build
+        run: cmake --build build --parallel
+
+      - name: Create WinCaptureStream2 directory and move exe
+        shell: bash
+        run: |
+          mkdir -p build/WinCaptureStream2
+          mv build/CaptureStream2.exe build/WinCaptureStream2/
+          cp ./CaptureStream2/qss_files/stylesheet-win.qss build/WinCaptureStream2/
+
+      - name: Create ZIP file
+        run: |
+          cd build
+          zip -r "CaptureStream-Windows-x86-${{ github.event.inputs.yyyymmdd }}.zip" WinCaptureStream2
+
+      - name: Format release title
+        id: format_date
+        shell: bash
+        run: |
+          yyyy="${{ github.event.inputs.yyyymmdd }}"
+          echo "title=${yyyy:0:4}/${yyyy:4:2}/${yyyy:6:2}版リリース" >> "$GITHUB_OUTPUT"
+
+      - name: Upload ZIP to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build/CaptureStream2-Windows-x86-${{ github.event.inputs.yyyymmdd }}.zip
+          tag_name: ${{ github.event.inputs.yyyymmdd }}
+          name: ${{ steps.format_date.outputs.title }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+  wim_qt5_build:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/csreviser/qt5-mxe-x86-static:5.15.0
+
+    steps:
+      - name: Checkout this repo
+        uses: actions/checkout@v4
+
+      - name: Clone CaptureStream2
+        run: |
+          git clone https://github.com/CSReviser/CaptureStream2.git
+          cd CaptureStream2
+          git checkout feature
+          git submodule update --init --recursive
+
+      - name: Create build directory
+        run: mkdir -p build
+
+      - name: Configure with CMake
+        run: >
+          /opt/mxe/usr/x86_64-w64-mingw32.static/qt6/bin/qt-cmake
+          -S CaptureStream2
+          -B build
+          -DCMAKE_BUILD_TYPE=Release
+          -DCMAKE_PREFIX_PATH="/opt/mxe/usr/x86_64-w64-mingw32.static/qt6/bin"
+          -DCMAKE_FIND_ROOT_PATH="/opt/mxe/usr/x86_64-w64-mingw32.static"
+          -DCMAKE_SYSTEM_NAME=Windows
+          -DCMAKE_INSTALL_PREFIX=install
+          -DQT_HOST_PATH="/opt/mxe/usr/x86_64-w64-mingw32.static/qt6"
+
+      - name: Build
+        run: cmake --build build --parallel
+
+      - name: Create WinCaptureStream2 directory and move exe
+        shell: bash
+        run: |
+          mkdir -p build/WinCaptureStream2
+          mv build/CaptureStream2.exe build/WinCaptureStream2/
+          cp ./CaptureStream2/qss_files/stylesheet-win.qss build/WinCaptureStream2/
+
+      - name: Create ZIP file
+        run: |
+          cd build
+          zip -r "CaptureStream-Windows-x86-${{ github.event.inputs.yyyymmdd }}.zip" WinCaptureStream2
+
+      - name: Format release title
+        id: format_date
+        shell: bash
+        run: |
+          yyyy="${{ github.event.inputs.yyyymmdd }}"
+          echo "title=${yyyy:0:4}/${yyyy:4:2}/${yyyy:6:2}版リリース" >> "$GITHUB_OUTPUT"
+
+      - name: Upload ZIP to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build/CaptureStream2-Windows-qt5-x86-${{ github.event.inputs.yyyymmdd }}.zip
+          tag_name: ${{ github.event.inputs.yyyymmdd }}
+          name: ${{ steps.format_date.outputs.title }}
+          body: "Static build for Windows (Qt 6.9.0, MXE)"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+ 
