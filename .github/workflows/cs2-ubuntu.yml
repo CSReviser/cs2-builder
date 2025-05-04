@@ -66,9 +66,9 @@ jobs:
       - name: Upload ZIP to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: build/CaptureStream-ubuntu-${{ github.event.inputs.yyyymmdd }}.zip
+          files: build/CaptureStream2-ubuntu-${{ github.event.inputs.yyyymmdd }}.zip
           tag_name: ${{ github.event.inputs.yyyymmdd }}
           name: ${{ steps.format_date.outputs.title }}
-          body: "Static build for ubuntu (Qt 6.9.0, MXE)"
+          body: "Static build for ubuntu (Qt 6.9.0)"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
