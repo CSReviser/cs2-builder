@@ -1,0 +1,94 @@
+name: Build CaptureStream2 for macOS and Windows
+
+on:
+  workflow_dispatch:
+    inputs:
+      yyyymmdd:
+        description: 'Release date (yyyymmdd)'
+        required: true
+
+jobs:
+  mac_build:
+    runs-on: macos-14
+    outputs:
+      tag: ${{ steps.setvars.outputs.tag }}
+      title: ${{ steps.setvars.outputs.title }}
+
+    steps:
+      - name: Set release variables
+        id: setvars
+        run: |
+          tag=${{ github.event.inputs.yyyymmdd }}
+          title="${tag:0:4}/${tag:4:2}/${tag:6:2}版リリース"
+          echo "tag=$tag" >> $GITHUB_OUTPUT
+          echo "title=$title" >> $GITHUB_OUTPUT
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build macOS binary (仮の手順)
+        run: |
+          mkdir -p MacCaptureStream2
+          echo "This is a macOS dummy binary" > MacCaptureStream2/CaptureStream2
+
+      - name: Create zip
+        run: |
+          zip -r MacCaptureStream2-${{ github.event.inputs.yyyymmdd }}.zip MacCaptureStream2
+
+      - name: Create release and upload mac file
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "${{ steps.setvars.outputs.tag }}" \
+            "MacCaptureStream2-${{ github.event.inputs.yyyymmdd }}.zip" \
+            --title "${{ steps.setvars.outputs.title }}" \
+            --notes "### CaptureStream2 リリース\n\n- **macOS版**: `MacCaptureStream2-${{ github.event.inputs.yyyymmdd }}.zip` を含みます。\n\n※Windows版はこの後追加されます。"
+
+  win_build:
+    runs-on: ubuntu-latest
+    needs: mac_build
+    container:
+      image: ghcr.io/csreviser/qt6-mxe-static:6.9.0
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Clone CaptureStream2
+        run: |
+          git clone https://github.com/CSReviser/CaptureStream2.git
+          cd CaptureStream2
+          git checkout feature
+          git submodule update --init --recursive
+
+      - name: Create build directory
+        run: mkdir -p build
+
+      - name: Configure with CMake
+        run: >
+          /opt/mxe/usr/x86_64-w64-mingw32.static/qt6/bin/qt-cmake
+          -S CaptureStream2
+          -B build
+          -DCMAKE_BUILD_TYPE=Release
+          -DCMAKE_PREFIX_PATH="/opt/mxe/usr/x86_64-w64-mingw32.static/qt6/bin"
+          -DCMAKE_FIND_ROOT_PATH="/opt/mxe/usr/x86_64-w64-mingw32.static"
+          -DCMAKE_SYSTEM_NAME=Windows
+          -DCMAKE_INSTALL_PREFIX=install
+          -DQT_HOST_PATH="/opt/mxe/usr/x86_64-w64-mingw32.static/qt6"
+
+      - name: Build
+        run: cmake --build build --parallel
+
+      - name: Prepare artifact folder and zip
+        run: |
+          mkdir -p WinCaptureStream2
+          cp build/CaptureStream2.exe WinCaptureStream2/
+          zip -r CaptureStream-x64-${{ github.event.inputs.yyyymmdd }}.zip WinCaptureStream2
+
+      - name: Upload Windows binary to existing release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload "${{ needs.mac_build.outputs.tag }}" \
+            "CaptureStream-x64-${{ github.event.inputs.yyyymmdd }}.zip" \
+            --clobber
