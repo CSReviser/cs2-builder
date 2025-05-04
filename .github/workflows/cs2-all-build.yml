@@ -1,4 +1,4 @@
-name: Build CaptureStream2 for macOS and Windows
+name: 0. Build CaptureStream2 for macOS and Windows
 
 on:
   workflow_dispatch:
