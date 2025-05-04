@@ -47,7 +47,7 @@ jobs:
         run: |
           mkdir -p build/WinCaptureStream2
           mv build/CaptureStream2.exe build/WinCaptureStream2/
-          cp ./qss_files/stylesheet-mac.qss build/WinCaptureStream2/
+          cp ./CaptureStream2/qss_files/stylesheet-win.qss build/WinCaptureStream2/
 
       - name: Create ZIP file
         run: |
