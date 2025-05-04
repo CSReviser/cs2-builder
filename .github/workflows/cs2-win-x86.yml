@@ -1,0 +1,39 @@
+name: 2-2. Win Qt6 32bit Static Build (MXE)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/csreviser/qt6-mxe-x86-static:6.9.0
+
+    steps:
+      - name: Checkout this repo
+        uses: actions/checkout@v4
+
+      - name: Clone CaptureStream2
+        run: |
+          git clone https://github.com/CSReviser/CaptureStream2.git
+          cd CaptureStream2
+          git checkout feature
+          git submodule update --init --recursive
+
+      - name: Create build directory
+        run: mkdir -p build
+
+      - name: Configure with CMake
+        run: >
+          /opt/mxe/usr/i686-w64-mingw32.static/qt6/bin/qt-cmake
+          -S CaptureStream2
+          -B build
+
+      - name: Build
+        run: cmake --build build --parallel
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: capturestream2-windows-qt6-x86-static
+          path: build/*.exe
