@@ -92,11 +92,8 @@ jobs:
       - name: Checkout this repo
         uses: actions/checkout@v4
 
-- name: Checkout repo
-  uses: actions/checkout@v4
-
-- name: Mark repo as safe
-  run: git config --global --add safe.directory "${GITHUB_WORKSPACE}"
+      - name: Mark repo as safe
+        run: git config --global --add safe.directory "${GITHUB_WORKSPACE}"
 
       - name: Clone CaptureStream2
         run: |
@@ -163,6 +160,20 @@ jobs:
       - name: Checkout this repo
         uses: actions/checkout@v4
 
+      - name: Mark repo as safe
+        run: git config --global --add safe.directory "${GITHUB_WORKSPACE}"
+
+      - name: Install GitHub CLI
+        run: |
+          apt-get update
+          apt-get install -y curl
+          curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | \
+          gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg
+          echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | \
+          tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+          apt-get update
+          apt-get install -y gh
+
       - name: Clone CaptureStream2
         run: |
           git clone https://github.com/CSReviser/CaptureStream2.git
@@ -199,17 +210,6 @@ jobs:
         run: |
           zip -r "CaptureStream2-Windows-x86-${{ github.event.inputs.yyyymmdd }}.zip" build/WinCaptureStream2
  
-      - name: Install GitHub CLI
-        run: |
-          apt-get update
-          apt-get install -y curl
-          curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | \
-          gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg
-          echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | \
-          tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-          apt-get update
-          apt-get install -y gh
-
       - name: Upload Windows binary to existing release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -227,6 +227,9 @@ jobs:
     steps:
       - name: Checkout this repo
         uses: actions/checkout@v4
+
+      - name: Mark repo as safe
+        run: git config --global --add safe.directory "${GITHUB_WORKSPACE}"
 
       - name: Clone CaptureStream2
         run: |
