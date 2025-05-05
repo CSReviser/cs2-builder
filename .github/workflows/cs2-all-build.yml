@@ -354,52 +354,30 @@ jobs:
     needs: mac_build
     container:
       image: ghcr.io/csreviser/qt6-static:6.9.0-ubuntu22.04
-    env:
-      QT_VERSION: 6.9.0
-      IMAGE_NAME: ghcr.io/csreviser/qt6-static:6.9.0-ubuntu22.04
 
     steps:
-      - name: Checkout repository
+      - name: Checkout this repo
         uses: actions/checkout@v4
-        
+
       - name: Mark repo as safe
         run: git config --global --add safe.directory "${GITHUB_WORKSPACE}"
-        
+
       - name: Clone CaptureStream2
         run: |
           git clone https://github.com/CSReviser/CaptureStream2.git
           cd CaptureStream2
           git checkout feature
           git submodule update --init --recursive
-      - name: Get UID and GID
-        id: userinfo
-        run: |
-          echo "uid=$(id -u)" >> "$GITHUB_OUTPUT"
-          echo "gid=$(id -g)" >> "$GITHUB_OUTPUT"
+
       - name: Build using Docker container with Qt static
         run: |
-          docker run --rm \
-            -v ${{ github.workspace }}:/work \
-            -w /work/CaptureStream2 \
-            --env HOST_UID=${{ steps.userinfo.outputs.uid }} \
-            --env HOST_GID=${{ steps.userinfo.outputs.gid }} \
-            --env PATH="/opt/qt6-static/bin:/usr/bin:/bin:/usr/local/bin" \
-            ${{ env.IMAGE_NAME }} \
-            bash -c "
-              mkdir -p build && cd build && \
-              qt-cmake .. -DQT_DEBUG_FIND_PACKAGE=ON && \
-              cmake --build . --parallel && \
-              mkdir -p build/LinCaptureStream2 && \
-              mv CaptureStream2 build/LinCaptureStream2/ && \
-              cp ../qss_files/stylesheet-ubu.qss build/LinCaptureStream2 && \
+              mkdir -p build && cd build
+              qt-cmake .. -DQT_DEBUG_FIND_PACKAGE=ON
+              cmake --build . --parallel
+              mkdir -p build/LinCaptureStream2
+              mv CaptureStream2 build/LinCaptureStream2/
+              cp ../qss_files/stylesheet-ubu.qss build/LinCaptureStream2
               chown -R \$HOST_UID:\$HOST_GID /work
-            "
-
-      - name: Create ZIP file
-        shell: bash
-        run: |
-          cd CaptureStream2/build
-          zip -r "CaptureStream2-ubuntu-${{ github.event.inputs.yyyymmdd }}.zip" LinCaptureStream2 && \
 
       - name: Install GitHub CLI
         run: |
@@ -412,6 +390,12 @@ jobs:
           apt-get update
           apt-get install -y gh
 
+      - name: Create ZIP file
+        shell: bash
+        run: |
+          cd CaptureStream2/build
+          zip -r "CaptureStream2-ubuntu-${{ github.event.inputs.yyyymmdd }}.zip" LinCaptureStream2 && \
+
       - name: Upload Windows binary to existing release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -420,7 +404,7 @@ jobs:
           gh release upload "${{ needs.mac_build.outputs.tag }}" \
             "CaptureStream2-ubuntu-${{ github.event.inputs.yyyymmdd }}.zip" \
             --clobber
-            
+
 
   mac_qt5_build:
     runs-on: macos-14
