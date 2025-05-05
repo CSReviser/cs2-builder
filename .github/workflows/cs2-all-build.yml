@@ -399,7 +399,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          cd build
+          cd CaptureStream2/build
           gh release upload "${{ needs.mac_build.outputs.tag }}" \
             "CaptureStream2-ubuntu-${{ github.event.inputs.yyyymmdd }}.zip" \
             --clobber
