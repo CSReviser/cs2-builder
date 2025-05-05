@@ -79,7 +79,7 @@ jobs:
           files: build/CaptureStream2-MacOS-${{ github.event.inputs.yyyymmdd }}.dmg
           tag_name: ${{ github.event.inputs.yyyymmdd }}
           name: ${{ steps.format_date.outputs.title }}
-          body: "Universal Qt 6.9 build for macOS"
+          body: "Qt 6.9 build test"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
