@@ -369,26 +369,39 @@ jobs:
           git checkout feature
           git submodule update --init --recursive
 
-      - name: Create build directory
-        run: mkdir -p build
+      - name: Get UID and GID
+        id: userinfo
+        run: |
+          echo "uid=$(id -u)" >> "$GITHUB_OUTPUT"
+          echo "gid=$(id -g)" >> "$GITHUB_OUTPUT"
 
-      - name: Configure with CMake
-        run: >
-          export PATH="$PATH:/opt/qt6-static/bin:/usr/bin:/bin:/usr/local/bin"
-          cd build && \
-          cmake .. -DQT_DEBUG_FIND_PACKAGE=ON
-          make 
+      - name: Build using Docker container with Qt static
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}:/work \
+            -w /work/CaptureStream2 \
+            --env HOST_UID=${{ steps.userinfo.outputs.uid }} \
+            --env HOST_GID=${{ steps.userinfo.outputs.gid }} \
+            --env PATH="/opt/qt6-static/bin:/usr/bin:/bin:/usr/local/bin" \
+            ${{ env.IMAGE_NAME }} \
+            bash -c "
+              mkdir -p build && cd build && \
+              qt-cmake .. -DQT_DEBUG_FIND_PACKAGE=ON && \
+              cmake --build . --parallel && \
+              chown -R \$HOST_UID:\$HOST_GID /work
+            "
 
       - name: Create WinCaptureStream2 directory and move exe
         shell: bash
         run: |
-          mkdir -p build/LinCaptureStream2
-          mv ./release/CaptureStream2.exe build/LinCaptureStream2/
-          cp ./CaptureStream2/qss_files/stylesheet-ubu.qss build/LinCaptureStream2/
+          cd CaptureStream2/build
+          mkdir -p LinCaptureStream2
+          mv ../release/CaptureStream2 build/LinCaptureStream2/
+          cp ../CaptureStream2/qss_files/stylesheet-ubu.qss build/LinCaptureStream2/
       
       - name: Create ZIP file
         run: |
-          cd build
+          cd CaptureStream2/build
           zip -r "CaptureStream2-Ubuntu-${{ github.event.inputs.yyyymmdd }}.zip" LinCaptureStream2
 
       - name: Install GitHub CLI
@@ -467,7 +480,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          cd build
+          cd CaptureStream2/build
           gh release upload "${{ needs.mac_build.outputs.tag }}" \
             "CaptureStream2-MacOS-qt5-${{ github.event.inputs.yyyymmdd }}.dmg" \
             --clobber
