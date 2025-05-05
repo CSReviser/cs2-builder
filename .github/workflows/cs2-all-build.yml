@@ -61,10 +61,11 @@ jobs:
           mv build/CaptureStream2.app build/MacCaptureStream2/
       - name: Create DMG file
         run: |
+          cd build
           hdiutil create -volname CaptureStream2 \
-                      -srcfolder build/MacCaptureStream2 \
+                      -srcfolder MacCaptureStream2 \
                       -ov -format UDZO \
-                      "build/CaptureStream2-MacOS-${{ github.event.inputs.yyyymmdd }}.dmg"
+                      "CaptureStream2-MacOS-${{ github.event.inputs.yyyymmdd }}.dmg"
 
       - name: Format release title
         id: format_date
@@ -140,12 +141,14 @@ jobs:
 
       - name: Create ZIP file
         run: |
-          zip -r "CaptureStream2-Windows-x64-${{ github.event.inputs.yyyymmdd }}.zip" build/WinCaptureStream2
+          cd build
+          zip -r "CaptureStream2-Windows-x64-${{ github.event.inputs.yyyymmdd }}.zip" WinCaptureStream2
 
       - name: Upload Windows binary to existing release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          cd build
           gh release upload "${{ needs.mac_build.outputs.tag }}" \
             "CaptureStream2-Windows-x64-${{ github.event.inputs.yyyymmdd }}.zip" \
             --clobber
@@ -208,12 +211,14 @@ jobs:
 
       - name: Create ZIP file
         run: |
-          zip -r "CaptureStream2-Windows-x86-${{ github.event.inputs.yyyymmdd }}.zip" build/WinCaptureStream2
+          cd build
+          zip -r "CaptureStream2-Windows-x86-${{ github.event.inputs.yyyymmdd }}.zip" WinCaptureStream2
  
       - name: Upload Windows binary to existing release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          cd build
           gh release upload "${{ needs.mac_build.outputs.tag }}" \
             "CaptureStream2-Windows-x86-${{ github.event.inputs.yyyymmdd }}.zip" \
             --clobber
@@ -258,7 +263,8 @@ jobs:
       
       - name: Create ZIP file
         run: |
-          zip -r "CaptureStream2-Windows-x64-qt5-${{ github.event.inputs.yyyymmdd }}.zip" build/WinCaptureStream2
+          cd build
+          zip -r "CaptureStream2-Windows-x64-qt5-${{ github.event.inputs.yyyymmdd }}.zip" WinCaptureStream2
 
       - name: Install GitHub CLI
         run: |
@@ -275,6 +281,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          cd build
           gh release upload "${{ needs.mac_build.outputs.tag }}" \
             "CaptureStream2-Windows-x64-qt5-${{ github.event.inputs.yyyymmdd }}.zip" \
             --clobber
@@ -319,7 +326,8 @@ jobs:
       
       - name: Create ZIP file
         run: |
-          zip -r "CaptureStream2-Windows-x86-qt5-${{ github.event.inputs.yyyymmdd }}.zip" build/WinCaptureStream2
+          cd build
+          zip -r "CaptureStream2-Windows-x86-qt5-${{ github.event.inputs.yyyymmdd }}.zip" WinCaptureStream2
 
       - name: Install GitHub CLI
         run: |
@@ -336,6 +344,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          cd build
           gh release upload "${{ needs.mac_build.outputs.tag }}" \
             "CaptureStream2-Windows-x86-qt5-${{ github.event.inputs.yyyymmdd }}.zip" \
             --clobber
@@ -366,7 +375,7 @@ jobs:
       - name: Configure with CMake
         run: >
           cd build && \
-          qt-cmake .. -DQT_DEBUG_FIND_PACKAGE=ON
+          /opt/qt6-static/bin:/usr/bin/qt-cmake .. -DQT_DEBUG_FIND_PACKAGE=ON
           
       - name: Build
         run: make 
@@ -380,7 +389,8 @@ jobs:
       
       - name: Create ZIP file
         run: |
-          zip -r "CaptureStream2-Ubuntu-${{ github.event.inputs.yyyymmdd }}.zip" build/LinCaptureStream2
+          cd build
+          zip -r "CaptureStream2-Ubuntu-${{ github.event.inputs.yyyymmdd }}.zip" LinCaptureStream2
 
       - name: Install GitHub CLI
         run: |
@@ -397,6 +407,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          cd build
           gh release upload "${{ needs.mac_build.outputs.tag }}" \
             "CaptureStream2-Ubuntu-${{ github.event.inputs.yyyymmdd }}.zip" \
             --clobber
