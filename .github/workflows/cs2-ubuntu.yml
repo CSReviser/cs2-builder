@@ -49,7 +49,7 @@ jobs:
         run: |
           mkdir -p build/LinCaptureStream2
           mv CaptureStream2 build/LinCaptureStream2/
-          cp ./CaptureStream2/qss_files/stylesheet-ubu.qss build/LinCaptureStream2/
+          cp CaptureStream2/qss_files/stylesheet-ubu.qss build/LinCaptureStream2/
 
       - name: Create ZIP file
         run: |
