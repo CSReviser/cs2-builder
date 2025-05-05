@@ -393,8 +393,7 @@ jobs:
       - name: Create ZIP file
         run: |
           cd CaptureStream2/build
-          ls -r
-          zip -r "CaptureStream2-ubuntu-${{ github.event.inputs.yyyymmdd }}.zip" ./LinCaptureStream2
+          zip -r "CaptureStream2-ubuntu-${{ github.event.inputs.yyyymmdd }}.zip" LinCaptureStream2
       
       - name: Upload zip to GitHub Release
         uses: softprops/action-gh-release@v2
@@ -403,14 +402,6 @@ jobs:
           tag_name: ${{ needs.mac_build.outputs.tag }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Upload Ubuntu binary to existing release
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          cd CaptureStream2/build
-          gh release upload "${{ needs.mac_build.outputs.tag }}" \
-            "CaptureStream2-ubuntu-${{ github.event.inputs.yyyymmdd }}.zip" \
-            --clobber
 
   mac_qt5_build:
     runs-on: macos-14
