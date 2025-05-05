@@ -425,6 +425,10 @@ jobs:
       - name: Mark repo as safe
         run: git config --global --add safe.directory "${GITHUB_WORKSPACE}"
 
+      - name: Update GitHub CLI
+        run: |
+          brew install gh || brew upgrade gh
+
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
