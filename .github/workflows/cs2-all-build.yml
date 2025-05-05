@@ -463,6 +463,16 @@ jobs:
                       -ov -format UDZO \
                       "CaptureStream2-MacOS-qt5-${{ github.event.inputs.yyyymmdd }}.dmg"
 
+
+      - name: Upload DMG to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build/CaptureStream2-MacOS-qt5-${{ github.event.inputs.yyyymmdd }}.dmg
+          tag_name: ${{ github.event.inputs.yyyymmdd }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
       - name: Upload .dmg to release
         run: |
             gh release upload "${{ needs.mac_build.outputs.tag }}" \
