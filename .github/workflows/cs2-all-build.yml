@@ -354,7 +354,10 @@ jobs:
     needs: mac_build
     container:
       image: ghcr.io/csreviser/qt6-static:6.9.0-ubuntu22.04
-      
+    env:
+      QT_VERSION: 6.9.0
+      IMAGE_NAME: ghcr.io/csreviser/qt6-static:6.9.0-ubuntu22.04
+  
     steps:
       - name: Checkout this repo
         uses: actions/checkout@v4
