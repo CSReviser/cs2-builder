@@ -278,3 +278,126 @@ jobs:
           gh release upload "${{ needs.mac_build.outputs.tag }}" \
             "CaptureStream2-Windows-x64-qt5-${{ github.event.inputs.yyyymmdd }}.zip" \
             --clobber
+
+  wim_x68_qt5_build:
+    runs-on: ubuntu-latest
+    needs: mac_build
+    container:
+      image: ghcr.io/csreviser/qt5-mxe-x86-static:5.15.0
+
+    steps:
+      - name: Checkout this repo
+        uses: actions/checkout@v4
+
+      - name: Mark repo as safe
+        run: git config --global --add safe.directory "${GITHUB_WORKSPACE}"
+
+      - name: Clone CaptureStream2
+        run: |
+          git clone https://github.com/CSReviser/CaptureStream2.git
+          cd CaptureStream2
+          git checkout feature
+          git submodule update --init --recursive
+
+      - name: Create build directory
+        run: mkdir -p build
+
+      - name: Configure with CMake
+        run: >
+          /opt/mxe/usr/i686-w64-mingw32.static/qt5/bin/qmake
+          CaptureStream2/CaptureStream2.pro
+          
+      - name: Build
+        run: make 
+
+      - name: Create WinCaptureStream2 directory and move exe
+        shell: bash
+        run: |
+          mkdir -p build/WinCaptureStream2
+          mv ./release/CaptureStream2.exe build/WinCaptureStream2/
+          cp ./CaptureStream2/qss_files/stylesheet-win.qss build/WinCaptureStream2/
+      
+      - name: Create ZIP file
+        run: |
+          zip -r "CaptureStream2-Windows-x86-qt5-${{ github.event.inputs.yyyymmdd }}.zip" build/WinCaptureStream2
+
+      - name: Install GitHub CLI
+        run: |
+          apt-get update
+          apt-get install -y curl
+          curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | \
+          gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg
+          echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | \
+          tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+          apt-get update
+          apt-get install -y gh
+
+      - name: Upload Windows binary to existing release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload "${{ needs.mac_build.outputs.tag }}" \
+            "CaptureStream2-Windows-x86-qt5-${{ github.event.inputs.yyyymmdd }}.zip" \
+            --clobber
+            
+  ubuntu_build:
+    runs-on: ubuntu-latest
+    needs: mac_build
+    container:
+      image: ghcr.io/csreviser/qt6-static:6.9.0-ubuntu22.04
+      
+    steps:
+      - name: Checkout this repo
+        uses: actions/checkout@v4
+
+      - name: Mark repo as safe
+        run: git config --global --add safe.directory "${GITHUB_WORKSPACE}"
+
+      - name: Clone CaptureStream2
+        run: |
+          git clone https://github.com/CSReviser/CaptureStream2.git
+          cd CaptureStream2
+          git checkout feature
+          git submodule update --init --recursive
+
+      - name: Create build directory
+        run: mkdir -p build
+
+      - name: Configure with CMake
+        run: >
+          cd build && \
+          qt-cmake .. -DQT_DEBUG_FIND_PACKAGE=ON
+          
+      - name: Build
+        run: make 
+
+      - name: Create WinCaptureStream2 directory and move exe
+        shell: bash
+        run: |
+          mkdir -p build/LinCaptureStream2
+          mv ./release/CaptureStream2.exe build/LinCaptureStream2/
+          cp ./CaptureStream2/qss_files/stylesheet-ubu.qss build/LinCaptureStream2/
+      
+      - name: Create ZIP file
+        run: |
+          zip -r "CaptureStream2-Ubuntu-${{ github.event.inputs.yyyymmdd }}.zip" build/LinCaptureStream2
+
+      - name: Install GitHub CLI
+        run: |
+          apt-get update
+          apt-get install -y curl
+          curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | \
+          gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg
+          echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | \
+          tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+          apt-get update
+          apt-get install -y gh
+
+      - name: Upload Windows binary to existing release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload "${{ needs.mac_build.outputs.tag }}" \
+            "CaptureStream2-Ubuntu-${{ github.event.inputs.yyyymmdd }}.zip" \
+            --clobber
+            
