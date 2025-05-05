@@ -375,9 +375,9 @@ jobs:
           mkdir -p build && cd build
           qt-cmake .. -DQT_DEBUG_FIND_PACKAGE=ON
           cmake --build . --parallel
-          mkdir -p build/LinCaptureStream2
-          mv CaptureStream2 build/LinCaptureStream2/
-          cp ../qss_files/stylesheet-ubu.qss build/LinCaptureStream2
+          mkdir -p LinCaptureStream2
+          mv CaptureStream2 ./LinCaptureStream2/
+          cp ../qss_files/stylesheet-ubu.qss ./LinCaptureStream2
 
       - name: Install GitHub CLI
         run: |
