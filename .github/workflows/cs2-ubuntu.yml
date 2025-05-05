@@ -52,7 +52,7 @@ jobs:
         id: format_date
         shell: bash
         run: |
-          cd build
+          cd CaptureStream2/build
           zip -r "CaptureStream-ubuntu-${{ github.event.inputs.yyyymmdd }}.zip" LinCaptureStream2 && \
           yyyy="${{ github.event.inputs.yyyymmdd }}"
           echo "title=${yyyy:0:4}/${yyyy:4:2}/${yyyy:6:2}版リリース" >> "$GITHUB_OUTPUT"
