@@ -471,4 +471,4 @@ jobs:
           cd CaptureStream2/build
           gh release upload "${{ needs.mac_build.outputs.tag }}" \
             "CaptureStream2-MacOS-qt5-${{ github.event.inputs.yyyymmdd }}.dmg" \
-            --clobber
+            --clobber --verbose
