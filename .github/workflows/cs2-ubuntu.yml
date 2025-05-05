@@ -42,15 +42,11 @@ jobs:
               mkdir -p build && cd build && \
               qt-cmake .. -DQT_DEBUG_FIND_PACKAGE=ON && \
               cmake --build . --parallel && \
+              mkdir -p build/LinCaptureStream2 && \
+              mv CaptureStream2 build/LinCaptureStream2/ && \
+              cp CaptureStream2/qss_files/stylesheet-ubu.qss build/LinCaptureStream2/ && \
               chown -R \$HOST_UID:\$HOST_GID /work
             "
-      - name: Create WinCaptureStream2 directory and move exe
-        shell: bash
-        run: |
-          mkdir -p build/LinCaptureStream2
-          mv CaptureStream2 build/LinCaptureStream2/
-          ls -r
-          cp CaptureStream2/qss_files/stylesheet-ubu.qss build/LinCaptureStream2/
 
       - name: Create ZIP file
         run: |
