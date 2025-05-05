@@ -393,7 +393,7 @@ jobs:
               autoconf	automake 	autopoint bash bison build-essential bzip2 ca-certificates cmake curl flex \
               g++ g++-multilib gettext git gperf intltool libc6-dev-i386 libclang-dev libgdk-pixbuf2.0-dev libgl-dev \
               libltdl-dev libpcre2-dev libssl-dev libtool libtool-bin libxml-parser-perl lzip \
-              make  opensslpatch  perl   pkg-config  p7zip-full \
+              make  openssl patch  perl   pkg-config  p7zip-full \
               python-is-python3  python3  python3-mako  python3-packaging  python3-pip  python3-pkg-resources \
               python3-setuptools  ruby  sed  sqlite3  unzip  wget  xz-utils 
 
