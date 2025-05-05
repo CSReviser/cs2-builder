@@ -391,7 +391,6 @@ jobs:
           apt-get install -y gh
 
       - name: Create ZIP file
-        shell: bash
         run: |
           cd CaptureStream2/build
           zip -r "CaptureStream2-ubuntu-${{ github.event.inputs.yyyymmdd }}.zip" LinCaptureStream2 
@@ -464,31 +463,12 @@ jobs:
                       -ov -format UDZO \
                       "CaptureStream2-MacOS-qt5-${{ github.event.inputs.yyyymmdd }}.dmg"
 
-- name: Install jq (macOS)
-  if: runner.os == 'macOS'
-  run: brew install jq
-
-- name: Delete existing .dmg asset if it exists
-  run: |
-    ASSET_ID=$(gh api \
-      repos/${{ github.repository }}/releases/tags/${{ needs.mac_build.outputs.tag }} \
-      | jq -r '.assets[] | select(.name == "CaptureStream2-MacOS-qt5-${{ github.event.inputs.yyyymmdd }}.dmg") | .id')
-
-    if [ -n "$ASSET_ID" ]; then
-      echo "Deleting existing asset with ID: $ASSET_ID"
-      gh api -X DELETE repos/${{ github.repository }}/releases/assets/$ASSET_ID
-    else
-      echo "No existing asset to delete."
-    fi
-  env:
-    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-- name: Upload .dmg to release
-  run: |
-    gh release upload "${{ needs.mac_build.outputs.tag }}" \
-      "CaptureStream2-MacOS-qt5-${{ github.event.inputs.yyyymmdd }}.dmg"
-  env:
-    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload .dmg to release
+        run: |
+            gh release upload "${{ needs.mac_build.outputs.tag }}" \
+            "CaptureStream2-MacOS-qt5-${{ github.event.inputs.yyyymmdd }}.dmg"
+            env:
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
       - name: Authenticate GitHub CLI
