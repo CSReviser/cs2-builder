@@ -393,7 +393,7 @@ jobs:
       - name: Create ZIP file
         run: |
           cd CaptureStream2/build
-          zip -r "CaptureStream2-ubuntu-${{ github.event.inputs.yyyymmdd }}.zip" -i LinCaptureStream2 
+          zip -r "CaptureStream2-ubuntu-${{ github.event.inputs.yyyymmdd }}.zip" LinCaptureStream2 
 
       - name: Upload Windows binary to existing release
         env:
