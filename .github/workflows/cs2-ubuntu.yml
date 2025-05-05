@@ -44,14 +44,10 @@ jobs:
               cmake --build . --parallel && \
               mkdir -p build/LinCaptureStream2 && \
               mv CaptureStream2 build/LinCaptureStream2/ && \
-              cp ../qss_files/stylesheet-ubu.qss build/LinCaptureStream2/ && \
+              cp ../qss_files/stylesheet-ubu.qss build/LinCaptureStream2 && \
+              zip -r "CaptureStream-ubuntu-${{ github.event.inputs.yyyymmdd }}.zip" LinCaptureStream2 && \
               chown -R \$HOST_UID:\$HOST_GID /work
             "
-
-      - name: Create ZIP file
-        run: |
-          cd build
-          zip -r "CaptureStream-ubuntu-${{ github.event.inputs.yyyymmdd }}.zip" LinCaptureStream2
 
       - name: Format release title
         id: format_date
