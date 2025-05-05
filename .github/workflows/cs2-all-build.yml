@@ -371,13 +371,14 @@ jobs:
 
       - name: Build using Docker container with Qt static
         run: |
-              mkdir -p build && cd build
-              qt-cmake .. -DQT_DEBUG_FIND_PACKAGE=ON
-              cmake --build . --parallel
-              mkdir -p build/LinCaptureStream2
-              mv CaptureStream2 build/LinCaptureStream2/
-              cp ../qss_files/stylesheet-ubu.qss build/LinCaptureStream2
-              chown -R \$HOST_UID:\$HOST_GID /work
+          cd CaptureStream2
+          mkdir -p build && cd build
+          qt-cmake .. -DQT_DEBUG_FIND_PACKAGE=ON
+          cmake --build . --parallel
+          mkdir -p build/LinCaptureStream2
+          mv CaptureStream2 build/LinCaptureStream2/
+          cp ../qss_files/stylesheet-ubu.qss build/LinCaptureStream2
+          chown -R \$HOST_UID:\$HOST_GID /work
 
       - name: Install GitHub CLI
         run: |
