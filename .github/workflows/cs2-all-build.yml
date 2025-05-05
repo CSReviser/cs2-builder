@@ -378,7 +378,6 @@ jobs:
           mkdir -p build/LinCaptureStream2
           mv CaptureStream2 build/LinCaptureStream2/
           cp ../qss_files/stylesheet-ubu.qss build/LinCaptureStream2
-          chown -R \$HOST_UID:\$HOST_GID /work
 
       - name: Install GitHub CLI
         run: |
