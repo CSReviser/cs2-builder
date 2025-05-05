@@ -376,10 +376,8 @@ jobs:
         run: >
           export PATH="$PATH:/opt/qt6-static/bin:/usr/bin:/bin:/usr/local/bin"
           cd build && \
-          qt-cmake .. -DQT_DEBUG_FIND_PACKAGE=ON
-          
-      - name: Build
-        run: make 
+          cmake .. -DQT_DEBUG_FIND_PACKAGE=ON
+          make 
 
       - name: Create WinCaptureStream2 directory and move exe
         shell: bash
@@ -459,7 +457,7 @@ jobs:
 
       - name: Create DMG file
         run: |
-          cd build
+          cd CaptureStream2/build
           hdiutil create -volname CaptureStream2 \
                       -srcfolder MacCaptureStream2 \
                       -ov -format UDZO \
