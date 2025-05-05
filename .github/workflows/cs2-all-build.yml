@@ -375,7 +375,7 @@ jobs:
       - name: Configure with CMake
         run: >
           cd build && \
-          /opt/qt6-static/bin:/usr/bin/qt-cmake .. -DQT_DEBUG_FIND_PACKAGE=ON
+          /opt/qt6-static/usr/bin/qt-cmake .. -DQT_DEBUG_FIND_PACKAGE=ON
           
       - name: Build
         run: make 
@@ -412,3 +412,67 @@ jobs:
             "CaptureStream2-Ubuntu-${{ github.event.inputs.yyyymmdd }}.zip" \
             --clobber
             
+
+  mac_qt5_build:
+    runs-on: macos-14
+    needs: mac_build
+
+    steps:
+      - name: Set release variables
+        id: setvars
+        run: |
+          tag=${{ github.event.inputs.yyyymmdd }}
+          title="${tag:0:4}/${tag:4:2}/${tag:6:2}版リリース"
+          echo "tag=$tag" >> $GITHUB_OUTPUT
+          echo "title=$title" >> $GITHUB_OUTPUT
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: 5.15.*
+          modules: 'qtcharts'
+          extra: '--external 7z'
+
+      - name: Clone CaptureStream2
+        run: |
+          git clone https://github.com/CSReviser/CaptureStream2.git
+          cd CaptureStream2
+          git checkout feature
+          git submodule update --init --recursive
+
+      - name: qmake
+        run: |
+          cd CaptureStream2
+          qmake -makefile CaptureStream2.pro QMAKE_APPLE_DEVICE_ARCHS="x86_64"
+          make
+          wget -qO FFmpeg.7z https://evermeet.cx/ffmpeg/ffmpeg-7.1.1.7z
+          7z e FFmpeg.7z ffmpeg -o./CaptureStream2.app/Contents/MacOS/
+          chmod -R 755 ./CaptureStream2.app
+          mkdir -p ./build/MacCaptureStream2
+          cp ./icon.icns ./CaptureStream2.app/Contents/Resources/
+          cp ./qss_files/stylesheet-mac.qss ./CaptureStream2.app/Contents/MacOS/
+          mv ./CaptureStream2.app ./build/MacCaptureStream2/
+
+      - name: Create MacCaptureStream2 directory
+        run: |
+          mkdir -p build/MacCaptureStream2
+          mv build/CaptureStream2.app build/MacCaptureStream2/
+      - name: Create DMG file
+        run: |
+          cd build
+          hdiutil create -volname CaptureStream2 \
+                      -srcfolder MacCaptureStream2 \
+                      -ov -format UDZO \
+                      "CaptureStream2-MacOS-qt5-${{ github.event.inputs.yyyymmdd }}.dmg"
+
+      - name: Upload Windows binary to existing release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd build
+          gh release upload "${{ needs.mac_build.outputs.tag }}" \
+            "CaptureStream2-MacOS-qt5-${{ github.event.inputs.yyyymmdd }}.dmg" \
+            --clobber
