@@ -444,6 +444,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Mark repo as safe
+        run: git config --global --add safe.directory "${GITHUB_WORKSPACE}"
+
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
