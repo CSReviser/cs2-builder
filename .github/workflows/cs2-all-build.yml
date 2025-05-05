@@ -396,14 +396,21 @@ jobs:
           ls -r
           zip -r "CaptureStream2-ubuntu-${{ github.event.inputs.yyyymmdd }}.zip" ./LinCaptureStream2
       
-      - name: Upload DMG to GitHub Release
+      - name: Upload zip to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           files: CaptureStream2/build/CaptureStream2-ubuntu-${{ github.event.inputs.yyyymmdd }}.zip
           tag_name: ${{ needs.mac_build.outputs.tag }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+      - name: Upload Ubuntu binary to existing release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd CaptureStream2/build
+          gh release upload "${{ needs.mac_build.outputs.tag }}" \
+            "CaptureStream2-ubuntu-${{ github.event.inputs.yyyymmdd }}.zip" \
+            --clobber
 
   mac_qt5_build:
     runs-on: macos-14
