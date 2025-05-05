@@ -374,8 +374,9 @@ jobs:
 
       - name: Configure with CMake
         run: >
+          export PATH="$PATH:/opt/qt6-static/bin:/usr/bin:/bin:/usr/local/bin"
           cd build && \
-          /opt/qt6-static/usr/bin/qt-cmake .. -DQT_DEBUG_FIND_PACKAGE=ON
+          qt-cmake .. -DQT_DEBUG_FIND_PACKAGE=ON
           
       - name: Build
         run: make 
@@ -456,10 +457,6 @@ jobs:
           cp ./qss_files/stylesheet-mac.qss ./CaptureStream2.app/Contents/MacOS/
           mv ./CaptureStream2.app ./build/MacCaptureStream2/
 
-      - name: Create MacCaptureStream2 directory
-        run: |
-          mkdir -p build/MacCaptureStream2
-          mv build/CaptureStream2.app build/MacCaptureStream2/
       - name: Create DMG file
         run: |
           cd build
