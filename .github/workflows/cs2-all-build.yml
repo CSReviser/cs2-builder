@@ -547,7 +547,7 @@ jobs:
       - name: Upload DMG to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: CaptureStream2/build/CaptureStream2-MacOS-universal-${{ github.event.inputs.yyyymmdd }}.dmg
+          files: build/CaptureStream2-MacOS-universal-${{ github.event.inputs.yyyymmdd }}.dmg
           tag_name: ${{ needs.mac_build.outputs.tag }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
