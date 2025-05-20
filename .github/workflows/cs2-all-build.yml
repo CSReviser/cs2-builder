@@ -526,7 +526,7 @@ jobs:
       - name: Prepare CaptureStream2 executable
         run: |
           wget -qO FFmpeg.tar.gz https://github.com/CSReviser/ffmpeg-build/releases/download/7.1.1/ffmpeg-macos-universal.tar.gz || { echo "Failed to download FFmpeg"; exit 1; }
-          7z e FFmpeg.tar.gz ffmpeg -o./build/CaptureStream2.app/Contents/MacOS/ || { echo "Failed to extract FFmpeg"; exit 1; }
+          7z e FFmpeg.tar.gz -o./build/CaptureStream2.app/Contents/MacOS/ || { echo "Failed to extract FFmpeg"; exit 1; }
           cp CaptureStream2/icon.icns ./build/CaptureStream2.app/Contents/Resources/
           cp CaptureStream2/qss_files/stylesheet-mac.qss ./build/CaptureStream2.app/Contents/MacOS/
 
