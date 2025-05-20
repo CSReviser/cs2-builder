@@ -485,3 +485,77 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+  mac_universal_build:
+    runs-on: macos-14
+    needs: mac_build
+
+    steps:
+      - name: Set release variables
+        id: setvars
+        run: |
+          tag=${{ github.event.inputs.yyyymmdd }}
+          title="${tag:0:4}/${tag:4:2}/${tag:6:2}版リリース"
+          echo "tag=$tag" >> $GITHUB_OUTPUT
+          echo "title=$title" >> $GITHUB_OUTPUT
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Mark repo as safe
+        run: git config --global --add safe.directory "${GITHUB_WORKSPACE}"
+
+      - name: Update GitHub CLI
+        run: |
+          brew install gh || brew upgrade gh
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: 6.9.*
+          modules: 'qtcharts'
+          extra: '--external 7z'
+
+      - name: Clone CaptureStream2
+        run: |
+          git clone https://github.com/CSReviser/CaptureStream2.git
+          cd CaptureStream2
+          git checkout feature
+          git submodule update --init --recursive
+
+      - name: Configure CMake
+        run: |
+          mkdir build
+          cmake -S CaptureStream2 -B build -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"
+
+      - name: Build with Make
+        run: cmake --build build --parallel
+
+      - name: Prepare CaptureStream2 executable
+        run: |
+          wget -qO FFmpeg.tar.gz https://github.com/CSReviser/ffmpeg-build/releases/download/7.1.1/ffmpeg-macos-universal.tar.gz || { echo "Failed to download FFmpeg"; exit 1; }
+          7z e FFmpeg.tar.gz ffmpeg -o./build/CaptureStream2.app/Contents/MacOS/ || { echo "Failed to extract FFmpeg"; exit 1; }
+          cp CaptureStream2/icon.icns ./build/CaptureStream2.app/Contents/Resources/
+          cp CaptureStream2/qss_files/stylesheet-mac.qss ./build/CaptureStream2.app/Contents/MacOS/
+
+      - name: Create MacCaptureStream2 directory
+        run: |
+          mkdir -p build/MacCaptureStream2
+          mv build/CaptureStream2.app build/MacCaptureStream2/
+          cp -r CaptureStream2/qss_files/License build/MacCaptureStream2/
+         
+      - name: Create DMG file
+        run: |
+          cd CaptureStream2/build
+          hdiutil create -volname CaptureStream2 \
+                      -srcfolder MacCaptureStream2 \
+                      -ov -format UDZO \
+                      "CaptureStream2-MacOS-qt5-${{ github.event.inputs.yyyymmdd }}.dmg"
+
+
+      - name: Upload DMG to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: CaptureStream2/build/CaptureStream2-MacOS-qt5-${{ github.event.inputs.yyyymmdd }}.dmg
+          tag_name: ${{ needs.mac_build.outputs.tag }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
