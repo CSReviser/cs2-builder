@@ -388,7 +388,7 @@ jobs:
           mkdir -p LinCaptureStream2
           mv CaptureStream2 ./LinCaptureStream2/
           cp ../qss_files/stylesheet-ubu.qss ./LinCaptureStream2
-          cp -r ./qss_files/License ./LinCaptureStream2
+          cp -r ../qss_files/License ./LinCaptureStream2
           wget -qO ffmpeg-static-ubuntu.zip https://github.com/CSReviser/ffmpeg-build/releases/download/7.1.1/ffmpeg-static-ubuntu.zip
           7z e ffmpeg-static-ubuntu.zip ffmpeg -o./LinCaptureStream2
           chmod -R 755 ./LinCaptureStream2
