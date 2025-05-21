@@ -63,8 +63,9 @@ jobs:
           
       - name: Create DMG file
         run: |
+          cd build
           hdiutil create -volname CaptureStream2 \
-                      -srcfolder build \
+                      -srcfolder "../build/MacCaptureStream2" \
                       -ov -format UDZO \
                       -fs HFS+ \
                       "CaptureStream2-MacOS-${{ github.event.inputs.yyyymmdd }}.dmg"
@@ -78,7 +79,7 @@ jobs:
       - name: Upload DMG to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: CaptureStream2-MacOS-${{ github.event.inputs.yyyymmdd }}.dmg
+          files: build/CaptureStream2-MacOS-${{ github.event.inputs.yyyymmdd }}.dmg
           tag_name: ${{ github.event.inputs.yyyymmdd }}
           name: ${{ steps.format_date.outputs.title }}
           body: "Qt 6.9 build test"
