@@ -65,8 +65,9 @@ jobs:
         run: |
           cd build
           hdiutil create -volname CaptureStream2 \
-                      -srcfolder MacCaptureStream2 \
+                      -srcfolder "build/MacCaptureStream2" \
                       -ov -format UDZO \
+                      -fs HFS+ \
                       "CaptureStream2-MacOS-${{ github.event.inputs.yyyymmdd }}.dmg"
 
       - name: Format release title
@@ -472,8 +473,9 @@ jobs:
         run: |
           cd CaptureStream2/build
           hdiutil create -volname CaptureStream2 \
-                      -srcfolder MacCaptureStream2 \
+                      -srcfolder "build/MacCaptureStream2" \
                       -ov -format UDZO \
+                      -fs HFS+ \
                       "CaptureStream2-MacOS-qt5-${{ github.event.inputs.yyyymmdd }}.dmg"
 
 
@@ -540,8 +542,9 @@ jobs:
         run: |
           cd build
           hdiutil create -volname CaptureStream2 \
-                      -srcfolder MacCaptureStream2 \
+                      -srcfolder "build/MacCaptureStream2" \
                       -ov -format UDZO \
+                      -fs HFS+ \
                       "CaptureStream2-MacOS-universal-${{ github.event.inputs.yyyymmdd }}.dmg"
 
       - name: Upload DMG to GitHub Release
