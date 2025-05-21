@@ -66,14 +66,14 @@ jobs:
           cd build
           hdiutil create -volname MacCaptureStream2 \
                       -srcfolder MacCaptureStream2 \
-                      -ov -format UDZO \
+                      -ov -format UDRW \
                       -fs HFS+ \
-                      "CaptureStream2-MacOS-${{ github.event.inputs.yyyymmdd }}.dmg"
-
-hdiutil attach -readwrite "CaptureStream2-temp.dmg"
-rm -rf /Volumes/CaptureStream2/.HFS+ Private Directory Data*
-hdiutil detach /Volumes/CaptureStream2
-hdiutil convert "CaptureStream2-temp.dmg" -format UDZO -o "CaptureStream2-MacOS-universal-${{ github.event.inputs.yyyymmdd }}.dmg"
+                      "CaptureStream2-temp.dmg"
+          hdiutil attach -readwrite "CaptureStream2-temp.dmg"
+          rm -rf /Volumes/MacCaptureStream2/.HFS+ Private Directory Data_*
+          rm -rf /Volumes/MacCaptureStream2/[HFS+ Private Data]*
+          hdiutil detach /Volumes/MacCaptureStream2
+          hdiutil convert "CaptureStream2-temp.dmg" -format UDZO -o "CaptureStream2-MacOS-${{ github.event.inputs.yyyymmdd }}.dmg"
 
       - name: Format release title
         id: format_date
