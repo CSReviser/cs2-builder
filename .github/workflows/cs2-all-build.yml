@@ -64,8 +64,8 @@ jobs:
       - name: Create DMG file
         run: |
           cd build
-          hdiutil create -volname CaptureStream2 \
-                      -srcfolder "../build/MacCaptureStream2" \
+          hdiutil create -volname MacCaptureStream2 \
+                      -srcfolder MacCaptureStream2 \
                       -ov -format UDZO \
                       -fs HFS+ \
                       "CaptureStream2-MacOS-${{ github.event.inputs.yyyymmdd }}.dmg"
