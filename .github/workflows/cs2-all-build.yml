@@ -57,23 +57,17 @@ jobs:
 
       - name: Create MacCaptureStream2 directory
         run: |
-          mkdir -p build/MacCaptureStream2
-          mv build/CaptureStream2.app build/MacCaptureStream2/
-          cp -r CaptureStream2/qss_files/License build/MacCaptureStream2/
+          mkdir -p build/tmp/MacCaptureStream2
+          mv build/CaptureStream2.app build/tmp/MacCaptureStream2/
+          cp -r CaptureStream2/qss_files/License build/tmp/MacCaptureStream2/
           
       - name: Create DMG file
         run: |
           cd build
           hdiutil create -volname MacCaptureStream2 \
-                      -srcfolder MacCaptureStream2 \
-                      -ov -format UDRW \
-                      -fs HFS+ \
-                      "CaptureStream2-temp.dmg"
-          hdiutil attach -readwrite "CaptureStream2-temp.dmg"
-          rm -rf /Volumes/MacCaptureStream2/.HFS+ Private Directory Data_*
-          rm -rf /Volumes/MacCaptureStream2/[HFS+ Private Data]*
-          hdiutil detach /Volumes/MacCaptureStream2
-          hdiutil convert "CaptureStream2-temp.dmg" -format UDZO -o "CaptureStream2-MacOS-${{ github.event.inputs.yyyymmdd }}.dmg"
+                      -srcfolder tmp \
+                      -ov -format UDZO \
+                      "CaptureStream2-MacOS-${{ github.event.inputs.yyyymmdd }}.dmg"
 
       - name: Format release title
         id: format_date
