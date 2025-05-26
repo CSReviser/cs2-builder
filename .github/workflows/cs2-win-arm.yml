@@ -27,8 +27,9 @@ jobs:
       - name: Create build directory
         run: |
           mkdir -p build
+          find /opt/qt6-arm -type f -name qt-cmake -executable
           ls -r
-          cd /opt/qt6-arm/bin
+          cd /opt/qt6-arm
           ls -r
 
       - name: Configure with CMake
