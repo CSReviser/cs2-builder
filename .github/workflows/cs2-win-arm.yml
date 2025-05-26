@@ -34,7 +34,7 @@ jobs:
           /usr/local/Qt-6.9.0/bin/qt-cmake
             -S .
             -B ../build 
-            -G Ninja \
+            -G Ninja 
             -DCMAKE_BUILD_TYPE=Release 
             -DCMAKE_SYSTEM_NAME=Windows 
             -DCMAKE_SYSTEM_PROCESSOR=ARM64 
