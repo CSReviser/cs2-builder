@@ -31,7 +31,7 @@ jobs:
       - name: Configure with CMake
         working-directory: CaptureStream2
         run: >
-          /usr/local/Qt-6.9.0/bin/qt-cmake
+          /opt/qt6-arm/bin/qt-cmake
             -S .
             -B ../build 
             -G Ninja 
