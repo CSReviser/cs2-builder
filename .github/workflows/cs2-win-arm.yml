@@ -27,15 +27,11 @@ jobs:
       - name: Create build directory
         run: |
           mkdir -p build
-          find /opt/qt6-arm -type f -name qt-cmake -executable
-          ls -r
-          cd /opt/qt6-arm
-          ls -r
 
       - name: Configure with CMake
         working-directory: CaptureStream2
         run: >
-          /opt/qt6-arm/bin/qt-cmake
+          /usr/local/Qt-6.9.0/bin/qt-cmake
             -S .
             -B ../build 
             -G Ninja \
