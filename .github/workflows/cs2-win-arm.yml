@@ -28,10 +28,11 @@ jobs:
         run: mkdir -p build
 
       - name: Configure with CMake
+        working-directory: CaptureStream2
         run: >
           qt-cmake
-            -S CaptureStream2
-            -B build 
+            -S .
+            -B ../build 
             -DCMAKE_BUILD_TYPE=Release 
             -DCMAKE_SYSTEM_NAME=Windows 
             -DCMAKE_SYSTEM_PROCESSOR=arm64 
