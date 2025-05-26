@@ -25,18 +25,16 @@ jobs:
           git submodule update --init --recursive
 
       - name: Create build directory
+        working-directory: CaptureStream2
         run: |
           mkdir -p build
 
       - name: Configure with CMake
-        working-directory: 
         run: |
-          cd CaptureStream2
-          /opt/qt6-arm/bin/qt-cmake . .
-          make
+          /opt/qt6-arm/bin/qt-cmake . -B build
 
       - name: Build
-        run: cmake --build ./build --parallel
+        run: cmake --build build --parallel
 
       - name: Create WinCaptureStream2 directory and move exe
         shell: bash
