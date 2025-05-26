@@ -34,7 +34,7 @@ jobs:
           /opt/qt6-arm/bin/qt-cmake . ../build
 
       - name: Build
-        run: cmake --build build --parallel
+        run: cmake --build ../build --parallel
 
       - name: Create WinCaptureStream2 directory and move exe
         shell: bash
