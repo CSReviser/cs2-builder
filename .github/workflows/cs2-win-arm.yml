@@ -32,7 +32,11 @@ jobs:
       - name: Configure with CMake
         working-directory: CaptureStream2
         run: |
-          /opt/qt6-arm/bin/qt-cmake . -B build
+          /opt/qt6-arm/bin/qt-cmake \
+            -DCMAKE_TOOLCHAIN_FILE=/opt/qt6-arm/lib/cmake/Qt6/qt.toolchain.cmake \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_INSTALL_PREFIX=/opt/qt6-arm \
+            -B build .
 
       - name: Build
         working-directory: CaptureStream2
