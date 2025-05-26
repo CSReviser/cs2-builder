@@ -32,6 +32,7 @@ jobs:
         working-directory: CaptureStream2
         run: >
           /opt/qt6-arm/bin/qt-cmake . ../build
+          make
 
       - name: Build
         run: cmake --build ../build --parallel
