@@ -31,16 +31,7 @@ jobs:
       - name: Configure with CMake
         working-directory: CaptureStream2
         run: >
-          /opt/qt6-arm/bin/qt-cmake
-            -S .
-            -B ../build 
-            -G Ninja 
-            -DCMAKE_BUILD_TYPE=Release 
-            -DCMAKE_SYSTEM_NAME=Windows 
-            -DCMAKE_SYSTEM_PROCESSOR=ARM64 
-            -DCMAKE_TOOLCHAIN_FILE=/opt/llvm-mingw/toolchain.cmake
-            -DCMAKE_PREFIX_PATH="/opt/qt6" 
-            -DQT_HOST_PATH="/opt/qt6-host"
+          /opt/qt6-arm/bin/qt-cmake . ../build
 
       - name: Build
         run: cmake --build build --parallel
