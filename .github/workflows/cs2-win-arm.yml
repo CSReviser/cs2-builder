@@ -39,6 +39,7 @@ jobs:
         run: cmake --build build --parallel
 
       - name: Create WinCaptureStream2 directory and move exe
+        working-directory: CaptureStream2
         shell: bash
         run: |
           mkdir -p build/WinCaptureStream2
@@ -46,6 +47,7 @@ jobs:
           cp ./CaptureStream2/qss_files/stylesheet-win.qss build/WinCaptureStream2/
 
       - name: Create ZIP file
+        working-directory: CaptureStream2
         run: |
           cd build
           zip -r "CaptureStream-arm64-${{ github.event.inputs.yyyymmdd }}.zip" WinCaptureStream2
@@ -53,6 +55,7 @@ jobs:
       - name: Format release title
         id: format_date
         shell: bash
+        working-directory: CaptureStream2
         run: |
           yyyy="${{ github.event.inputs.yyyymmdd }}"
           echo "title=${yyyy:0:4}/${yyyy:4:2}/${yyyy:6:2}版リリース (Windows ARM)" >> "$GITHUB_OUTPUT"
