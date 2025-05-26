@@ -29,13 +29,12 @@ jobs:
           mkdir -p build
 
       - name: Configure with CMake
-        working-directory: CaptureStream2
+        working-directory: 
         run: |
-          /opt/qt6-arm/bin/qt-cmake . ../build
-          make
+          /opt/qt6-arm/bin/qt-cmake ./CaptureStream2 ./build
 
       - name: Build
-        run: cmake --build ../build --parallel
+        run: cmake --build ./build --parallel
 
       - name: Create WinCaptureStream2 directory and move exe
         shell: bash
