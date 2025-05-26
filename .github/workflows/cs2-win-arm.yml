@@ -30,24 +30,15 @@ jobs:
       - name: Configure with CMake
         run: >
           qt-cmake
-qt-cmake \
-  -S CaptureStream2 \
-  -B build \
-  -DCMAKE_BUILD_TYPE=Release \
-  -DCMAKE_SYSTEM_NAME=Windows \
-  -DCMAKE_SYSTEM_PROCESSOR=arm64 \
-  -DCMAKE_C_COMPILER=clang \
-  -DCMAKE_CXX_COMPILER=clang++ \
-  -DCMAKE_PREFIX_PATH="/opt/qt6" \
-  -DQT_HOST_PATH="/opt/qt6-host"
-          -S CaptureStream2
-          -B build
-          -DCMAKE_BUILD_TYPE=Release
-          -DCMAKE_SYSTEM_NAME=Windows
-          -DCMAKE_SYSTEM_PROCESSOR=arm64
-          -DCMAKE_TOOLCHAIN_FILE=/opt/llvm-mingw/toolchain.cmake
-          -DCMAKE_PREFIX_PATH="/opt/qt6"
-          -DQT_HOST_PATH="/opt/qt6-host"
+            -S CaptureStream2
+            -B build 
+            -DCMAKE_BUILD_TYPE=Release 
+            -DCMAKE_SYSTEM_NAME=Windows 
+            -DCMAKE_SYSTEM_PROCESSOR=arm64 
+            -DCMAKE_C_COMPILER=clang 
+            -DCMAKE_CXX_COMPILER=clang++ 
+            -DCMAKE_PREFIX_PATH="/opt/qt6" 
+            -DQT_HOST_PATH="/opt/qt6-host"
 
       - name: Build
         run: cmake --build build --parallel
