@@ -25,7 +25,11 @@ jobs:
           git submodule update --init --recursive
 
       - name: Create build directory
-        run: mkdir -p build
+        run: |
+          mkdir -p build
+          ls -r
+          cd /opt/qt6-arm/bin
+          ls -r
 
       - name: Configure with CMake
         working-directory: CaptureStream2
