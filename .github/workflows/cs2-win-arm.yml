@@ -31,7 +31,9 @@ jobs:
       - name: Configure with CMake
         working-directory: 
         run: |
-          /opt/qt6-arm/bin/qt-cmake ./CaptureStream2 ./build
+          cd CaptureStream2
+          /opt/qt6-arm/bin/qt-cmake . .
+          make
 
       - name: Build
         run: cmake --build ./build --parallel
