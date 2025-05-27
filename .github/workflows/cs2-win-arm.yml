@@ -22,6 +22,14 @@ jobs:
           echo "----- qt.toolchain.cmake -----"
           cat /opt/qt6-arm/lib/cmake/Qt6/qt.toolchain.cmake || echo "File not found"
 
+      - name: Patch .cmake files to remove IMPORTED_IMPLIB
+        run: |
+          find /opt/qt6-arm/lib/cmake -type f -name '*.cmake' | while read -r cmakefile; do
+            echo "Patching $cmakefile"
+            sed -i '/IMPORTED_IMPLIB/d' "$cmakefile"
+            sed -i '/_qt_imported_implib_path/d' "$cmakefile"
+          done
+
       - name: Clone CaptureStream2
         run: |
           git clone https://github.com/CSReviser/CaptureStream2.git
