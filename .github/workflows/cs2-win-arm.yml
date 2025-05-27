@@ -17,6 +17,11 @@ jobs:
       - name: Checkout this repo
         uses: actions/checkout@v4
 
+      - name: Show qt.toolchain.cmake contents
+        run: |
+          echo "----- qt.toolchain.cmake -----"
+          cat /opt/qt6-arm/lib/cmake/Qt6/qt.toolchain.cmake || echo "File not found"
+
       - name: Clone CaptureStream2
         run: |
           git clone https://github.com/CSReviser/CaptureStream2.git
