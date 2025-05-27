@@ -44,7 +44,13 @@ jobs:
             -DCMAKE_SYSTEM_NAME=Windows \
             -DCMAKE_SYSTEM_PROCESSOR=arm64 \
             -DCMAKE_BUILD_TYPE=Release \
-            -B build -S .
+            -B build -S . \
+           || { \
+             echo "----- CMakeError.log -----"; cat build/CMakeFiles/CMakeError.log || true; \
+             echo "----- CMakeOutput.log -----"; cat build/CMakeFiles/CMakeOutput.log || true; \
+             echo "----- CMakeCache.txt -----"; cat build/CMakeCache.txt || true; \
+             exit 1; \
+            } 
 
       - name: Build
         working-directory: CaptureStream2
