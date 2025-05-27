@@ -39,9 +39,10 @@ jobs:
         run: |
           /opt/qt6-arm/bin/qt-cmake \
             -DCMAKE_TOOLCHAIN_FILE=/opt/qt6-arm/lib/cmake/Qt6/qt.toolchain.cmake \
+            -DCMAKE_SYSTEM_NAME=Windows \
+            -DCMAKE_SYSTEM_PROCESSOR=arm64 \
             -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_INSTALL_PREFIX=/opt/qt6-arm \
-            -B build .
+            -B build -S .
 
       - name: Build
         working-directory: CaptureStream2
