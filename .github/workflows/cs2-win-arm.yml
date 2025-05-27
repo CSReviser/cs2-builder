@@ -40,10 +40,12 @@ jobs:
           QT_USE_ORIGINAL_COMPILER: ON
         run: |
           /opt/qt6-arm/bin/qt-cmake \
+            -GNinja \
             -DCMAKE_TOOLCHAIN_FILE=/opt/qt6-arm/lib/cmake/Qt6/qt.toolchain.cmake \
+            -DCMAKE_C_COMPILER=aarch64-w64-mingw32-gcc \
+            -DCMAKE_CXX_COMPILER=aarch64-w64-mingw32-g++ \
             -DCMAKE_SYSTEM_NAME=Windows \
-            -DCMAKE_SYSTEM_PROCESSOR=arm64 \
-            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_SYSTEM_PROCESSOR=aarch64
             -B build -S . \
            || { \
              echo "----- CMakeError.log -----"; cat build/CMakeFiles/CMakeError.log || true; \
