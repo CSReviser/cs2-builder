@@ -36,6 +36,8 @@ jobs:
 
       - name: Configure with CMake
         working-directory: CaptureStream2
+        env:
+          QT_USE_ORIGINAL_COMPILER: ON
         run: |
           /opt/qt6-arm/bin/qt-cmake \
             -DCMAKE_TOOLCHAIN_FILE=/opt/qt6-arm/lib/cmake/Qt6/qt.toolchain.cmake \
