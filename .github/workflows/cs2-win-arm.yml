@@ -45,8 +45,8 @@ jobs:
             -DCMAKE_C_COMPILER=aarch64-w64-mingw32-gcc \
             -DCMAKE_CXX_COMPILER=aarch64-w64-mingw32-g++ \
             -DCMAKE_SYSTEM_NAME=Windows \
-            -DCMAKE_SYSTEM_PROCESSOR=aarch64
-            -B build -S . \
+            -DCMAKE_SYSTEM_PROCESSOR=aarch64 \
+            -DQT_BUILD_SHARED=OFF \
            || { \
              echo "----- CMakeError.log -----"; cat build/CMakeFiles/CMakeError.log || true; \
              echo "----- CMakeOutput.log -----"; cat build/CMakeFiles/CMakeOutput.log || true; \
