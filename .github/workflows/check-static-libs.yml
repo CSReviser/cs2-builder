@@ -1,4 +1,4 @@
-name: Check Qt6 Static Libraries
+name: Check Qt6 Static Libraries in Build Dir
 
 on:
   workflow_dispatch:
@@ -9,10 +9,20 @@ jobs:
     container:
       image: ghcr.io/csreviser/qt6-win-arm:latest
 
-    env:
-      QT6_ARM_PREFIX: /opt/qt6-arm-static  # DockerfileのENV値を手動で定義
-
     steps:
+      - name: Look for .a files in qtbase build output
+        run: |
+          echo "Searching for .a files under /qtbase"
+          found=$(find /qtbase -type f -name "*.a")
+          if [ -n "$found" ]; then
+            echo "✅ .a static libraries found:"
+            echo "$found"
+          else
+            echo "❌ No .a static libraries found in /qtbase"
+            echo "Static build may have failed or is not complete."
+            exit 1
+          fi
+
       - name: Check for static .a files in Qt install prefix
         run: |
           echo "Checking for .a files in $QT6_ARM_PREFIX/lib"
