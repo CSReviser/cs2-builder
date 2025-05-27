@@ -13,7 +13,7 @@ jobs:
       - name: Look for .a files in qtbase build output
         run: |
           echo "Searching for .a files under /qtbase"
-          found=$(find /qtbase -type f -name "*.a")
+          found=$(find /build/qt6/qtbase -type f -name "*.a")
           if [ -n "$found" ]; then
             echo "✅ .a static libraries found:"
             echo "$found"
