@@ -39,7 +39,7 @@ jobs:
         env:
           QT_USE_ORIGINAL_COMPILER: ON
         run: |
-          /opt/qt6-arm/bin/qt-cmake \
+          /opt/qt6-arm/bin/qt-cmake -B build -S . \
             -GNinja \
             -DCMAKE_TOOLCHAIN_FILE=/opt/qt6-arm/lib/cmake/Qt6/qt.toolchain.cmake \
             -DCMAKE_C_COMPILER=aarch64-w64-mingw32-gcc \
