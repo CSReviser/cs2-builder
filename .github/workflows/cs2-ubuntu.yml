@@ -41,7 +41,9 @@ jobs:
             ${{ env.IMAGE_NAME }} \
             bash -c "
               mkdir -p build && cd build && \
-              qt-cmake .. -DQT_DEBUG_FIND_PACKAGE=ON && \
+              qt-cmake .. \
+              -DQT_DEBUG_FIND_PACKAGE=ON \
+              -DCMAKE_EXE_LINKER_FLAGS='-static -lxcb -lXau -lXdmcp -lxcb-util' && \
               cmake --build . --parallel && \
               mkdir -p build/LinCaptureStream2 && \
               mv CaptureStream2 build/LinCaptureStream2/ && \
