@@ -75,9 +75,10 @@ jobs:
         shell: bash
         run: |
           cd CaptureStream2/build
-          echo "----- CMakeError.log -----" && cat /work/CaptureStream2/build/CMakeCache.txt || true && \
-          echo "----- CMakeError.log -----" && cat /work/CaptureStream2/build/CMakeFiles/CMakeError.log || true && \
-          echo "----- CMakeOutput.log -----" && /work/CaptureStream2/build/CMakeFiles/CMakeOutput.log || true && \
+          qt-cmake .. || true
+          echo "----- CMakeError.log -----" && cat ./CMakeCache.txt || true && \
+          echo "----- CMakeError.log -----" && cat ./CMakeFiles/CMakeError.log || true && \
+          echo "----- CMakeOutput.log -----" && cat ./CMakeFiles/CMakeOutput.log || true 
           zip -r "CaptureStream-ubuntu-${{ github.event.inputs.yyyymmdd }}.zip" LinCaptureStream2 && \
           yyyy="${{ github.event.inputs.yyyymmdd }}"
           echo "title=${yyyy:0:4}/${yyyy:4:2}/${yyyy:6:2}版リリース" >> "$GITHUB_OUTPUT"
