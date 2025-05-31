@@ -37,13 +37,13 @@ jobs:
             --env PATH="/opt/qt6-static/bin:/usr/bin:/bin:/usr/local/bin" \
             ${{ env.IMAGE_NAME }} \
             bash -c '
-              echo "[✓] Checking Qt tools..." &&
-              which qtpaths && qtpaths --qt-version &&
-              which moc && moc -v &&
-              which uic && uic -v &&
-              echo "[✓] Checking Qt cmake modules..." &&
-              find /opt/qt6-static/lib/cmake -name "Qt6*.cmake" | head &&
-              echo "[✓] Checking Qt static libs..." &&
+              echo "[✓] Checking Qt tools..." && \
+              which qtpaths && qtpaths --qt-version && \
+              which moc && moc -v && \
+              which uic && uic -v && \
+              echo "[✓] Checking Qt cmake modules..." && \
+              find /opt/qt6-static/lib/cmake -name "Qt6*.cmake" | head && \
+              echo "[✓] Checking Qt static libs..." && \
               find /opt/qt6-static/lib -name "*.a" | grep Qt6 | head
             '
 
