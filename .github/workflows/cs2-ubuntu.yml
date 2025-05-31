@@ -57,7 +57,7 @@ jobs:
             ${{ env.IMAGE_NAME }} \
             bash -c "
               mkdir -p build && cd build && \
-              export PATH="/opt/qt6-static/libexec:$PATH" && \
+              export PATH="/opt/qt6-static/bin:/opt/qt6-static/libexec:$PATH" && \
               qt-cmake .. \
               -DQT_DEBUG_FIND_PACKAGE=ON || true && \
               echo "----- CMakeError.log -----" && cat /work/CaptureStream2/build/CMakeFiles/CMakeError.log || true && \
