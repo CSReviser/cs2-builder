@@ -61,10 +61,10 @@ jobs:
               export PATH="/opt/qt6-static/bin:/opt/qt6-static/libexec:$PATH" && \
               qt-cmake .. \
               -DQT_DEBUG_FIND_PACKAGE=ON || true && \
-              echo "----- CMakeError.log -----" && cat /work/CaptureStream2/build/CMakeFiles/CMakeError.log || true && \
-              echo "----- CMakeOutput.log -----" && /work/CaptureStream2/build/CMakeFiles/CMakeOutput.log || true && \
               cmake --graphviz=graph.dot . && \
               dot -Tpng graph.dot -o graph.png && \
+              echo "----- CMakeError.log -----" && cat /work/CaptureStream2/build/CMakeFiles/CMakeError.log || true && \
+              echo "----- CMakeOutput.log -----" && /work/CaptureStream2/build/CMakeFiles/CMakeOutput.log || true && \
               cmake --build . --parallel && \
               mkdir -p build/LinCaptureStream2 && \
               mv CaptureStream2 build/LinCaptureStream2/ && \
