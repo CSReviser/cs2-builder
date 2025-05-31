@@ -38,7 +38,8 @@ jobs:
             ${{ env.IMAGE_NAME }} \
             bash -c '
               echo "[✓] Checking Qt tools..." && \
-              ls -r /opt/qt6-static/bin
+              ls -r /opt/qt6-static/bin && \
+              ls -r /opt/qt6-static/libexec && \
               echo "[✓] Checking Qt cmake modules..." && \
               find /opt/qt6-static/lib/cmake -name "Qt6*.cmake" | head && \
               echo "[✓] Checking Qt static libs..." && \
