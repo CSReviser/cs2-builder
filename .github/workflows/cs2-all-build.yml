@@ -363,7 +363,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: mac_build
     container:
-      image: ghcr.io/csreviser/qt6-static:6.9.0-ubuntu22.04
+      image: ghcr.io/csreviser/qt6-ubuntu-static:latest
+# ghcr.io/csreviser/qt6-static:6.9.0-ubuntu22.04
+# ghcr.io/csreviser/qt6-ubuntu-static:latest
 
     steps:
       - name: Checkout this repo
