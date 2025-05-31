@@ -42,6 +42,7 @@ jobs:
               ls -r /opt/qt6-static/libexec && \
               echo "[✓] Checking Qt cmake modules..." && \
               find /opt/qt6-static/lib/cmake -name "Qt6*.cmake" | head && \
+              find /opt/qt6-static/lib/cmake -name "*CoreConfig.cmake" | head && \
               echo "[✓] Checking Qt static libs..." && \
               find /opt/qt6-static/lib -name "*.a" | grep Qt6 | head
             '
