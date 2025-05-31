@@ -58,8 +58,8 @@ jobs:
             --env PATH="/opt/qt6-static/bin:/usr/bin:/bin:/usr/local/bin:/opt/qt6-static/libexec:$PATH" \
             ${{ env.IMAGE_NAME }} \
             bash -c "
-              mkdir -p build && \
-              qt-cmake . -B build || true && \
+              mkdir -p build && cd build && \
+              qt-cmake .. -DQT_DEBUG_FIND_PACKAGE=ON || true && \
               echo "----- CMakeError.log -----" && cat /work/CaptureStream2/build/CMakeCache.txt || true && \
               echo "----- CMakeError.log -----" && cat /work/CaptureStream2/build/CMakeFiles/CMakeError.log || true && \
               echo "----- CMakeOutput.log -----" && /work/CaptureStream2/build/CMakeFiles/CMakeOutput.log || true && \
