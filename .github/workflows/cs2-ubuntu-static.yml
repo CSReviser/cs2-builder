@@ -15,7 +15,6 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    needs: mac_build
     container:
       image: ghcr.io/csreviser/qt6-ubuntu-static:latest
 
