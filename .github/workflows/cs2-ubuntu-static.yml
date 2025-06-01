@@ -16,6 +16,63 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    needs: mac_build
+    container:
+      image: ghcr.io/csreviser/qt6-ubuntu-static:latest
+
+    steps:
+      - name: Checkout this repo
+        uses: actions/checkout@v4
+
+      - name: Install GitHub CLI
+        run: |
+          apt-get update
+          apt-get install -y curl zip
+          curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | \
+          gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg
+          echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | \
+          tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+          apt-get update
+          apt-get install -y gh p7zip-full lzip bzip2
+          
+      - name: Mark repo as safe
+        run: git config --global --add safe.directory "${GITHUB_WORKSPACE}"
+
+      - name: Clone CaptureStream2
+        run: |
+          git clone https://github.com/CSReviser/CaptureStream2.git
+          cd CaptureStream2
+          git checkout feature
+          git submodule update --init --recursive
+
+      - name: Build using Docker container with Qt static
+        run: |
+          cd CaptureStream2
+          mkdir -p build && cd build
+          qt-cmake .. -DQT_DEBUG_FIND_PACKAGE=ON
+          cmake --build . --parallel
+          mkdir -p LinCaptureStream2
+          mv CaptureStream2 ./LinCaptureStream2/
+          cp ../qss_files/stylesheet-ubu.qss ./LinCaptureStream2
+          cp -r ../qss_files/License ./LinCaptureStream2
+          wget -qO ffmpeg-static-ubuntu.zip https://github.com/CSReviser/ffmpeg-build/releases/download/7.1.1/ffmpeg-static-ubuntu.zip
+          7z e ffmpeg-static-ubuntu.zip ffmpeg -o./LinCaptureStream2
+          chmod -R 755 ./LinCaptureStream2
+
+      - name: Create ZIP file
+        run: |
+          cd CaptureStream2/build
+          zip -r "CaptureStream2-ubuntu-${{ github.event.inputs.yyyymmdd }}.zip" LinCaptureStream2
+      
+      - name: Upload zip to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: CaptureStream2/build/CaptureStream2-ubuntu-${{ github.event.inputs.yyyymmdd }}.zip
+          tag_name: ${{ needs.mac_build.outputs.tag }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
