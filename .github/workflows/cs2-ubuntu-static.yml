@@ -9,7 +9,6 @@ on:
 
 env:
   QT_VERSION: 6.9.0
-  IMAGE_NAME: ghcr.io/csreviser/qt6-static:6.9.0-ubuntu22.04
 #  IMAGE_NAME: ghcr.io/csreviser/qt6-static:6.9.0-ubuntu22.04
 # ghcr.io/csreviser/qt6-ubuntu-static:latest
 
@@ -69,83 +68,5 @@ jobs:
         with:
           files: CaptureStream2/build/CaptureStream2-ubuntu-${{ github.event.inputs.yyyymmdd }}.zip
           tag_name: ${{ needs.mac_build.outputs.tag }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Clone CaptureStream2
-        run: |
-          git clone https://github.com/CSReviser/CaptureStream2.git
-          cd CaptureStream2
-          git checkout feature
-          git submodule update --init --recursive
-      - name: Get UID and GID
-        id: userinfo
-        run: |
-          echo "uid=$(id -u)" >> "$GITHUB_OUTPUT"
-          echo "gid=$(id -g)" >> "$GITHUB_OUTPUT"
-
-      - name: Check Qt static environment in Docker
-        run: |
-          docker run --rm \
-            --env PATH="/opt/qt6-static/bin:/usr/bin:/bin:/usr/local/bin" \
-            ${{ env.IMAGE_NAME }} \
-            bash -c '
-              echo "[✓] Checking Qt tools..." && \
-              ls -r /opt/qt6-static/bin && \
-              ls -r /opt/qt6-static/libexec && \
-              echo "[✓] Checking Qt cmake modules..." && \
-              find /opt/qt6-static/lib/cmake -name "Qt6*.cmake" | head && \
-              find /opt/qt6-static/lib/cmake -name "*Config.cmake" | head && \
-              echo "[✓] Checking Qt static libs..." && \
-              find /opt/qt6-static/lib -name "*.a" | grep Qt6 | head
-            '
-
-      - name: Build using Docker container with Qt static
-        run: |
-          docker run --rm \
-            -v ${{ github.workspace }}:/work \
-            -w /work/CaptureStream2 \
-            --env HOST_UID=${{ steps.userinfo.outputs.uid }} \
-            --env HOST_GID=${{ steps.userinfo.outputs.gid }} \
-            --env PATH="/opt/qt6-static/bin:/usr/bin:/bin:/usr/local/bin:/opt/qt6-static/libexec:$PATH" \
-            ${{ env.IMAGE_NAME }} \
-            bash -c "
-              mkdir -p build && cd build && \
-              qt-cmake .. -DQT_DEBUG_FIND_PACKAGE=ON || true && \
-              echo "----- CMakeError.log -----" && cat /work/CaptureStream2/build/CMakeCache.txt || true && \
-              echo "----- CMakeError.log -----" && cat /work/CaptureStream2/build/CMakeFiles/CMakeError.log || true && \
-              echo "----- CMakeOutput.log -----" && /work/CaptureStream2/build/CMakeFiles/CMakeOutput.log || true && \
-              cmake --build . --parallel && \
-              mkdir -p build/LinCaptureStream2 && \
-              mv CaptureStream2 build/LinCaptureStream2/ && \
-              cp ../qss_files/stylesheet-ubu.qss build/LinCaptureStream2 && \
-              chown -R \$HOST_UID:\$HOST_GID /work
-            "
-
-      - name: Format release title
-        id: format_date
-        shell: bash
-        run: |
-          cd CaptureStream2/build
-              cmake --build . --parallel || true
-          echo "----- CMakeError.log -----" && cat ./CMakeCache.txt || true 
-          echo "----- CMakeError.log -----" && cat ./CMakeFiles/CMakeError.log || true && \
-          echo "----- CMakeOutput.log -----" && cat ./CMakeFiles/CMakeOutput.log || true 
-          zip -r "CaptureStream-ubuntu-${{ github.event.inputs.yyyymmdd }}.zip" LinCaptureStream2 && \
-          yyyy="${{ github.event.inputs.yyyymmdd }}"
-          echo "title=${yyyy:0:4}/${yyyy:4:2}/${yyyy:6:2}版リリース" >> "$GITHUB_OUTPUT"
-
-      - name: Upload ZIP to GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: build/CaptureStream2-ubuntu-${{ github.event.inputs.yyyymmdd }}.zip
-          tag_name: ${{ github.event.inputs.yyyymmdd }}
-          name: ${{ steps.format_date.outputs.title }}
-          body: "Static build for ubuntu (Qt 6.9.0)"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
