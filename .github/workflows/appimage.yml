@@ -33,7 +33,7 @@ jobs:
           cd CaptureStream2
           mkdir build
           cmake -S ./ -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/usr/lib/qt6
-          make -j$(nproc)
+          cmake --build build --parallel
           make install DESTDIR=AppDir
 
       - name: Download linuxdeployqt
