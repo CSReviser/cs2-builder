@@ -52,7 +52,7 @@ jobs:
            --appdir AppDir \
            --desktop-file capturestream2.desktop \
            --icon-file capturestream2.png \
-           --executable ./CaptureStream2 \
+           --executable ./build/CaptureStream2 \
            --output appimage \
            --plugin qt
 
