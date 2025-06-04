@@ -47,7 +47,7 @@ jobs:
             -appimage -extra-plugins=iconengines,imageformats -verbose=2
 
       - name: Upload AppImage
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: CaptureStream2-AppImage
           path: ./CaptureStream2-x86_64.AppImage
