@@ -19,7 +19,6 @@ jobs:
             cmake make g++ \
             desktop-file-utils patchelf wget file git
 
-
       - name: Clone CaptureStream2
         run: |
           git clone https://github.com/CSReviser/CaptureStream2.git
@@ -29,9 +28,10 @@ jobs:
 
       - name: Build Application
         run: |
+          cd CaptureStream
           mkdir build
           cd build
-          cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/usr/lib/qt6
+          cmake .. -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/usr/lib/qt6
           make -j$(nproc)
           make install DESTDIR=AppDir
 
