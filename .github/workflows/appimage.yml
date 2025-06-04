@@ -1,0 +1,46 @@
+name: Build AppImage
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  appimage:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Install Dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y \
+            qt6-base-dev qt6-base-dev-tools \
+            cmake make g++ \
+            desktop-file-utils patchelf wget file git
+
+      - name: Build Application
+        run: |
+          mkdir build
+          cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/usr/lib/qt6
+          make -j$(nproc)
+          make install DESTDIR=AppDir
+
+      - name: Download linuxdeployqt
+        run: |
+          wget https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-x86_64.AppImage
+          chmod +x linuxdeployqt-x86_64.AppImage
+
+      - name: Make AppImage
+        run: |
+          ./linuxdeployqt-x86_64.AppImage \
+            build/AppDir/usr/share/applications/CaptureStream2.desktop \
+            -appimage -extra-plugins=iconengines,imageformats -verbose=2
+
+      - name: Upload AppImage
+        uses: actions/upload-artifact@v3
+        with:
+          name: CaptureStream2-AppImage
+          path: ./CaptureStream2-x86_64.AppImage
