@@ -63,4 +63,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: CaptureStream2-AppImage
-          path: ./CaptureStream2-x86_64.AppImage
+          path: ./CaptureStream2/CaptureStream2-x86_64.AppImage
