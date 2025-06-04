@@ -34,7 +34,7 @@ jobs:
           mkdir build
           cd build
           cmake .. -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/usr/lib/qt6
-          make -j$(nproc)
+          make . -j$(nproc)
           make install DESTDIR=AppDir
 
       - name: Download linuxdeployqt
