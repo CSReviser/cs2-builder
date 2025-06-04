@@ -51,7 +51,7 @@ jobs:
           ./linuxdeploy-x86_64.AppImage \
            --appdir AppDir \
            --desktop-file capturestream2.desktop \
-           --icon-file capturestream2.png \
+           --icon-file icon.png \
            --executable ./build/CaptureStream2 \
            --output appimage \
            --plugin qt
