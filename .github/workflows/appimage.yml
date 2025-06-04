@@ -31,7 +31,7 @@ jobs:
           cd CaptureStream2
           mkdir build
           cd build
-          cmake .. -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/usr/lib/qt6
+          qt-cmake .. -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/usr/lib/qt6
           make -j$(nproc)
           make install DESTDIR=AppDir
 
