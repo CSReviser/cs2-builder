@@ -45,6 +45,9 @@ jobs:
           wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
           chmod +x linuxdeploy-plugin-qt-x86_64.AppImage
 
+      - name: Set QMAKE path
+        run: echo "QMAKE=/usr/lib/qt6/bin/qmake" >> $GITHUB_ENV
+
       - name: Build AppImage
         run: |
           cd CaptureStream2
