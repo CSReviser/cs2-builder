@@ -36,18 +36,25 @@ jobs:
           cmake --build build --parallel
           
 
-      - name: Download linuxdeployqt
+      - name: Download linuxdeploy and plugin
         run: |
           cd CaptureStream2
-          wget https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-x86_64.AppImage
-          chmod +x linuxdeployqt-x86_64.AppImage
+          wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+          chmod +x linuxdeploy-x86_64.AppImage
 
-      - name: Make AppImage
+          wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
+          chmod +x linuxdeploy-plugin-qt-x86_64.AppImage
+
+      - name: Build AppImage
         run: |
           cd CaptureStream2
-          ./linuxdeployqt-x86_64.AppImage \
-            build/AppDir/usr/share/applications/CaptureStream2.desktop \
-            -appimage -extra-plugins=iconengines,imageformats -verbose=2
+          ./linuxdeploy-x86_64.AppImage \
+           --appdir AppDir \
+           --desktop-file capturestream2.desktop \
+           --icon-file capturestream2.png \
+           --executable ./CaptureStream2 \
+           --output appimage \
+           --plugin qt
 
       - name: Upload AppImage
         uses: actions/upload-artifact@v4
