@@ -22,8 +22,7 @@ jobs:
              libgl1-mesa-dev \
             qt6-base-dev qt6-base-dev-tools \
             cmake make g++ \
-            desktop-file-utils patchelf wget file git fuse modprobe
-          sudo modprobe fuse
+            desktop-file-utils patchelf wget file git fuse
 
       - name: Clone CaptureStream2
         run: |
@@ -51,6 +50,13 @@ jobs:
       - name: Set QMAKE path
         run: echo "QMAKE=/opt/qt6-static/bin/qmake" >> $GITHUB_ENV
 
+      - name: Extract linuxdeploy AppImage
+        run: |
+         cd CaptureStream2
+         chmod +x linuxdeploy-x86_64.AppImage
+         ./linuxdeploy-x86_64.AppImage --appimage-extract
+         mv squashfs-root linuxdeploy-extracted
+
       - name: Build AppImage
         run: |
           cd CaptureStream2
@@ -60,8 +66,7 @@ jobs:
            --icon-file icon.png \
            --executable ./build/CaptureStream2 \
            --output appimage \
-           --plugin qt \
-           --appimage-extract
+           --plugin qt 
 
       - name: Upload AppImage
         uses: actions/upload-artifact@v4
