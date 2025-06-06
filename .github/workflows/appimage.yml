@@ -34,7 +34,7 @@ jobs:
         run: |
           cd CaptureStream2
           mkdir build
-          qt-cmake -S ./ -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/usr/lib/qt6
+          cmake -S ./ -B build
           cmake --build build --parallel
           
 
