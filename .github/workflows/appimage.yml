@@ -62,14 +62,14 @@ jobs:
       - name: Build AppImage without FUSE
         run: |
           cd CaptureStream2
-           PLUGIN_QT=./plugin-qt-extracted/AppRun \
+          PLUGIN_QT=./plugin-qt-extracted/AppRun \
           ./linuxdeploy-extracted/AppRun \
-          --appdir AppDir \
-          --desktop-file CaptureStream2.desktop \
-          --icon-file icon.png \
-          --executable ./build/CaptureStream2 \
-          --output appimage \
-          --plugin qt
+           --appdir AppDir \
+           --desktop-file CaptureStream2.desktop \
+           --icon-file icon.png \
+           --executable ./build/CaptureStream2 \
+           --output appimage \
+           --plugin qt
 
       - name: Upload AppImage
         uses: actions/upload-artifact@v4
