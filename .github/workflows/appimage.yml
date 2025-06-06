@@ -59,7 +59,8 @@ jobs:
            --icon-file icon.png \
            --executable ./build/CaptureStream2 \
            --output appimage \
-           --plugin qt
+           --plugin qt \
+           --appimage-extract
 
       - name: Upload AppImage
         uses: actions/upload-artifact@v4
