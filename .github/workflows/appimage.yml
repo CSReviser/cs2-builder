@@ -48,7 +48,7 @@ jobs:
           chmod +x linuxdeploy-plugin-qt-x86_64.AppImage
 
       - name: Set QMAKE path
-        run: echo "QMAKE=/opt/qt6-static/bin/qmake6" >> $GITHUB_ENV
+        run: echo "QMAKE=/opt/qt6-static/bin/qmake" >> $GITHUB_ENV
 
       - name: Build AppImage
         run: |
