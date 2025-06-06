@@ -6,6 +6,8 @@ on:
 jobs:
   appimage:
     runs-on: ubuntu-22.04
+    container:
+      image: ghcr.io/csreviser/qt6-static:6.9.0-ubuntu22.04
 
     steps:
       - name: Checkout Repository
