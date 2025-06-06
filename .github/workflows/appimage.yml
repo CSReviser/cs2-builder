@@ -62,7 +62,7 @@ jobs:
       - name: Build AppImage without FUSE
         run: |
           cd CaptureStream2
-          PLUGIN_QT=./plugin-qt-extracted/AppRun \
+          export PLUGIN_QT=./plugin-qt-extracted/AppRun
           ./linuxdeploy-extracted/AppRun \
            --appdir AppDir \
            --desktop-file CaptureStream2.desktop \
