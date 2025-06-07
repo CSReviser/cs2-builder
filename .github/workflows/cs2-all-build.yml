@@ -50,8 +50,9 @@ jobs:
 
       - name: Prepare CaptureStream2 executable
         run: |
-          wget -qO FFmpeg.7z https://evermeet.cx/ffmpeg/ffmpeg-7.1.1.7z || { echo "Failed to download FFmpeg"; exit 1; }
-          7z e FFmpeg.7z ffmpeg -o./build/CaptureStream2.app/Contents/MacOS/ || { echo "Failed to extract FFmpeg"; exit 1; }
+          wget -qO FFmpeg.tar.gz https://github.com/CSReviser/ffmpeg-build/releases/download/7.1.1/ffmpeg-macos-universal.tar.gz || { echo "Failed to download FFmpeg"; exit 1; }
+          tar -xzvf FFmpeg.tar.gz ffmpeg
+          cp ffmpeg ./build/CaptureStream2.app/Contents/MacOS/ 
           cp CaptureStream2/icon.icns ./build/CaptureStream2.app/Contents/Resources/
           cp CaptureStream2/qss_files/stylesheet-mac.qss ./build/CaptureStream2.app/Contents/MacOS/
 
@@ -506,7 +507,7 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
-          version: 6.9.*
+          version: 6.5.*
           modules: 'qtcharts'
           extra: '--external 7z'
 
@@ -527,9 +528,8 @@ jobs:
 
       - name: Prepare CaptureStream2 executable
         run: |
-          wget -qO FFmpeg.tar.gz https://github.com/CSReviser/ffmpeg-build/releases/download/7.1.1/ffmpeg-macos-universal.tar.gz || { echo "Failed to download FFmpeg"; exit 1; }
-          tar -xzvf FFmpeg.tar.gz ffmpeg
-          cp ffmpeg ./build/CaptureStream2.app/Contents/MacOS/ 
+          wget -qO FFmpeg.7z https://evermeet.cx/ffmpeg/ffmpeg-7.1.1.7z || { echo "Failed to download FFmpeg"; exit 1; }
+          7z e FFmpeg.7z ffmpeg -o./build/CaptureStream2.app/Contents/MacOS/ || { echo "Failed to extract FFmpeg"; exit 1; }
           cp CaptureStream2/icon.icns ./build/CaptureStream2.app/Contents/Resources/
           cp CaptureStream2/qss_files/stylesheet-mac.qss ./build/CaptureStream2.app/Contents/MacOS/
 
@@ -545,12 +545,12 @@ jobs:
           hdiutil create -volname MacCaptureStream2 \
                       -srcfolder tmp \
                       -ov -format UDZO \
-                      "CaptureStream2-MacOS-universal-${{ github.event.inputs.yyyymmdd }}.dmg"
+                      "CaptureStream2-MacOS-intel-${{ github.event.inputs.yyyymmdd }}.dmg"
 
       - name: Upload DMG to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: build/CaptureStream2-MacOS-universal-${{ github.event.inputs.yyyymmdd }}.dmg
+          files: build/CaptureStream2-MacOS-intel-${{ github.event.inputs.yyyymmdd }}.dmg
           tag_name: ${{ needs.mac_build.outputs.tag }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
