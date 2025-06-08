@@ -6,8 +6,8 @@ on:
 jobs:
   appimage:
     runs-on: ubuntu-22.04
-    container:
-      image: ghcr.io/csreviser/qt6-static:6.9.0-ubuntu22.04
+#    container:
+#      image: ghcr.io/csreviser/qt6-static:6.9.0-ubuntu22.04
 
     steps:
       - name: Checkout Repository
@@ -28,6 +28,7 @@ jobs:
         run: |
           git clone https://github.com/CSReviser/CaptureStream2.git
           cd CaptureStream2
+          git checkout feature
           git submodule update --init --recursive
 
       - name: Build Application
