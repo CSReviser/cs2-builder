@@ -24,6 +24,13 @@ jobs:
             cmake make g++ \
             desktop-file-utils patchelf wget file git fuse
 
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: 6.9.*
+          modules: 'qtcharts'
+          extra: '--external 7z'
+
       - name: Clone CaptureStream2
         run: |
           git clone https://github.com/CSReviser/CaptureStream2.git
