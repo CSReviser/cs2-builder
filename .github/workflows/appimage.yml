@@ -30,6 +30,7 @@ jobs:
           cd CaptureStream2
           git checkout feature
           git submodule update --init --recursive
+          cp ./qss_files/stylesheet-ubu.qss ./
 
       - name: Build Application
         run: |
