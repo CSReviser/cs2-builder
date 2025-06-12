@@ -21,7 +21,7 @@ jobs:
              build-essential \
              libgl1-mesa-dev \
             qt6-base-dev qt6-base-dev-tools \
-            cmake make g++ lddtree \
+            cmake make g++ ldd \
             desktop-file-utils patchelf wget file git fuse
 
       - name: Install Qt
