@@ -59,33 +59,25 @@ jobs:
       - name: Set QMAKE path
         run: echo "QMAKE=/opt/qt6-static/bin/qmake" >> $GITHUB_ENV
 
-- name: Copy missing libs
-  run: |
-    mkdir -p CaptureStream2/AppDir/usr/lib
-    cp /lib/x86_64-linux-gnu/libxkbcommon.so.0* CaptureStream2/AppDir/usr/lib/
-    cp /lib/x86_64-linux-gnu/libglib-2.0.so.0* CaptureStream2/AppDir/usr/lib/
-    cp /lib/x86_64-linux-gnu/libgthread-2.0.so.0* CaptureStream2/AppDir/usr/lib/
-    cp /lib/x86_64-linux-gnu/libpcre.so.3* CaptureStream2/AppDir/usr/lib/
-    cp /lib/x86_64-linux-gnu/libdbus-1.so.3* CaptureStream2/AppDir/usr/lib/
-    cp /lib/x86_64-linux-gnu/libsystemd.so.0* CaptureStream2/AppDir/usr/lib/
-    cp /lib/x86_64-linux-gnu/libxcb.so.1* CaptureStream2/AppDir/usr/lib/
-    cp /lib/x86_64-linux-gnu/libXau.so.6* CaptureStream2/AppDir/usr/lib/
-    cp /lib/x86_64-linux-gnu/libXdmcp.so.6* CaptureStream2/AppDir/usr/lib/
-    cp /lib/x86_64-linux-gnu/libbsd.so.0* CaptureStream2/AppDir/usr/lib/
-mkdir -p CaptureStream2/AppDir/usr/bin
-cat <<EOF > CaptureStream2/AppDir/usr/bin/qt.conf
-[Paths]
-Plugins=../lib/qt6/plugins
-Qml2Imports=../lib/qt6/qml
-EOF
-
-./linuxdeploy-x86_64.AppImage \
-  --appdir AppDir \
-  --desktop-file CaptureStream2.desktop \
-  --icon-file icon.png \
-  --executable ./build/CaptureStream2 \
-  --output appimage \
-  --plugin qt
+      - name: Copy missing libs
+        run: |
+          mkdir -p CaptureStream2/AppDir/usr/lib
+          cp /lib/x86_64-linux-gnu/libxkbcommon.so.0* CaptureStream2/AppDir/usr/lib/
+          cp /lib/x86_64-linux-gnu/libglib-2.0.so.0* CaptureStream2/AppDir/usr/lib/
+          cp /lib/x86_64-linux-gnu/libgthread-2.0.so.0* CaptureStream2/AppDir/usr/lib/
+          cp /lib/x86_64-linux-gnu/libpcre.so.3* CaptureStream2/AppDir/usr/lib/
+          cp /lib/x86_64-linux-gnu/libdbus-1.so.3* CaptureStream2/AppDir/usr/lib/
+          cp /lib/x86_64-linux-gnu/libsystemd.so.0* CaptureStream2/AppDir/usr/lib/
+          cp /lib/x86_64-linux-gnu/libxcb.so.1* CaptureStream2/AppDir/usr/lib/
+          cp /lib/x86_64-linux-gnu/libXau.so.6* CaptureStream2/AppDir/usr/lib/
+          cp /lib/x86_64-linux-gnu/libXdmcp.so.6* CaptureStream2/AppDir/usr/lib/
+          cp /lib/x86_64-linux-gnu/libbsd.so.0* CaptureStream2/AppDir/usr/lib/
+          mkdir -p CaptureStream2/AppDir/usr/bin
+          cat <<EOF > CaptureStream2/AppDir/usr/bin/qt.conf
+          [Paths]
+          Plugins=../lib/qt6/plugins
+          Qml2Imports=../lib/qt6/qml
+          EOF
 
       - name: Extract linuxdeploy AppImage
         run: |
@@ -98,13 +90,14 @@ EOF
 
       - name: Build AppImage without FUSE
         run: |
-          cd CaptureStream2
-          ./linuxdeploy-extracted/AppRun \
+         cd CaptureStream2
+         ./linuxdeploy-x86_64.AppImage \
            --appdir AppDir \
            --desktop-file CaptureStream2.desktop \
            --icon-file icon.png \
            --executable ./build/CaptureStream2 \
-           --output appimage 
+           --output appimage \
+           --plugin qt
            lddtree ./build/CaptureStream2
 #          lddtree ./CaptureStream2-x86_64.AppImage | grep "not found"
 
