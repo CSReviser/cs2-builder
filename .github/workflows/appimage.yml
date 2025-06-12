@@ -76,7 +76,7 @@ jobs:
            --desktop-file CaptureStream2.desktop \
            --icon-file icon.png \
            --executable ./build/CaptureStream2 \
-           --plugin qt \ 
+           --plugin=qt \ 
            --output appimage 
            lddtree squashfs-root/usr/bin/CaptureStream2 | grep "not found"
 
