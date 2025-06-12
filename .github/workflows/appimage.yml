@@ -77,6 +77,7 @@ jobs:
            --icon-file icon.png \
            --executable ./build/CaptureStream2 \
            --output appimage 
+           lddtree ./build/CaptureStream2 | grep "not found"
 #          lddtree ./CaptureStream2-x86_64.AppImage | grep "not found"
 
       - name: Upload AppImage
