@@ -78,6 +78,17 @@ jobs:
            --executable ./build/CaptureStream2 \
            --output appimage 
 
+./linuxdeploy-x86_64.AppImage \
+  --appdir AppDir \
+  --executable ./build/CaptureStream2 \
+  --desktop-file CaptureStream2.desktop \
+  --icon-file icon.png \
+  --library /usr/lib/x86_64-linux-gnu/libxcb.so.1 \
+  --library /usr/lib/x86_64-linux-gnu/libX11.so.6 \
+   --plugin qt \  
+  --output appimage
+lddtree squashfs-root/usr/bin/CaptureStream2 | grep "not found"
+
       - name: Upload AppImage
         uses: actions/upload-artifact@v4
         with:
