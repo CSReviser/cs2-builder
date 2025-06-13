@@ -14,6 +14,18 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v3
 
+      - name: Install Dependencies
+        run: |
+          apt update && apt install sudo -y 
+          sudo apt update
+          sudo apt install -y \
+             build-essential \
+             libgl1-mesa-dev \
+            qt6-base-dev qt6-base-dev-tools \
+            cmake make g++ \
+            desktop-file-utils patchelf wget file git fuse modprobe
+          sudo modprobe fuse
+
       - name: Clone CaptureStream2
         run: |
           git clone https://github.com/CSReviser/CaptureStream2.git
