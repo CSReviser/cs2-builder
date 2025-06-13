@@ -3,6 +3,19 @@ name: Build AppImage with linuxdeployqt
 on:
   workflow_dispatch:
 
+on:
+  workflow_dispatch:
+
+jobs:
+  build-app:
+    name: Build in Docker
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/csreviser/qt6-static:6.9.0-ubuntu22.04
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v3
 jobs:
   build-appimage:
     runs-on: ubuntu-latest
@@ -40,6 +53,46 @@ jobs:
           cd build
           /opt/qt6-static/bin/qmake ../CaptureStream2.pro
           make -j$(nproc)
+gcc_64/bin/qmake ../CaptureStream2.pro
+          make -j$(nproc)
+
+      - name: Upload built binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: built-binary
+          path: |
+            build/CaptureStream2
+            CaptureStream2.desktop
+            icon.png
+
+  package-appimage:
+    name: Package as AppImage
+    runs-on: ubuntu-22.04
+    needs: build-app
+
+    steps:
+      - name: Download built binary
+        uses: actions/download-artifact@v4
+        with:
+          name: built-binary
+          path: AppDir/usr/bin
+
+      - name: Restructure AppDir
+        run: |
+          mkdir -p AppDir
+          mkdir -p AppDir/usr/bin
+          mv AppDir/usr/bin/CaptureStream2 AppDir/usr/bin/
+          mv AppDir/usr/bin/CaptureStream2.desktop AppDir/
+          mv AppDir/usr/bin/icon.png AppDir/
+
+      - name: Download linuxdeployqt
+        run: |
+          wget https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage -O linuxdeployqt.AppImage
+          chmod +x linuxdeployqt.AppImage
+
+      - name: Make AppImage
+        run: |
+          ./linuxdeployqt.App 
 
       - name: Set QMAKE path
         run: echo "QMAKE=/opt/qt6-static/bin/qmake" >> $GITHUB_ENV
