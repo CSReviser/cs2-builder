@@ -23,8 +23,7 @@ jobs:
              libgl1-mesa-dev \
             qt6-base-dev qt6-base-dev-tools \
             cmake make g++ \
-            desktop-file-utils patchelf wget file git fuse modprobe
-          sudo modprobe fuse
+            desktop-file-utils patchelf wget file git fuse 
 
       - name: Clone CaptureStream2
         run: |
