@@ -77,7 +77,7 @@ jobs:
         run: |
           mkdir -p AppDir
           mkdir -p AppDir/usr/bin
-          mv ./CaptureStream2 AppDir/usr/bin/
+          mv ./build/CaptureStream2 AppDir/usr/bin/
           mv ./CaptureStream2.desktop AppDir/
           mv ./icon.png AppDir/
 
