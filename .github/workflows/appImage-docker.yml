@@ -14,8 +14,17 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v3
 
-      - name: Build CaptureStream2
+      - name: Clone CaptureStream2
         run: |
+          git clone https://github.com/CSReviser/CaptureStream2.git
+          cd CaptureStream2
+          git checkout feature
+          git submodule update --init --recursive
+          cp ./qss_files/stylesheet-ubu.qss ./
+
+      - name: Build Application
+        run: |
+          cd CaptureStream2
           mkdir -p build
           cd build
           /opt/Qt/6.9.0/gcc_64/bin/qmake ../CaptureStream2.pro
