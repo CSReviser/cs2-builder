@@ -72,7 +72,11 @@ jobs:
         with:
           name: built-binary
           path: AppDir/usr/bin
-
+      - name: Restructure AppDir
+        run: |
+          mkdir -p AppDir
+          mkdir -p AppDir/usr/bin
+          ls
       - name: Restructure AppDir
         run: |
           mkdir -p AppDir
