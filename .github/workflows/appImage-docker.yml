@@ -166,8 +166,7 @@ jobs:
            --desktop-file AppDir/CaptureStream2.desktop \
            --icon-file AppDir/icon.png \
            --executable AppDir/usr/bin/CaptureStream2 \
-           --output appimage \
-           --plugin qt
+           --output appimage 
 
       - name: Upload AppImage
         uses: actions/upload-artifact@v4
