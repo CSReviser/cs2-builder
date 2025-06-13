@@ -1,0 +1,45 @@
+name: Build AppImage with linuxdeployqt
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-appimage:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/csreviser/qt6-static:6.9.0-ubuntu22.04
+      options: --privileged
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v3
+
+      - name: Build CaptureStream2
+        run: |
+          mkdir -p build
+          cd build
+          /opt/Qt/6.9.0/gcc_64/bin/qmake ../CaptureStream2.pro
+          make -j$(nproc)
+
+      - name: Download linuxdeployqt
+        run: |
+          wget https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage -O linuxdeployqt.AppImage
+          chmod +x linuxdeployqt.AppImage
+
+      - name: Prepare AppDir
+        run: |
+          mkdir -p AppDir/usr/bin
+          cp build/CaptureStream2 AppDir/usr/bin/
+          cp icon.png AppDir/
+          cp CaptureStream2.desktop AppDir/
+
+      - name: Run linuxdeployqt
+        run: |
+          ./linuxdeployqt.AppImage AppDir/usr/share/applications/CaptureStream2.desktop \
+            -appimage -bundle-non-qt-libs
+
+      - name: Upload AppImage
+        uses: actions/upload-artifact@v4
+        with:
+          name: CaptureStream2.AppImage
+          path: ./CaptureStream2*.AppImage
