@@ -27,13 +27,16 @@ jobs:
           cd CaptureStream2
           mkdir -p build
           cd build
-          /opt/Qt/6.9.0/gcc_64/bin/qmake ../CaptureStream2.pro
+          /opt/qt6-static/bin/qmake ../CaptureStream2.pro
           make -j$(nproc)
 
       - name: Download linuxdeployqt
         run: |
           wget https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage -O linuxdeployqt.AppImage
           chmod +x linuxdeployqt.AppImage
+
+      - name: Set QMAKE path
+        run: echo "QMAKE=/opt/qt6-static/bin/qmake" >> $GITHUB_ENV
 
       - name: Prepare AppDir
         run: |
