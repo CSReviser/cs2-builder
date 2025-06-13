@@ -77,6 +77,7 @@ jobs:
         run: |
           mkdir -p AppDir
           mkdir -p AppDir/usr/bin
+          ls
           mv ./build/CaptureStream2 AppDir/usr/bin/
           mv ./CaptureStream2.desktop AppDir/
           mv ./icon.png AppDir/
@@ -103,7 +104,6 @@ jobs:
 
       - name: Download linuxdeploy and plugin
         run: |
-          cd CaptureStream2
           wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
           chmod +x linuxdeploy-x86_64.AppImage
 
@@ -112,19 +112,18 @@ jobs:
 
       - name: Copy missing libs
         run: |
-          mkdir -p CaptureStream2/AppDir/usr/lib
-          cp /lib/x86_64-linux-gnu/libxkbcommon.so.0* CaptureStream2/AppDir/usr/lib/
-          cp /lib/x86_64-linux-gnu/libglib-2.0.so.0* CaptureStream2/AppDir/usr/lib/
-          cp /lib/x86_64-linux-gnu/libgthread-2.0.so.0* CaptureStream2/AppDir/usr/lib/
-          cp /lib/x86_64-linux-gnu/libpcre.so.3* CaptureStream2/AppDir/usr/lib/
-          cp /lib/x86_64-linux-gnu/libdbus-1.so.3* CaptureStream2/AppDir/usr/lib/
-          cp /lib/x86_64-linux-gnu/libsystemd.so.0* CaptureStream2/AppDir/usr/lib/
-          cp /lib/x86_64-linux-gnu/libxcb.so.1* CaptureStream2/AppDir/usr/lib/
-          cp /lib/x86_64-linux-gnu/libXau.so.6* CaptureStream2/AppDir/usr/lib/
-          cp /lib/x86_64-linux-gnu/libXdmcp.so.6* CaptureStream2/AppDir/usr/lib/
-          cp /lib/x86_64-linux-gnu/libbsd.so.0* CaptureStream2/AppDir/usr/lib/
-          mkdir -p CaptureStream2/AppDir/usr/bin
-          cat <<EOF > CaptureStream2/AppDir/usr/bin/qt.conf
+          mkdir -p AppDir/usr/lib
+          cp /lib/x86_64-linux-gnu/libxkbcommon.so.0* AppDir/usr/lib/
+          cp /lib/x86_64-linux-gnu/libglib-2.0.so.0* AppDir/usr/lib/
+          cp /lib/x86_64-linux-gnu/libgthread-2.0.so.0* AppDir/usr/lib/
+          cp /lib/x86_64-linux-gnu/libpcre.so.3* AppDir/usr/lib/
+          cp /lib/x86_64-linux-gnu/libdbus-1.so.3* AppDir/usr/lib/
+          cp /lib/x86_64-linux-gnu/libsystemd.so.0* AppDir/usr/lib/
+          cp /lib/x86_64-linux-gnu/libxcb.so.1* AppDir/usr/lib/
+          cp /lib/x86_64-linux-gnu/libXau.so.6* AppDir/usr/lib/
+          cp /lib/x86_64-linux-gnu/libXdmcp.so.6* AppDir/usr/lib/
+          cp /lib/x86_64-linux-gnu/libbsd.so.0* AppDir/usr/lib/
+          cat <<EOF > AppDir/usr/bin/qt.conf
           [Paths]
           Plugins=../lib/qt6/plugins
           Qml2Imports=../lib/qt6/qml
@@ -132,7 +131,6 @@ jobs:
 
       - name: Extract linuxdeploy AppImage
         run: |
-         cd CaptureStream2
          chmod +x linuxdeploy-x86_64.AppImage
          ./linuxdeploy-x86_64.AppImage --appimage-extract
          mv squashfs-root linuxdeploy-extracted
@@ -141,7 +139,6 @@ jobs:
 
       - name: Build AppImage without FUSE
         run: |
-         cd CaptureStream2
          ./linuxdeploy-x86_64.AppImage \
            --appdir AppDir \
            --desktop-file CaptureStream2.desktop \
@@ -156,4 +153,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: CaptureStream2-AppImage
-          path: ./CaptureStream2/CaptureStream2-x86_64.AppImage
+          path: ./CaptureStream2-x86_64.AppImage
