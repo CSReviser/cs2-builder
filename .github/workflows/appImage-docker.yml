@@ -46,9 +46,9 @@ jobs:
         with:
           name: built-binary
           path: |
-            build/CaptureStream2
-            CaptureStream2.desktop
-            icon.png
+            CaptureStream2/build/CaptureStream2
+            CaptureStream2/CaptureStream2.desktop
+            CaptureStream2/icon.png
 
   package-appimage:
     name: Package as AppImage
