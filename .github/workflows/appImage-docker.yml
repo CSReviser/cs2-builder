@@ -3,26 +3,13 @@ name: Build AppImage with linuxdeployqt
 on:
   workflow_dispatch:
 
-on:
-  workflow_dispatch:
-
 jobs:
   build-app:
     name: Build in Docker
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/csreviser/qt6-static:6.9.0-ubuntu22.04
-
-    steps:
-      - name: Checkout source
-        uses: actions/checkout@v3
-jobs:
-  build-appimage:
-    runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/csreviser/qt6-static:6.9.0-ubuntu22.04
       options: --privileged
-
     steps:
       - name: Checkout source
         uses: actions/checkout@v3
@@ -53,8 +40,6 @@ jobs:
           cd build
           /opt/qt6-static/bin/qmake ../CaptureStream2.pro
           make -j$(nproc)
-gcc_64/bin/qmake ../CaptureStream2.pro
-          make -j$(nproc)
 
       - name: Upload built binary
         uses: actions/upload-artifact@v4
@@ -71,6 +56,17 @@ gcc_64/bin/qmake ../CaptureStream2.pro
     needs: build-app
 
     steps:
+      - name: Install Dependencies
+        run: |
+          apt update && apt install sudo -y 
+          sudo apt update
+          sudo apt install -y \
+             build-essential \
+             libgl1-mesa-dev \
+            qt6-base-dev qt6-base-dev-tools \
+            cmake make g++ pax-utils \
+            desktop-file-utils patchelf wget file git fuse
+    
       - name: Download built binary
         uses: actions/download-artifact@v4
         with:
@@ -90,16 +86,8 @@ gcc_64/bin/qmake ../CaptureStream2.pro
           wget https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage -O linuxdeployqt.AppImage
           chmod +x linuxdeployqt.AppImage
 
-      - name: Make AppImage
-        run: |
-          ./linuxdeployqt.App 
-
-      - name: Set QMAKE path
-        run: echo "QMAKE=/opt/qt6-static/bin/qmake" >> $GITHUB_ENV
-
       - name: Download and extract linuxdeployqt
         run: |
-          cd CaptureStream2
           wget https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage -O linuxdeployqt.AppImage
           chmod +x linuxdeployqt.AppImage
           ./linuxdeployqt.AppImage --appimage-extract
@@ -113,14 +101,59 @@ gcc_64/bin/qmake ../CaptureStream2.pro
           cp icon.png AppDir/
           cp CaptureStream2.desktop AppDir/
 
-      - name: Run linuxdeployqt extracted
+      - name: Download linuxdeploy and plugin
         run: |
           cd CaptureStream2
-          ./linuxdeployqt/AppRun AppDir/CaptureStream2.desktop \
-            -appimage -bundle-non-qt-libs
+          wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+          chmod +x linuxdeploy-x86_64.AppImage
+
+          wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
+          chmod +x linuxdeploy-plugin-qt-x86_64.AppImage
+
+      - name: Copy missing libs
+        run: |
+          mkdir -p CaptureStream2/AppDir/usr/lib
+          cp /lib/x86_64-linux-gnu/libxkbcommon.so.0* CaptureStream2/AppDir/usr/lib/
+          cp /lib/x86_64-linux-gnu/libglib-2.0.so.0* CaptureStream2/AppDir/usr/lib/
+          cp /lib/x86_64-linux-gnu/libgthread-2.0.so.0* CaptureStream2/AppDir/usr/lib/
+          cp /lib/x86_64-linux-gnu/libpcre.so.3* CaptureStream2/AppDir/usr/lib/
+          cp /lib/x86_64-linux-gnu/libdbus-1.so.3* CaptureStream2/AppDir/usr/lib/
+          cp /lib/x86_64-linux-gnu/libsystemd.so.0* CaptureStream2/AppDir/usr/lib/
+          cp /lib/x86_64-linux-gnu/libxcb.so.1* CaptureStream2/AppDir/usr/lib/
+          cp /lib/x86_64-linux-gnu/libXau.so.6* CaptureStream2/AppDir/usr/lib/
+          cp /lib/x86_64-linux-gnu/libXdmcp.so.6* CaptureStream2/AppDir/usr/lib/
+          cp /lib/x86_64-linux-gnu/libbsd.so.0* CaptureStream2/AppDir/usr/lib/
+          mkdir -p CaptureStream2/AppDir/usr/bin
+          cat <<EOF > CaptureStream2/AppDir/usr/bin/qt.conf
+          [Paths]
+          Plugins=../lib/qt6/plugins
+          Qml2Imports=../lib/qt6/qml
+          EOF
+
+      - name: Extract linuxdeploy AppImage
+        run: |
+         cd CaptureStream2
+         chmod +x linuxdeploy-x86_64.AppImage
+         ./linuxdeploy-x86_64.AppImage --appimage-extract
+         mv squashfs-root linuxdeploy-extracted
+         ./linuxdeploy-plugin-qt-x86_64.AppImage --appimage-extract
+         mv squashfs-root plugin-qt-extracted
+
+      - name: Build AppImage without FUSE
+        run: |
+         cd CaptureStream2
+         ./linuxdeploy-x86_64.AppImage \
+           --appdir AppDir \
+           --desktop-file CaptureStream2.desktop \
+           --icon-file icon.png \
+           --executable ./build/CaptureStream2 \
+           --output appimage \
+           --plugin qt
+           lddtree ./build/CaptureStream2
+#          lddtree ./CaptureStream2-x86_64.AppImage | grep "not found"
 
       - name: Upload AppImage
         uses: actions/upload-artifact@v4
         with:
-          name: CaptureStream2.AppImage
-          path: ./CaptureStream2/*.AppImage
+          name: CaptureStream2-AppImage
+          path: ./CaptureStream2/CaptureStream2-x86_64.AppImage
