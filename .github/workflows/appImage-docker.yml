@@ -132,13 +132,11 @@ jobs:
         run: |
          ./linuxdeploy-x86_64.AppImage \
            --appdir AppDir \
-           --desktop-file CaptureStream2.desktop \
-           --icon-file icon.png \
-           --executable ./build/CaptureStream2 \
+           --desktop-file AppDir/CaptureStream2.desktop \
+           --icon-file AppDir/icon.png \
+           --executable AppDir/usr/bin/CaptureStream2 \
            --output appimage \
            --plugin qt
-           lddtree ./build/CaptureStream2
-#          lddtree ./CaptureStream2-x86_64.AppImage | grep "not found"
 
       - name: Upload AppImage
         uses: actions/upload-artifact@v4
