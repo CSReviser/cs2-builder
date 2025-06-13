@@ -93,14 +93,6 @@ jobs:
           ./linuxdeployqt.AppImage --appimage-extract
           mv squashfs-root linuxdeployqt
 
-      - name: Prepare AppDir
-        run: |
-          cd CaptureStream2
-          mkdir -p AppDir/usr/bin
-          cp build/CaptureStream2 AppDir/usr/bin/
-          cp icon.png AppDir/
-          cp CaptureStream2.desktop AppDir/
-
       - name: Download linuxdeploy and plugin
         run: |
           wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
