@@ -114,6 +114,7 @@ jobs:
           cp /lib/x86_64-linux-gnu/libXau.so.6* AppDir/usr/lib/
           cp /lib/x86_64-linux-gnu/libXdmcp.so.6* AppDir/usr/lib/
           cp /lib/x86_64-linux-gnu/libbsd.so.0* AppDir/usr/lib/
+          cp /lib/x86_64-linux-gnu/libxcb-cursor.so.0* AppDir/usr/lib/
           cat <<EOF > AppDir/usr/bin/qt.conf
           [Paths]
           Plugins=../lib/qt6/plugins
