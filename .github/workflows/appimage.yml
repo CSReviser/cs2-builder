@@ -44,6 +44,7 @@ jobs:
              libxkbcommon-x11-dev \
              libxrender-dev \
             cmake make g++ pax-utils \
+            libpcre3 \
             desktop-file-utils patchelf wget file git fuse
 
       - name: Install Qt
