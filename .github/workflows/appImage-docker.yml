@@ -77,9 +77,9 @@ jobs:
         run: |
           mkdir -p AppDir
           mkdir -p AppDir/usr/bin
-          mv AppDir/usr/bin/CaptureStream2 AppDir/usr/bin/
-          mv AppDir/usr/bin/CaptureStream2.desktop AppDir/
-          mv AppDir/usr/bin/icon.png AppDir/
+          mv ./CaptureStream2 AppDir/usr/bin/
+          mv ./CaptureStream2.desktop AppDir/
+          mv ./icon.png AppDir/
 
       - name: Download linuxdeployqt
         run: |
