@@ -20,7 +20,29 @@ jobs:
           sudo apt install -y \
              build-essential \
              libgl1-mesa-dev \
-            qt6-base-dev qt6-base-dev-tools \
+             libxcb1-dev libxcb-util-dev libx11-dev \
+             libxext-dev libxrender-dev libxkbcommon-dev \
+             libx11-xcb-dev \
+             libxcb-cursor-dev \
+             libxcb-glx0-dev \
+             libxcb-icccm4-dev \
+             libxcb-image0-dev \
+             libxcb-keysyms1-dev \
+             libxcb-randr0-dev \
+             libxcb-render-util0-dev \
+             libxcb-shape0-dev \
+             libxcb-shm0-dev \
+             libxcb-sync-dev \
+             libxcb-util-dev \
+             libxcb-xfixes0-dev \
+             libxcb-xkb-dev \
+             libxcb1-dev \
+             libxext-dev \
+             libxfixes-dev \
+             libxi-dev \
+             libxkbcommon-dev \
+             libxkbcommon-x11-dev \
+             libxrender-dev \
             cmake make g++ pax-utils \
             desktop-file-utils patchelf wget file git fuse
 
@@ -69,6 +91,7 @@ jobs:
           cp /lib/x86_64-linux-gnu/libXau.so.6* CaptureStream2/AppDir/usr/lib/
           cp /lib/x86_64-linux-gnu/libXdmcp.so.6* CaptureStream2/AppDir/usr/lib/
           cp /lib/x86_64-linux-gnu/libbsd.so.0* CaptureStream2/AppDir/usr/lib/
+          cp /lib/x86_64-linux-gnu/libxcb-cursor.so.0* AppDir/usr/lib/
           mkdir -p CaptureStream2/AppDir/usr/bin
           cat <<EOF > CaptureStream2/AppDir/usr/bin/qt.conf
           [Paths]
