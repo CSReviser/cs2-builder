@@ -72,19 +72,14 @@ jobs:
         with:
           name: built-binary
           path: AppDir/usr/bin
+
       - name: Restructure AppDir
         run: |
           mkdir -p AppDir
           mkdir -p AppDir/usr/bin
-          ls
-      - name: Restructure AppDir
-        run: |
-          mkdir -p AppDir
-          mkdir -p AppDir/usr/bin
-          ls
-          mv ./build/CaptureStream2 AppDir/usr/bin/
-          mv ./CaptureStream2.desktop AppDir/
-          mv ./icon.png AppDir/
+          mv AppDir/usr/bin/build/CaptureStream2 AppDir/usr/bin/
+          mv AppDir/usr/bin/CaptureStream2.desktop AppDir/
+          mv AppDir/usr/bin/icon.png AppDir/
 
       - name: Download linuxdeployqt
         run: |
