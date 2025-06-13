@@ -50,6 +50,34 @@ jobs:
       - name: Set QMAKE path
         run: echo "QMAKE=/opt/qt6-static/bin/qmake" >> $GITHUB_ENV
 
+)
+
+      - name: Download and extract linuxdeployqt
+        run: |
+          wget https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage -O linuxdeployqt.AppImage
+          chmod +x linuxdeployqt.AppImage
+          ./linuxdeployqt.AppImage --appimage-extract
+          mv squashfs-root linuxdeployqt
+
+      - name: Prepare AppDir
+        run: |
+          mkdir -p AppDir/usr/bin
+          cp build/CaptureStream2 AppDir/usr/bin/
+          cp icon.png AppDir/
+          cp CaptureStream2.desktop AppDir/
+
+      - name: Run linuxdeployqt extracted
+        run: |
+          ./linuxdeployqt/AppRun AppDir/CaptureStream2.desktop \
+            -appimage -bundle-non-qt-libs
+
+      - name: Upload AppImage
+        uses: actions/upload-artifact@v4
+        with:
+          name: CaptureStream2.AppImage
+          path: ./*.AppImage
+
+
       - name: Prepare AppDir
         run: |
           cd CaptureStream2
