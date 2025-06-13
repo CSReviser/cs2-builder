@@ -70,4 +70,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: CaptureStream2.AppImage
-          path: ./*.AppImage
+          path: ./CaptureStream2/*.AppImage
