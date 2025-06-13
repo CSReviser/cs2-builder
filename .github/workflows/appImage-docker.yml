@@ -41,19 +41,12 @@ jobs:
           /opt/qt6-static/bin/qmake ../CaptureStream2.pro
           make -j$(nproc)
 
-      - name: Download linuxdeployqt
-        run: |
-          cd CaptureStream2
-          wget https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage -O linuxdeployqt.AppImage
-          chmod +x linuxdeployqt.AppImage
-
       - name: Set QMAKE path
         run: echo "QMAKE=/opt/qt6-static/bin/qmake" >> $GITHUB_ENV
 
-)
-
       - name: Download and extract linuxdeployqt
         run: |
+          cd CaptureStream2
           wget https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage -O linuxdeployqt.AppImage
           chmod +x linuxdeployqt.AppImage
           ./linuxdeployqt.AppImage --appimage-extract
@@ -61,6 +54,7 @@ jobs:
 
       - name: Prepare AppDir
         run: |
+          cd CaptureStream2
           mkdir -p AppDir/usr/bin
           cp build/CaptureStream2 AppDir/usr/bin/
           cp icon.png AppDir/
@@ -68,6 +62,7 @@ jobs:
 
       - name: Run linuxdeployqt extracted
         run: |
+          cd CaptureStream2
           ./linuxdeployqt/AppRun AppDir/CaptureStream2.desktop \
             -appimage -bundle-non-qt-libs
 
@@ -76,24 +71,3 @@ jobs:
         with:
           name: CaptureStream2.AppImage
           path: ./*.AppImage
-
-
-      - name: Prepare AppDir
-        run: |
-          cd CaptureStream2
-          mkdir -p AppDir/usr/bin
-          cp build/CaptureStream2 AppDir/usr/bin/
-          cp icon.png AppDir/
-          cp CaptureStream2.desktop AppDir/
-
-      - name: Run linuxdeployqt
-        run: |
-          cd CaptureStream2
-          ./linuxdeployqt.AppImage AppDir/usr/share/applications/CaptureStream2.desktop \
-            -appimage -bundle-non-qt-libs
-
-      - name: Upload AppImage
-        uses: actions/upload-artifact@v4
-        with:
-          name: CaptureStream2.AppImage
-          path: ./CaptureStream2*.AppImage
