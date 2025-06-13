@@ -24,6 +24,8 @@ jobs:
             qt6-base-dev qt6-base-dev-tools \
             cmake make g++ \
             desktop-file-utils patchelf wget file git fuse 
+          sudo add-apt-repository universe
+          sudo apt install libfuse2t64
 
       - name: Clone CaptureStream2
         run: |
