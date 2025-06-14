@@ -71,11 +71,19 @@ jobs:
           Plugins=../lib/qt6/plugins
           Qml2Imports=../lib/qt6/qml
           EOF
+
+      - name: Prepare AppDir
+        run: |
+         cd CaptureStream2
+          mkdir -p AppDir/usr/bin
+          cp build/CaptureStream2 AppDir/usr/bin/
+          cp icon.png AppDir/
+          cp CaptureStream2.desktop AppDir/
           
       - name: Run linuxdeployqt
         run: |
          cd CaptureStream2
-          ./linuxdeployqt.AppImage ./CaptureStream2.desktop \
+          ./linuxdeployqt.AppImage AppDir/CaptureStream2.desktop \
             -appimage -bundle-non-qt-libs 
             
       - name: Extract linuxdeploy AppImage
