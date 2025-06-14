@@ -104,7 +104,6 @@ jobs:
            --icon-file icon.png \
            --executable ./build/CaptureStream2 \
            --output appimage \
-           --plugin qt
            lddtree ./build/CaptureStream2
 
 
