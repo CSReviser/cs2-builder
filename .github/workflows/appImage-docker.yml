@@ -106,8 +106,6 @@ jobs:
            --output appimage \
            lddtree ./build/CaptureStream2
 
-
-
       - name: Upload built binary
         uses: actions/upload-artifact@v4
         with:
