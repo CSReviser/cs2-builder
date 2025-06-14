@@ -48,6 +48,8 @@ jobs:
           chmod +x linuxdeploy-x86_64.AppImage
           wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
           chmod +x linuxdeploy-plugin-qt-x86_64.AppImage
+          wget https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage -O linuxdeployqt.AppImage
+          chmod +x linuxdeployqt.AppImage
 
       - name: Copy missing libs
         run: |
@@ -69,6 +71,13 @@ jobs:
           Plugins=../lib/qt6/plugins
           Qml2Imports=../lib/qt6/qml
           EOF
+          
+      - name: Run linuxdeployqt
+        run: |
+         cd CaptureStream2
+          ./linuxdeployqt.AppImage AppDir/usr/share/applications/CaptureStream2.desktop \
+            -appimage -bundle-non-qt-libs 
+            
       - name: Extract linuxdeploy AppImage
         run: |
          cd CaptureStream2
@@ -77,6 +86,7 @@ jobs:
          mv squashfs-root linuxdeploy-extracted
          ./linuxdeploy-plugin-qt-x86_64.AppImage --appimage-extract
          mv squashfs-root plugin-qt-extracted
+         
       - name: Build AppImage without FUSE
         run: |
          cd CaptureStream2
@@ -88,6 +98,7 @@ jobs:
            --output appimage \
            --plugin qt
            lddtree ./build/CaptureStream2
+
 
 
       - name: Upload built binary
