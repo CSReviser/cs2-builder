@@ -71,7 +71,10 @@ jobs:
           Plugins=../lib/qt6/plugins
           Qml2Imports=../lib/qt6/qml
           EOF
-
+          
+      - name: Set QMAKE path
+        run: echo "QMAKE=/opt/qt6-static/bin/qmake" >> $GITHUB_ENV
+        
       - name: Prepare AppDir
         run: |
          cd CaptureStream2
