@@ -54,7 +54,9 @@ jobs:
           chmod +x linuxdeploy-plugin-qt-x86_64.AppImage
           wget https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage -O linuxdeployqt.AppImage
           chmod +x linuxdeployqt.AppImage
-       
+          wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O appimagetool
+          chmod +x appimagetool
+
       - name: Set QMAKE path
         run: echo "QMAKE=/opt/qt6-static/bin/qmake" >> $GITHUB_ENV
         
