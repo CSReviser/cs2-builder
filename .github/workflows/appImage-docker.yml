@@ -75,7 +75,7 @@ jobs:
       - name: Run linuxdeployqt
         run: |
          cd CaptureStream2
-          ./linuxdeployqt.AppImage AppDir/usr/share/applications/CaptureStream2.desktop \
+          ./linuxdeployqt.AppImage ./CaptureStream2.desktop \
             -appimage -bundle-non-qt-libs 
             
       - name: Extract linuxdeploy AppImage
