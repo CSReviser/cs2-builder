@@ -67,7 +67,15 @@ jobs:
           cp build/CaptureStream2 AppDir/usr/bin/
           cp icon.png AppDir/
           cp CaptureStream2.desktop AppDir/
-          
+
+      - name: Prepare AppDir (without creating AppImage yet)
+        run: |
+          ./linuxdeployqt AppDir/usr/share/applications/*.desktop -no-appimage -verbose=2
+
+      - name: Build AppImage (Type 1, FUSE-less)
+        run: |
+          ./appimagetool --comp gzip AppDir
+
       - name: Run linuxdeployqt
         run: |
          cd CaptureStream2
