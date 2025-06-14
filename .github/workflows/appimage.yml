@@ -64,7 +64,6 @@ jobs:
           cd CaptureStream2
           git checkout feature
           git submodule update --init --recursive
-#          cp ./qss_files/stylesheet-ubu.qss ./
 
       - name: Build Application
         run: |
@@ -126,7 +125,7 @@ jobs:
            lddtree ./build/CaptureStream2
            cd build
            mkdir -p LinCaptureStream2
-           cp ../CaptureStream2-x86_64.AppImage ./LinCaptureStream2/CaptureStream2.AppImage
+           cp ../CaptureStream2-x86_64.AppImage ./LinCaptureStream2/CaptureStream2
            cp ../qss_files/stylesheet-ubu.qss ./LinCaptureStream2
            cp -r ../qss_files/License ./LinCaptureStream2
            wget -qO ffmpeg-static-ubuntu.zip https://github.com/CSReviser/ffmpeg-build/releases/download/7.1.1/ffmpeg-static-ubuntu.zip
