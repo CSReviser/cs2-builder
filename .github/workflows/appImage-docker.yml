@@ -71,7 +71,7 @@ jobs:
       - name: Prepare AppDir (without creating AppImage yet)
         run: |
          cd CaptureStream2
-          ./linuxdeployqt AppDir/usr/share/applications/*.desktop -no-appimage -verbose=2
+          ./linuxdeployqt AppDir/CaptureStream2.desktop -no-appimage -verbose=2
 
       - name: Build AppImage (Type 1, FUSE-less)
         run: |
