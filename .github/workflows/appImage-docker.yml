@@ -2,7 +2,7 @@ name: Build AppImage with linuxdeployqt
 
 on:
   workflow_dispatch:
-      inputs:
+    inputs:
       yyyymmdd:
         description: 'Release date (yyyymmdd)'
         required: true
