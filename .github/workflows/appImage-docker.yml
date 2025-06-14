@@ -23,7 +23,7 @@ jobs:
              libgl1-mesa-dev \
             qt6-base-dev qt6-base-dev-tools \
             cmake make g++ \
-            desktop-file-utils patchelf wget file git fuse libfuse2 7z
+            desktop-file-utils patchelf wget file git fuse libfuse2 p7zip-full
 
       - name: Clone CaptureStream2
         run: |
