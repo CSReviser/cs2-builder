@@ -70,26 +70,27 @@ jobs:
 
       - name: Prepare AppDir (without creating AppImage yet)
         run: |
+         cd CaptureStream2
           ./linuxdeployqt AppDir/usr/share/applications/*.desktop -no-appimage -verbose=2
 
       - name: Build AppImage (Type 1, FUSE-less)
         run: |
+         cd CaptureStream2
           ./appimagetool --comp gzip AppDir
 
       - name: Run linuxdeployqt
         run: |
          cd CaptureStream2
-          ./linuxdeployqt.AppImage AppDir/CaptureStream2.desktop \
-            -appimage -bundle-non-qt-libs 
-           cd build
-           mkdir -p LinCaptureStream2
-           cp ../CaptureStream2*.AppImage ./LinCaptureStream2/CaptureStream2
-           cp ../qss_files/stylesheet-ubu.qss ./LinCaptureStream2
-           cp -r ../qss_files/License ./LinCaptureStream2
-           wget -qO ffmpeg-static-ubuntu.zip https://github.com/CSReviser/ffmpeg-build/releases/download/7.1.1/ffmpeg-static-ubuntu.zip
-           7z e ffmpeg-static-ubuntu.zip ffmpeg -o./LinCaptureStream2
-           chmod -R 755 ./LinCaptureStream2
-
+         cd build
+         mkdir -p LinCaptureStream2
+         cp ../CaptureStream2*.AppImage ./LinCaptureStream2/CaptureStream2
+         cp ../qss_files/stylesheet-ubu.qss ./LinCaptureStream2
+         cp -r ../qss_files/License ./LinCaptureStream2
+         wget -qO ffmpeg-static-ubuntu.zip https://github.com/CSReviser/ffmpeg-build/releases/download/7.1.1/ffmpeg-static-ubuntu.zip
+         7z e ffmpeg-static-ubuntu.zip ffmpeg -o./LinCaptureStream2
+         chmod -R 755 ./LinCaptureStream2
+#          ./linuxdeployqt.AppImage AppDir/CaptureStream2.desktop \
+#           -appimage -bundle-non-qt-libs 
       - name: Create ZIP file
         run: |
           cd CaptureStream2/build
