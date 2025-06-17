@@ -87,7 +87,7 @@ jobs:
           cd CaptureStream2
           wget https://github.com/linuxdeploy/linuxdeploy/releases/download/1-alpha-20250213-2/linuxdeploy-aarch64.AppImage
           chmod +x linuxdeploy-aarch64.AppImage
-          wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-aarch64.AppImage
+          wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/1-alpha-20250213-1/linuxdeploy-plugin-qt-aarch64.AppImage
           chmod +x linuxdeploy-plugin-qt-aarch64.AppImage
 
       - name: Copy missing libs
