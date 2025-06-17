@@ -108,7 +108,7 @@ jobs:
            --desktop-file CaptureStream2.desktop \
            --icon-file icon.png \
            --executable ./build/CaptureStream2 \
-           --output appimage \
+           --output appimage 
            lddtree ./build/CaptureStream2
            cd build
            mkdir -p LinCaptureStream2
