@@ -1,4 +1,4 @@
-name: Build AppImage with linuxdeployqt
+name: arm AppImage with linuxdeployqt
 
 on:
   workflow_dispatch:
