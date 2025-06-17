@@ -69,7 +69,7 @@ jobs:
         run: |
           cd CaptureStream2
           mkdir build
-          cmake -S ./ -B build
+          cmake -DCMAKE_SYSTEM_PROCESSOR=arm64 -S ./ -B build
           cmake --build build --parallel
           
 
