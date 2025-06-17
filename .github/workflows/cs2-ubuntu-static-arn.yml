@@ -14,7 +14,7 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-arm
+    runs-on: ubuntu-latest
     container:
       image: ghcr.io/csreviser/qt6-static-arn:latest
 
