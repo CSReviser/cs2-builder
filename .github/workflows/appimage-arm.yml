@@ -100,10 +100,19 @@ jobs:
           Qml2Imports=../lib/qt6/qml
           EOF
 
+      - name: Extract linuxdeploy AppImage
+        run: |
+         cd CaptureStream2
+         chmod +x linuxdeploy-aarch64.AppImage
+         ./linuxdeploy-aarch64.AppImage --appimage-extract
+         mv squashfs-root linuxdeploy-extracted
+         ./linuxdeploy-plugin-qt-aarch64.AppImage --appimage-extract
+         mv squashfs-root plugin-qt-extracted
+
       - name: Build AppImage without FUSE
         run: |
          cd CaptureStream2
-         ./linuxdeploy-aarch64.AppImage \
+         ./linuxdeploy-extracted \
            --appdir AppDir \
            --desktop-file CaptureStream2.desktop \
            --icon-file icon.png \
