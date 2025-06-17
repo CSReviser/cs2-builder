@@ -9,7 +9,7 @@ on:
 
 jobs:
   appimage:
-    runs-on: ubuntu-22.04-arm
+    runs-on: ubuntu-24.04-arm
 #    container:
 #      image: ghcr.io/csreviser/qt6-static:6.9.0-ubuntu22.04
 
@@ -82,9 +82,8 @@ jobs:
       - name: Download linuxdeploy and plugin
         run: |
           cd CaptureStream2
-          wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
-          chmod +x linuxdeploy-x86_64.AppImage
-
+          wget https://github.com/linuxdeploy/linuxdeploy/releases/download/1-alpha-20250213-2/linuxdeploy-aarch64.AppImage
+          chmod +x linuxdeploy-aarch64.AppImage
           wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
           chmod +x linuxdeploy-plugin-qt-x86_64.AppImage
 
