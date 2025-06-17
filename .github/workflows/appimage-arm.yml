@@ -123,12 +123,12 @@ jobs:
       - name: Create ZIP file
         run: |
           cd CaptureStream2/build
-          zip -r "CaptureStream2-AppImage-${{ github.event.inputs.yyyymmdd }}.zip" LinCaptureStream2
+          zip -r "CaptureStream2-AppImage-arm-${{ github.event.inputs.yyyymmdd }}.zip" LinCaptureStream2
       
       - name: Upload zip to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: CaptureStream2/build/CaptureStream2-AppImage-${{ github.event.inputs.yyyymmdd }}.zip
+          files: CaptureStream2/build/CaptureStream2-AppImage-arm-${{ github.event.inputs.yyyymmdd }}.zip
           tag_name: ${{ github.event.inputs.yyyymmdd }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -137,4 +137,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: CaptureStream2-AppImage
-          path: ./CaptureStream2/CaptureStream2-x86_64.AppImage
+          path: ./CaptureStream2/CaptureStream2-arm.AppImage
