@@ -8,7 +8,7 @@ on:
         required: true
 
 env:
-  QT_VERSION: 6.9.0
+  QT_VERSION: 6.9.1
 #  IMAGE_NAME: ghcr.io/csreviser/qt6-static:6.9.0-ubuntu22.04
 # ghcr.io/csreviser/qt6-ubuntu-static:latest
 
@@ -16,7 +16,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/csreviser/qt6-static-arn:latest
+      image: ghcr.io/csreviser/qt6-static-arm:latest
 
     steps:
       - name: Checkout this repo
