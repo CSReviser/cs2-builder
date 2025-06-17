@@ -118,7 +118,6 @@ jobs:
            --icon-file icon.png \
            --executable ./build/CaptureStream2 \
            --output appimage 
-           lddtree ./build/CaptureStream2
            cd build
            mkdir -p LinCaptureStream2
            cp ../CaptureStream2-aarch64.AppImage ./LinCaptureStream2/CaptureStream2
