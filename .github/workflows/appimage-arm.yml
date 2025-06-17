@@ -51,6 +51,12 @@ jobs:
             libpcre3 \
             desktop-file-utils patchelf wget file git fuse libc6
 
+      - name: Run ldd version check
+        run: ldd --version
+
+      - name: Check GLIBC versions
+        run: strings /lib/aarch64-linux-gnu/libc.so.6 | grep GLIBC_
+
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
