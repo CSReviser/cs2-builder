@@ -1,4 +1,4 @@
-name: Build AppImage
+name:  arm AppImage
 
 on:
   workflow_dispatch:
