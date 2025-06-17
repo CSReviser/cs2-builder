@@ -124,15 +124,17 @@ jobs:
            cp ../CaptureStream2-aarch64.AppImage ./LinCaptureStream2/CaptureStream2
            cp ../qss_files/stylesheet-ubu.qss ./LinCaptureStream2
            cp -r ../qss_files/License ./LinCaptureStream2
-           wget -qO ffmpeg-static-ubuntu.zip https://github.com/CSReviser/ffmpeg-build/releases/download/7.1.1/ffmpeg-static-ubuntu.zip
-           7z e ffmpeg-static-ubuntu.zip ffmpeg -o./LinCaptureStream2
+           wget -qO ffmpeg-static-ubuntu-arm.zip https://github.com/CSReviser/ffmpeg-build/releases/download/7.1.1/ffmpeg-static-ubuntu-arm.zip
+           7z e ffmpeg-static-ubuntu-arm.zip ffmpeg -o./LinCaptureStream2
            chmod -R 755 ./LinCaptureStream2
 
       - name: Create ZIP file
         run: |
           cd CaptureStream2/build
           zip -r "CaptureStream2-AppImage-arm-${{ github.event.inputs.yyyymmdd }}.zip" LinCaptureStream2
-      
+          cp ./CaptureStream2 ./LinCaptureStream2/CaptureStream2
+          zip -r "CaptureStream2-ubuntu-arm-${{ github.event.inputs.yyyymmdd }}.zip" LinCaptureStream2
+          
       - name: Upload zip to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
@@ -141,6 +143,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Upload zip to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: CaptureStream2/build/CaptureStream2-ubuntu-arm-${{ github.event.inputs.yyyymmdd }}.zip
+          tag_name: ${{ github.event.inputs.yyyymmdd }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
       - name: Upload AppImage
         uses: actions/upload-artifact@v4
         with:
