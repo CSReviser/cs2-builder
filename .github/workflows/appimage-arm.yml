@@ -49,7 +49,7 @@ jobs:
              libxrender-dev \
             cmake make g++ pax-utils \
             libpcre3 \
-            desktop-file-utils patchelf wget file git fuse
+            desktop-file-utils patchelf wget file git fuse libc6
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
