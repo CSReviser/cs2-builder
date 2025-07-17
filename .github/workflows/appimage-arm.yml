@@ -64,8 +64,8 @@ jobs:
         uses: jurplel/install-qt-action@v4
         with:
           version: 6.9.*
-          modules: 'qtcharts'
-          extra: '--external 7z'
+#          modules: 'qtcharts'
+#          extra: '--external 7z'
 
       - name: Clone CaptureStream2
         run: |
