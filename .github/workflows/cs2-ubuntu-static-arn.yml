@@ -43,6 +43,7 @@ jobs:
           
       - name: Build using Docker container with Qt static
         run: |
+          ls
           cd CaptureStream2
           mkdir -p build && cd build
           qt-cmake .. -DQT_DEBUG_FIND_PACKAGE=ON
@@ -54,6 +55,7 @@ jobs:
           wget -qO ffmpeg-static-ubuntu-arm.zip https://github.com/CSReviser/ffmpeg-build/releases/download/7.1.1/ffmpeg-static-ubuntu-arm.zip
           7z e ffmpeg-static-ubuntu-arm.zip ffmpeg -o./LinCaptureStream2
           chmod -R 755 ./LinCaptureStream2
+          ls
   
       - name: Upload AppImage
         uses: actions/upload-artifact@v4
