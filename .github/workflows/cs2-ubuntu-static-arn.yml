@@ -55,19 +55,11 @@ jobs:
           7z e ffmpeg-static-ubuntu-arm.zip ffmpeg -o./LinCaptureStream2
           chmod -R 755 ./LinCaptureStream2
 
-      - name: Tar files
-        run: |
-          cd CaptureStream2
-          ls
-          ls ./LinCaptureStream2
-          tar cvf CaptureStream2.tar ./LinCaptureStream2/
-      
       - name: Upload AppImage
         uses: actions/upload-artifact@v4
         with:
           name: CaptureStream2-ubuntu-arm
-          path: CaptureStream2.tar
-
+          path: ./CaptureStream2/build/LinCaptureStream2
           
 #      - name: Create ZIP file
 #        run: |
