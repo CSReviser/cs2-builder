@@ -43,7 +43,6 @@ jobs:
           
       - name: Build using Docker container with Qt static
         run: |
-          ls
           cd CaptureStream2
           mkdir -p build && cd build
           qt-cmake .. -DQT_DEBUG_FIND_PACKAGE=ON
@@ -56,12 +55,16 @@ jobs:
           7z e ffmpeg-static-ubuntu-arm.zip ffmpeg -o./LinCaptureStream2
           chmod -R 755 ./LinCaptureStream2
           ls
-  
+          ls ./LinCaptureStream2
+          
+      - name: Tar files
+        run: tar cvf CaptureStream2.tar ./LinCaptureStream2
+      
       - name: Upload AppImage
         uses: actions/upload-artifact@v4
         with:
           name: CaptureStream2-ubuntu-arm
-          path: ./CaptureStream2/LinCaptureStream2
+          path: CaptureStream2.tar
 
           
 #      - name: Create ZIP file
