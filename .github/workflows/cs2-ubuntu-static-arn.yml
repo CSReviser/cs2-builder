@@ -54,12 +54,12 @@ jobs:
           wget -qO ffmpeg-static-ubuntu-arm.zip https://github.com/CSReviser/ffmpeg-build/releases/download/7.1.1/ffmpeg-static-ubuntu-arm.zip
           7z e ffmpeg-static-ubuntu-arm.zip ffmpeg -o./LinCaptureStream2
           chmod -R 755 ./LinCaptureStream2
-          ls
-          ls ./LinCaptureStream2
-          
+
       - name: Tar files
         run: |
           cd CaptureStream2
+          ls
+          ls ./LinCaptureStream2
           tar cvf CaptureStream2.tar ./LinCaptureStream2/
       
       - name: Upload AppImage
