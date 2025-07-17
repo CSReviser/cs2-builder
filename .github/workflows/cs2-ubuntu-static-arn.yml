@@ -54,16 +54,23 @@ jobs:
           wget -qO ffmpeg-static-ubuntu-arm.zip https://github.com/CSReviser/ffmpeg-build/releases/download/7.1.1/ffmpeg-static-ubuntu-arm.zip
           7z e ffmpeg-static-ubuntu-arm.zip ffmpeg -o./LinCaptureStream2
           chmod -R 755 ./LinCaptureStream2
-
-      - name: Create ZIP file
-        run: |
-          cd CaptureStream2/build
-          zip -r "CaptureStream2-ubuntu-arn-${{ github.event.inputs.yyyymmdd }}.zip" LinCaptureStream2
-      
-      - name: Upload zip to GitHub Release
-        uses: softprops/action-gh-release@v2
+  
+      - name: Upload AppImage
+        uses: actions/upload-artifact@v4
         with:
-          files: CaptureStream2/build/CaptureStream2-ubuntu-arn-${{ github.event.inputs.yyyymmdd }}.zip
-          tag_name: ${{ needs.mac_build.outputs.tag }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          name: CaptureStream2-ubuntu-arm
+          path: ./CaptureStream2/LinCaptureStream2
+
+          
+#      - name: Create ZIP file
+#        run: |
+#          cd CaptureStream2/build
+#         zip -r "CaptureStream2-ubuntu-arn-${{ github.event.inputs.yyyymmdd }}.zip" LinCaptureStream2
+      
+#      - name: Upload zip to GitHub Release
+#        uses: softprops/action-gh-release@v2
+#        with:
+#          files: CaptureStream2/build/CaptureStream2-ubuntu-arn-${{ github.event.inputs.yyyymmdd }}.zip
+#          tag_name: ${{ needs.mac_build.outputs.tag }}
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
