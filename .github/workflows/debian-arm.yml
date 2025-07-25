@@ -98,8 +98,10 @@ jobs:
          chmod +x linuxdeploy-aarch64.AppImage
          ./linuxdeploy-aarch64.AppImage --appimage-extract
          mv squashfs-root linuxdeploy-extracted
+         chmod +x linuxdeploy-extracted
          ./linuxdeploy-plugin-qt-aarch64.AppImage --appimage-extract
          mv squashfs-root plugin-qt-extracted
+         chmod +x plugin-qt-extracted
 
       - name: Build AppImage without FUSE
         run: |
