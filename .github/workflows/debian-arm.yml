@@ -104,6 +104,8 @@ jobs:
       - name: Build AppImage without FUSE
         run: |
          cd CaptureStream2
+         sudo modprobe fuse
+         sudo groupadd fuse
          ./linuxdeploy-aarch64.AppImage \
            --appdir AppDir \
            --desktop-file CaptureStream2.desktop \
