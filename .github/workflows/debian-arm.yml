@@ -75,7 +75,7 @@ jobs:
           cp /lib/aarch64-linux-gnu/libxkbcommon.so.0* CaptureStream2/AppDir/usr/lib/
           cp /lib/aarch64-linux-gnu/libglib-2.0.so.0* CaptureStream2/AppDir/usr/lib/
           cp /lib/aarch64-linux-gnu/libgthread-2.0.so.0* CaptureStream2/AppDir/usr/lib/
-          cp /lib/aarch64-linux-gnu/libpcre.so.3* CaptureStream2/AppDir/usr/lib/
+          cp /lib/aarch64-linux-gnu/libwayland*.so.* CaptureStream2/AppDir/usr/lib/
           cp /lib/aarch64-linux-gnu/libdbus-1.so.3* CaptureStream2/AppDir/usr/lib/
           cp /lib/aarch64-linux-gnu/libsystemd.so.0* CaptureStream2/AppDir/usr/lib/
           cp /lib/aarch64-linux-gnu/libxcb.so.1* CaptureStream2/AppDir/usr/lib/
@@ -89,7 +89,9 @@ jobs:
           Plugins=../lib/qt6/plugins
           Qml2Imports=../lib/qt6/qml
           EOF
-
+          
+ #         cp /lib/aarch64-linux-gnu/libpcre.so.3* CaptureStream2/AppDir/usr/lib/
+          
       - name: Extract linuxdeploy AppImage
         run: |
          cd CaptureStream2
