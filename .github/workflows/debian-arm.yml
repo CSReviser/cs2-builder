@@ -29,7 +29,9 @@ jobs:
           echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | \
           tee /etc/apt/sources.list.d/github-cli.list > /dev/null
           apt-get update
-          apt-get install -y gh p7zip-full lzip bzip2 fuse sudo libfuse2
+          apt-get install -y gh p7zip-full lzip bzip2 fuse sudo libfuse2 kmod
+          modprobe fuse
+          groupadd fuse
           
       - name: Mark repo as safe
         run: git config --global --add safe.directory "${GITHUB_WORKSPACE}"
@@ -106,12 +108,13 @@ jobs:
       - name: Build AppImage without FUSE
         run: |
          cd CaptureStream2
-         ./linuxdeploy-extracted/AppRun \
+         ./linuxdeploy-aarch64.AppImage \
            --appdir AppDir \
            --desktop-file CaptureStream2.desktop \
            --icon-file icon.png \
            --executable ./build/CaptureStream2 \
-           --output appimage
+           --output appimage \
+           --plugin qt
            cd build
            mkdir -p LinCaptureStream2
            cp ../CaptureStream2-aarch64.AppImage ./LinCaptureStream2/CaptureStream2
