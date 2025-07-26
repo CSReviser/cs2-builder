@@ -30,8 +30,8 @@ jobs:
           tee /etc/apt/sources.list.d/github-cli.list > /dev/null
           apt-get update
           apt-get install -y gh p7zip-full lzip bzip2 fuse sudo libfuse2 kmod
-          sudo modprobe fuse
-          sudo groupadd fuse
+   #       sudo modprobe fuse
+  #        sudo groupadd fuse
           
       - name: Mark repo as safe
         run: git config --global --add safe.directory "${GITHUB_WORKSPACE}"
