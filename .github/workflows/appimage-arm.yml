@@ -79,10 +79,9 @@ jobs:
         run: |
           cd CaptureStream2
           mkdir build
-          qmake6 && make
-#          cmake -DCMAKE_SYSTEM_PROCESSOR=arm64 -S ./ -B build
-#          cmake --build build --parallel
-          
+          cmake -DCMAKE_SYSTEM_PROCESSOR=arm64 -S ./ -B build
+          cmake --build build --parallel
+#          qmake6 && make          
 
       - name: Download linuxdeploy and plugin
         run: |
