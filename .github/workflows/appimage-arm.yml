@@ -54,7 +54,7 @@ jobs:
             qt6-base-dev
             python3 -m pip install --upgrade pip
             pip install pyelftools
-            qmake -version
+            qmake6 -version
 
       - name: Run ldd version check
         run: ldd --version
