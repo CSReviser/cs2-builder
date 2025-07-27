@@ -9,7 +9,7 @@ on:
 
 jobs:
   appimage:
-    runs-on: ubuntu-24.04-arm
+    runs-on: ubuntu-22.04-arm
 #    container:
 #      image: ghcr.io/csreviser/qt6-static:6.9.0-ubuntu22.04
 
@@ -61,10 +61,10 @@ jobs:
       - name: Check GLIBC versions
         run: strings /lib/aarch64-linux-gnu/libc.so.6 | grep GLIBC_
 
-#      - name: Install Qt
-#        uses: jurplel/install-qt-action@v4
-#        with:
-#          version: 6.8.*
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: 6.8.*
 #          modules: 'qtcharts'
 #          extra: '--external 7z'
 
