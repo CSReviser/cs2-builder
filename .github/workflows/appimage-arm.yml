@@ -56,7 +56,7 @@ jobs:
             pip install pyelftools
             qmake6 -version
             which qmake6
-            sudo ln -sf /usr/lib/qt6/bin/qmake6 /usr/bin/qmake
+            sudo ln -sf /usr/bin/qmake6 /usr/bin/qmake
             locate qmake
 
       - name: Run ldd version check
