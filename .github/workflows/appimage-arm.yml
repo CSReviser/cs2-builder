@@ -86,6 +86,8 @@ jobs:
         run: |
           curl -LO https://github.com/CSReviser/qt6-static-builder/releases/download/qt6.9.1-static-linux/qt6.9.1-linux-static.tar.gz
           tar -xf  qt6.9.1-linux-static.tar.gz
+          cd  qt-build
+          cmake --install .
 
       - name: Build CaptureStream2 with static Qt using qt-cmake
         run: |
