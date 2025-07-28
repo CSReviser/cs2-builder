@@ -84,14 +84,14 @@ jobs:
 
       - name: Download and extract Qt ${{ env.QT_VERSION }} static build
         run: |
-          curl -LO https://github.com/CSReviser/qt6-static-builder/releases/download/qt6.9.1-static-linux/qt6.8.3-linux-static.tar.gz
-          tar -xf  qt6.8.3-linux-static.tar.gz
+          curl -LO https://github.com/CSReviser/qt6-static-builder/releases/download/qt6.9.1-static-linux/qt6.9.1-linux-static.tar.gz
+          tar -xf  qt6.9.1-linux-static.tar.gz
 
       - name: Build CaptureStream2 with static Qt using qt-cmake
         run: |
           cd CaptureStream2
           mkdir build && cd build
-          ../../qt6-static-install/bin/qt-cmake .. -DQT_DEBUG_FIND_PACKAGE=ON
+          /opt/qt6-static/bin/qt-cmake .. -DQT_DEBUG_FIND_PACKAGE=ON
           cmake --build . --parallel
 
       - name: Build Application
