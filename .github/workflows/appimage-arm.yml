@@ -52,11 +52,7 @@ jobs:
              libxrender-dev \
             cmake make g++ pax-utils \
             libpcre3 \
-            desktop-file-utils patchelf wget file git fuse libc6 \
-            python3\
-            qt6-base-dev
-            python3 -m pip install --upgrade pip
-            pip install pyelftools
+            desktop-file-utils patchelf wget file git fuse libc6 
             qmake6 -version
             which qmake6
             sudo ln -sf /usr/bin/qmake6 /usr/bin/qmake
