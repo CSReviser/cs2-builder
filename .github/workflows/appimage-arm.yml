@@ -52,7 +52,7 @@ jobs:
              libxrender-dev \
             cmake make g++ pax-utils \
             libpcre3 \
-            desktop-file-utils patchelf wget file git fuse libc6 p7zip-full
+            desktop-file-utils patchelf wget file git fuse libc6 p7zip-full zip
             qmake6 -version
             which qmake6
             sudo ln -sf /usr/bin/qmake6 /usr/bin/qmake
