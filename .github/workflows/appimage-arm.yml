@@ -144,7 +144,8 @@ jobs:
       - name: Build AppImage without FUSE
         run: |
          cd CaptureStream2
-         ./linuxdeploy-aarch64.AppImage \
+         ls linuxdeploy-extracted
+         ./linuxdeploy-extracted \
            --appdir AppDir \
            --desktop-file CaptureStream2.desktop \
            --icon-file icon.png \
