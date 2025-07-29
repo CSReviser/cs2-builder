@@ -13,8 +13,8 @@ env:
 jobs:
   appimage:
     runs-on: ubuntu-22.04-arm
-#    container:
-#      image: ghcr.io/csreviser/qt6-static:6.9.0-ubuntu22.04
+    container:
+      image: ghcr.io/csreviser/qt6-debian-arm-static:latest
 
     steps:
       - name: Checkout Repository
