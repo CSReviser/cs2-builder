@@ -97,16 +97,16 @@ jobs:
           
  #         cp /lib/aarch64-linux-gnu/libpcre.so.3* CaptureStream2/AppDir/usr/lib/
           
-      - name: Extract linuxdeploy AppImage
-        run: |
-         cd CaptureStream2
-         chmod +x linuxdeploy-aarch64.AppImage
-         ./linuxdeploy-aarch64.AppImage --appimage-extract
-         mv squashfs-root linuxdeploy-extracted
-         chmod +x linuxdeploy-extracted
-         ./linuxdeploy-plugin-qt-aarch64.AppImage --appimage-extract
-         mv squashfs-root plugin-qt-extracted
-         chmod +x plugin-qt-extracted
+#      - name: Extract linuxdeploy AppImage
+#        run: |
+#         cd CaptureStream2
+#         chmod +x linuxdeploy-aarch64.AppImage
+#         ./linuxdeploy-aarch64.AppImage --appimage-extract
+#         mv squashfs-root linuxdeploy-extracted
+#         chmod +x linuxdeploy-extracted
+#         ./linuxdeploy-plugin-qt-aarch64.AppImage --appimage-extract
+#         mv squashfs-root plugin-qt-extracted
+#         chmod +x plugin-qt-extracted
 
       - name: Build AppImage without FUSE
         run: |
