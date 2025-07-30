@@ -70,7 +70,7 @@ jobs:
       - name: Upload zip to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: CaptureStream2/build/CaptureStream2-ubuntu-arn-${{ github.event.inputs.yyyymmdd }}.zip
-          tag_name: ${{ needs.mac_build.outputs.tag }}
+          files: CaptureStream2/build/CaptureStream2-ubuntu-arm-${{ github.event.inputs.yyyymmdd }}.zip
+          tag_name: ${{ github.event.inputs.yyyymmdd }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
