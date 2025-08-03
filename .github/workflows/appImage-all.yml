@@ -120,7 +120,7 @@ jobs:
 
   build-app:
     name: Build in Docker
-    runs-on: ubuntu-
+    runs-on: ubuntu-22.04
     container:
       image: ghcr.io/csreviser/qt6-static:6.9.1-ubuntu22.04
       options: --privileged
