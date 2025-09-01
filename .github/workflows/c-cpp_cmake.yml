@@ -24,8 +24,8 @@ jobs:
       run: |
           git clone https://github.com/CSReviser/CaptureStream2.git
           cd CaptureStream2
-          git checkout feature
           git submodule update --init --recursive
+#          git checkout feature 
 
     # CMakeでビルド構成を生成
     - name: Configure CMake
