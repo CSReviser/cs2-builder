@@ -5,7 +5,7 @@ on:
 
 jobs:
   build:
-    runs-on: macos-14
+    runs-on: macos-15
 
     steps:
     # リポジトリをチェックアウト
@@ -55,5 +55,5 @@ jobs:
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
-        name: CaptureStream2-Universal-Qt65
+        name: CaptureStream2-Universal-macos15
         path: build/CaptureStream2.tar
