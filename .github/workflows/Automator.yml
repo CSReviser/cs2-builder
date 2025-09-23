@@ -1,0 +1,56 @@
+name: Build Automator App for CaptureStream2
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-automator-app:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Create Automator workflow directory
+        run: |
+          mkdir -p CaptureStream2AutoRun.app/Contents
+          mkdir -p CaptureStream2AutoRun.app/Contents/MacOS
+
+      - name: Create Automator shell script
+        run: |
+          cat <<EOF > CaptureStream2AutoRun.app/Contents/MacOS/script
+          #!/bin/bash
+          /Applications/CaptureStream2.app/Contents/MacOS/capturestream2 -nogui
+          EOF
+          chmod +x CaptureStream2AutoRun.app/Contents/MacOS/script
+
+      - name: Create Info.plist
+        run: |
+          cat <<EOF > CaptureStream2AutoRun.app/Contents/Info.plist
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>CFBundleExecutable</key>
+            <string>script</string>
+            <key>CFBundleIdentifier</key>
+            <string>com.example.capturestream2autorun</string>
+            <key>CFBundleName</key>
+            <string>CaptureStream2AutoRun</string>
+            <key>CFBundlePackageType</key>
+            <string>APPL</string>
+            <key>CFBundleVersion</key>
+            <string>1.0</string>
+          </dict>
+          </plist>
+          EOF
+
+      - name: Zip Automator app
+        run: |
+          zip -r CaptureStream2AutoRun.zip CaptureStream2AutoRun.app
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: CaptureStream2AutoRun
+          path: CaptureStream2AutoRun.zip
