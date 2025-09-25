@@ -81,3 +81,9 @@ jobs:
         with:
           name: CaptureStream2Launchers-dmg
           path: CaptureStream2Launchers.dmg
+
+      - name: Upload zip Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: CaptureStream2Launchers
+          path: dmg_content
