@@ -42,8 +42,8 @@ jobs:
 
       - name: Create Automator Workflow
         run: |
-          mkdir -p CaptureStreamRunner.workflow/Contents
-          cat > CaptureStreamRunner.workflow/Contents/document.wflow << 'EOF'
+          mkdir -p CaptureStream2Runner.workflow/Contents
+          cat > CaptureStream2Runner.workflow/Contents/document.wflow << 'EOF'
           <?xml version="1.0" encoding="UTF-8"?>
           <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
           <plist version="1.0">
@@ -69,7 +69,7 @@ jobs:
       - name: Create DMG
         run: |
           mkdir -p dmg_content
-          cp -R CaptureStreamRunner.workflow dmg_content/
+          cp -R CaptureStream2Runner.workflow dmg_content/
           cp -R CaptureStream2AutoRun.app dmg_content/
 
           hdiutil create -volname "CaptureStream2 Launchers" \
