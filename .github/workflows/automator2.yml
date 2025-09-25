@@ -1,7 +1,6 @@
 name: Create Automator App
 
 on:
-  push:
   workflow_dispatch:  # 手動トリガーを有効化
 
 jobs:
