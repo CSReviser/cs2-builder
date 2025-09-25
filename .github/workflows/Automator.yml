@@ -70,6 +70,7 @@ jobs:
         run: |
           mkdir -p dmg_content
           chmod -R 755 ./CaptureStream2AutoRun.app
+          open ./CaptureStream2AutoRun.app
           cp -R CaptureStream2Runner.workflow dmg_content/
           cp -R CaptureStream2AutoRun.app dmg_content/
 
