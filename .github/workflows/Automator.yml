@@ -11,21 +11,16 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Create Automator workflow directory
+      - name: Create CaptureStream2AutoRun.app bundle
         run: |
-          mkdir -p CaptureStream2AutoRun.app/Contents
           mkdir -p CaptureStream2AutoRun.app/Contents/MacOS
 
-      - name: Create Automator shell script
-        run: |
           cat <<EOF > CaptureStream2AutoRun.app/Contents/MacOS/script
           #!/bin/bash
-          /Applications/CaptureStream2.app/Contents/MacOS/capturestream2 -nogui
+          exec "/Applications/CaptureStream2.app/Contents/MacOS/CaptureStream2" -nogui
           EOF
           chmod +x CaptureStream2AutoRun.app/Contents/MacOS/script
 
-      - name: Create Info.plist
-        run: |
           cat <<EOF > CaptureStream2AutoRun.app/Contents/Info.plist
           <?xml version="1.0" encoding="UTF-8"?>
           <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -59,7 +54,7 @@ jobs:
                 <key>action</key>
                 <string>com.apple.cocoa.applescript</string>
                 <key>parameters</key>
-                  <dict>
+                <dict>
                   <key>script</key>
                   <string>do shell script "/Applications/CaptureStream2.app/Contents/MacOS/CaptureStream2 -nogui"</string>
                 </dict>
@@ -71,31 +66,18 @@ jobs:
           </plist>
           EOF
 
-      - name: Zip Automator app
-        run: |
-          zip -r CaptureStream2AutoRun.zip CaptureStream2AutoRun.app
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: CaptureStream2AutoRun
-          path: CaptureStream2AutoRun.zip
-
       - name: Create DMG
         run: |
           mkdir -p dmg_content
           cp -R CaptureStreamRunner.workflow dmg_content/
-          cp -R CaptureStream2AutoRun.zip dmg_content/
-          hdiutil create -volname "CaptureStream2 Launchers" -srcfolder dmg_content -ov -format UDZO CaptureStream2Launchers.dmg
-          
+          cp -R CaptureStream2AutoRun.app dmg_content/
+
+          hdiutil create -volname "CaptureStream2 Launchers" \
+            -srcfolder dmg_content \
+            -ov -format UDZO CaptureStream2Launchers.dmg
+
       - name: Upload DMG Artifact
         uses: actions/upload-artifact@v4
         with:
           name: CaptureStream2Launchers-dmg
           path: CaptureStream2Launchers.dmg
-
-      - name: Upload DMG Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: CaptureStream2
-          path: dmg_content        
