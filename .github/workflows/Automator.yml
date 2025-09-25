@@ -45,6 +45,32 @@ jobs:
           </plist>
           EOF
 
+      - name: Create Automator Workflow
+        run: |
+          mkdir -p CaptureStreamRunner.workflow/Contents
+          cat > CaptureStreamRunner.workflow/Contents/document.wflow << 'EOF'
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>actions</key>
+            <array>
+              <dict>
+                <key>action</key>
+                <string>com.apple.cocoa.applescript</string>
+                <key>parameters</key>
+                  <dict>
+                  <key>script</key>
+                  <string>do shell script "/Applications/CaptureStream2.app/Contents/MacOS/CaptureStream2 -nogui"</string>
+                </dict>
+              </dict>
+            </array>
+            <key>workflowType</key>
+            <string>Automator</string>
+          </dict>
+          </plist>
+          EOF
+
       - name: Zip Automator app
         run: |
           zip -r CaptureStream2AutoRun.zip CaptureStream2AutoRun.app
@@ -54,3 +80,22 @@ jobs:
         with:
           name: CaptureStream2AutoRun
           path: CaptureStream2AutoRun.zip
+
+      - name: Create DMG
+        run: |
+          mkdir -p dmg_content
+          cp -R CaptureStreamRunner.workflow dmg_content/
+          cp -R CaptureStream2AutoRun.zip dmg_content/
+          hdiutil create -volname "CaptureStream2 Launchers" -srcfolder dmg_content -ov -format UDZO CaptureStream2Launchers.dmg
+          
+      - name: Upload DMG Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: CaptureStream2Launchers-dmg
+          path: CaptureStream2Launchers.dmg
+
+      - name: Upload DMG Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: CaptureStream2
+          path: dmg_content        
