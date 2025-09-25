@@ -13,7 +13,7 @@ jobs:
 
     - name: Create Automator Workflow (plist format)
       run: |
-        mkdir -p CaptureStreamRunner.workflow
+        mkdir -p CaptureStreamRunner.workflow/Contents
         cat > CaptureStreamRunner.workflow/Contents/document.wflow << 'EOF'
         <?xml version="1.0" encoding="UTF-8"?>
         <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
