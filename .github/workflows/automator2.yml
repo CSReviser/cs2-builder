@@ -1,7 +1,7 @@
 name: Create Automator App
 
 on:
-  workflow_dispatch:  # 手動トリガーを有効化
+  workflow_dispatch:
 
 jobs:
   build:
@@ -11,78 +11,49 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Create Automator Workflow JSON
+    - name: Create Automator Workflow (plist format)
       run: |
-        cat > CaptureStreamWorkflow.json << 'EOF'
-        {
-          "WFWorkflowActions": [
-            {
-              "WFWorkflowActionIdentifier": "is.workflow.actions.runapplescript",
-              "WFWorkflowActionIdentifierLegacy": "com.apple.RunAppleScript",
-              "WFWorkflowActionIsDetached": 0,
-              "WFWorkflowActionRealDurationSeconds": 0,
-              "WFWorkflowActionUncompressedDurationSeconds": 0,
-              "WFWorkflowActionParameters": {
-                "WFAppleScriptSource": "#!/usr/bin/osascript\n\n# Run the CaptureStream2 command\ndo shell script \"/Applications/CaptureStream2.app/Contents/MacOS/CaptureStream2 -nogui\""
-              }
-            }
-          ],
-          "WFWorkflowClientVersion": "1.0",
-          "WFWorkflowHasOutputFallback": 1,
-          "WFWorkflowIcon": {
-            "WFWorkflowIconStartColor": 0
-          },
-          "WFWorkflowInputContentItemClasses": [],
-          "WFWorkflowMinimumVersion": "109",
-          "WFWorkflowName": "CaptureStream2 NoGUI Runner",
-          "WFWorkflowOutputContentItemClasses": []
-        }
-        EOF
-
-    - name: Save as Workflow and Export to App
-      run: |
-        # JSON を .workflow として保存（Automator の内部形式は plist だが、JSON で定義して CLI で処理）
-        automator -v << 'EOF' | automator -l -o CaptureStreamRunner.workflow -
-        # シェルスクリプト版のシンプル実装（JSON より安定）
-        echo '<?xml version="1.0" encoding="UTF-8"?>
+        mkdir -p CaptureStreamRunner.workflow
+        cat > CaptureStreamRunner.workflow/Contents/document.wflow << 'EOF'
+        <?xml version="1.0" encoding="UTF-8"?>
         <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
         <plist version="1.0">
         <dict>
-          <key>WFWorkflowActions</key>
+          <key>actions</key>
           <array>
             <dict>
-              <key>WFWorkflowActionIdentifier</key>
-              <string>is.workflow.actions.executecommand</string>
-              <key>WFWorkflowActionParameters</key>
+              <key>action</key>
+              <string>com.apple.cocoa.applescript</string>
+              <key>parameters</key>
               <dict>
-                <key>WFCommandActionScriptSource</key>
-                <string>#!/bin/sh /Applications/CaptureStream2.app/Contents/MacOS/CaptureStream2 -nogui</string>
-                <key>WFCommandActionShell</key>
-                <string>/bin/sh</string>
+                <key>script</key>
+                <string>do shell script "/Applications/CaptureStream2.app/Contents/MacOS/CaptureStream2 -nogui"</string>
               </dict>
             </dict>
           </array>
-          <key>WFWorkflowName</key>
-          <string>CaptureStream2 NoGUI Runner</string>
+          <key>workflowType</key>
+          <string>Automator</string>
         </dict>
-        </plist>' > temp.workflow
-        # temp.workflow を .app にエクスポート
-        osascript -e 'tell application "Automator" to open POSIX file "'$(pwd)'/temp.workflow"'
-        osascript -e 'tell application "Automator" to save workflow as application in POSIX file "'$(pwd)'/CaptureStreamRunner.app" overwriting yes'
-        osascript -e 'tell application "Automator" to close front document'
-        rm temp.workflow
+        </plist>
         EOF
 
-    - name: Verify App Bundle
+    - name: Verify Workflow Structure
       run: |
-        # .app の構造を確認
-        ls -la CaptureStreamRunner.app/Contents/
-        # 実行テスト（ヘッドレスなのでエラーは無視、CaptureStream2 が存在しない場合）
-        open CaptureStreamRunner.app || echo "App opened (headless test)"
+        ls -la CaptureStreamRunner.workflow
+        plutil -lint CaptureStreamRunner.workflow/Contents/document.wflow
+
+    - name: Package as App Bundle (simulated)
+      run: |
+        mkdir -p CaptureStreamRunner.app/Contents/MacOS
+        cp -R CaptureStreamRunner.workflow CaptureStreamRunner.app/Contents/Resources
+        echo '#!/bin/bash' > CaptureStreamRunner.app/Contents/MacOS/launch.sh
+        echo 'open -a Automator "$(dirname "$0")/../Resources/CaptureStreamRunner.workflow"' >> CaptureStreamRunner.app/Contents/MacOS/launch.sh
+        chmod +x CaptureStreamRunner.app/Contents/MacOS/launch.sh
+        touch CaptureStreamRunner.app/Contents/Info.plist
 
     - name: Upload App Artifact
       uses: actions/upload-artifact@v4
       with:
         name: CaptureStreamRunner-app
         path: CaptureStreamRunner.app
-        retention-days: 7  # 7 日間保持
+        retention-days: 7
