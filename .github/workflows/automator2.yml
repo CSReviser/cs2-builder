@@ -2,7 +2,6 @@ name: Create Automator App
 
 on:
   push:
-    branches: [ main ]
   workflow_dispatch:  # 手動トリガーを有効化
 
 jobs:
@@ -58,8 +57,7 @@ jobs:
               <key>WFWorkflowActionParameters</key>
               <dict>
                 <key>WFCommandActionScriptSource</key>
-                <string>#!/bin/sh
-/Applications/CaptureStream2.app/Contents/MacOS/CaptureStream2 -nogui</string>
+                <string>#!/bin/sh /Applications/CaptureStream2.app/Contents/MacOS/CaptureStream2 -nogui</string>
                 <key>WFCommandActionShell</key>
                 <string>/bin/sh</string>
               </dict>
