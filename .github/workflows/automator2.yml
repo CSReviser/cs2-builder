@@ -1,4 +1,4 @@
-name: Create Automator App
+name: Build CaptureStream2 Launchers
 
 on:
   workflow_dispatch:
@@ -11,7 +11,11 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Create Automator Workflow (plist format)
+    - name: Install Platypus
+      run: |
+        brew install --cask platypus
+
+    - name: Create Automator Workflow
       run: |
         mkdir -p CaptureStreamRunner.workflow/Contents
         cat > CaptureStreamRunner.workflow/Contents/document.wflow << 'EOF'
@@ -37,23 +41,32 @@ jobs:
         </plist>
         EOF
 
-    - name: Verify Workflow Structure
+    - name: Create Platypus App
       run: |
-        ls -la CaptureStreamRunner.workflow
-        plutil -lint CaptureStreamRunner.workflow/Contents/document.wflow
+        mkdir -p platypus_output
+        echo '#!/bin/bash' > platypus_output/launch.sh
+        echo 'exec "/Applications/CaptureStream2.app/Contents/MacOS/CaptureStream2" -nogui' >> platypus_output/launch.sh
+        chmod +x platypus_output/launch.sh
 
-    - name: Package as App Bundle (simulated)
+        platypus \
+          -a "CaptureStream2 Launcher" \
+          -o None \
+          -p "/bin/bash" \
+          -i /System/Applications/Utilities/Terminal.app/Contents/Resources/Terminal.icns \
+          platypus_output/launch.sh \
+          CaptureStreamRunner.app
+
+    - name: Create DMG
       run: |
-        mkdir -p CaptureStreamRunner.app/Contents/MacOS
-        cp -R CaptureStreamRunner.workflow CaptureStreamRunner.app/Contents/Resources
-        echo '#!/bin/bash' > CaptureStreamRunner.app/Contents/MacOS/launch.sh
-        echo 'open -a Automator "$(dirname "$0")/../Resources/CaptureStreamRunner.workflow"' >> CaptureStreamRunner.app/Contents/MacOS/launch.sh
-        chmod +x CaptureStreamRunner.app/Contents/MacOS/launch.sh
-        touch CaptureStreamRunner.app/Contents/Info.plist
+        mkdir -p dmg_content
+        cp -R CaptureStreamRunner.workflow dmg_content/
+        cp -R CaptureStreamRunner.app dmg_content/
 
-    - name: Upload App Artifact
+        hdiutil create -volname "CaptureStream2 Launchers" -srcfolder dmg_content -ov -format UDZO CaptureStream2Launchers.dmg
+
+    - name: Upload DMG Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: CaptureStreamRunner-app
-        path: CaptureStreamRunner.app
+        name: CaptureStream2Launchers-dmg
+        path: CaptureStream2Launchers.dmg
         retention-days: 7
