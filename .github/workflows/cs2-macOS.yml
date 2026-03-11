@@ -18,10 +18,10 @@ jobs:
     - name: Install Qt
       uses: jurplel/install-qt-action@v4
       with:
-        version: 6.10.1
-        modules: 'qtcharts'
+        version: 6.10.0
         extra: '--external 7z'
-
+#        modules: 'qtcharts'
+        
     - name: Clone CaptureStream2
       run: |
         git clone https://github.com/CSReviser/CaptureStream2.git
