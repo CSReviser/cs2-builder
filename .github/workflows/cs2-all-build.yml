@@ -421,7 +421,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   mac_qt5_build:
-    runs-on: macos-26
+    runs-on: macos-15
     needs: mac_build
 
     steps:
