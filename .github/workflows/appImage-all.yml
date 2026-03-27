@@ -151,10 +151,9 @@ jobs:
       - name: Build Application
         run: |
           cd CaptureStream2
-          mkdir -p build
-          cd build
-          /opt/qt6-static/bin/qmake ../CaptureStream2.pro
-          make -j$(nproc)
+          mkdir -p build && cd build
+          qt-cmake .. -DQT_DEBUG_FIND_PACKAGE=ON
+          cmake --build . --parallel
 
       - name: Download linuxdeploy and plugin
         run: |
