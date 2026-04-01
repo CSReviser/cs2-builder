@@ -446,7 +446,7 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
-          version: 5.15.*
+          version: 6.2.*
           extra: '--external 7z'
 #          modules: 'qtcharts'
 
@@ -477,13 +477,13 @@ jobs:
           hdiutil create -volname MacCaptureStream2 \
                       -srcfolder tmp \
                       -ov -format UDZO \
-                      "CaptureStream2-MacOS-qt5-${{ github.event.inputs.yyyymmdd }}.dmg"
+                      "CaptureStream2-MacOS-qt6-2-${{ github.event.inputs.yyyymmdd }}.dmg"
 
 
       - name: Upload DMG to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: CaptureStream2/build/CaptureStream2-MacOS-qt5-${{ github.event.inputs.yyyymmdd }}.dmg
+          files: CaptureStream2/build/CaptureStream2-MacOS-qt6-2-${{ github.event.inputs.yyyymmdd }}.dmg
           tag_name: ${{ needs.mac_build.outputs.tag }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -546,12 +546,12 @@ jobs:
           hdiutil create -volname MacCaptureStream2 \
                       -srcfolder tmp \
                       -ov -format UDZO \
-                      "CaptureStream2-MacOS-intel-${{ github.event.inputs.yyyymmdd }}.dmg"
+                      "CaptureStream2-MacOS-qt6-5-${{ github.event.inputs.yyyymmdd }}.dmg"
 
       - name: Upload DMG to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: build/CaptureStream2-MacOS-intel-${{ github.event.inputs.yyyymmdd }}.dmg
+          files: build/CaptureStream2-MacOS-qt6-5-${{ github.event.inputs.yyyymmdd }}.dmg
           tag_name: ${{ needs.mac_build.outputs.tag }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
