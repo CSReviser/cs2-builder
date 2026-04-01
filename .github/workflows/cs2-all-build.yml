@@ -326,7 +326,7 @@ jobs:
            chmod -R 755 ./LinCaptureStream2
            
       - name: Upload AppImage
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: CaptureStream2-AppImage-arm64-${{ github.event.inputs.yyyymmdd }}
           path: ./CaptureStream2/build/LinCaptureStream2
