@@ -295,18 +295,26 @@ jobs:
             "CaptureStream2-Windows-x64-qt5-${{ github.event.inputs.yyyymmdd }}.zip" \
             --clobber
 
-  wim_x68_qt5_build:
-    runs-on: ubuntu-latest
-    needs: mac_build
+   build-app:
+    name: Build in Docker
+    runs-on: ubuntu-22.04
     container:
-      image: ghcr.io/csreviser/qt5-mxe-x86-static:5.15.18
-
+      image: ghcr.io/csreviser/qt6-static:6.11.0-ubuntu22.04
+      options: --privileged
     steps:
-      - name: Checkout this repo
-        uses: actions/checkout@v4
+      - name: Checkout source
+        uses: actions/checkout@v3
 
-      - name: Mark repo as safe
-        run: git config --global --add safe.directory "${GITHUB_WORKSPACE}"
+      - name: Install Dependencies
+        run: |
+          apt update && apt install sudo -y 
+          sudo apt update
+          sudo apt install -y \
+             build-essential \
+             libgl1-mesa-dev \
+            qt6-base-dev qt6-base-dev-tools \
+            cmake make g++ \
+            desktop-file-utils patchelf wget file git fuse libfuse2 p7zip-full zip
 
       - name: Clone CaptureStream2
         run: |
@@ -314,51 +322,80 @@ jobs:
           cd CaptureStream2
           git checkout feature
           git submodule update --init --recursive
+          cp ./qss_files/stylesheet-ubu.qss ./
 
-      - name: Create build directory
-        run: mkdir -p build
-
-      - name: Configure with CMake
-        run: >
-          /opt/mxe/usr/i686-w64-mingw32.static/qt5/bin/qmake
-          CaptureStream2/CaptureStream2.pro
-          
-      - name: Build
-        run: make 
-
-      - name: Create WinCaptureStream2 directory and move exe
-        shell: bash
+      - name: Build Application
         run: |
-          mkdir -p build/WinCaptureStream2
-          mv ./release/CaptureStream2.exe build/WinCaptureStream2/
-          cp ./CaptureStream2/qss_files/stylesheet-win.qss build/WinCaptureStream2/
-          cp -r ./CaptureStream2/qss_files/License build/WinCaptureStream2/
-          cp /opt/mxe/usr/i686-w64-mingw32.static/bin/ffmpeg.exe build/WinCaptureStream2/
-      
+          cd CaptureStream2
+          mkdir -p build && cd build
+          qt-cmake .. -DQT_DEBUG_FIND_PACKAGE=ON
+          cmake --build . --parallel
+
+      - name: Download linuxdeploy and plugin
+        run: |
+          cd CaptureStream2
+          wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+          chmod +x linuxdeploy-x86_64.AppImage
+          wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
+          chmod +x linuxdeploy-plugin-qt-x86_64.AppImage
+          wget https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage -O linuxdeployqt.AppImage
+          chmod +x linuxdeployqt.AppImage
+          wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O appimagetool
+          chmod +x appimagetool
+
+      - name: Set QMAKE path
+        run: echo "QMAKE=/opt/qt6-static/bin/qmake" >> $GITHUB_ENV
+        
+      - name: Prepare AppDir
+        run: |
+         cd CaptureStream2
+          mkdir -p AppDir/usr/bin
+          cp build/CaptureStream2 AppDir/usr/bin/
+          cp icon.png AppDir/
+          cp CaptureStream2.desktop AppDir/
+
+      - name: Prepare AppDir (without creating AppImage yet)
+        run: |
+         cd CaptureStream2
+         ./linuxdeployqt.AppImage AppDir/CaptureStream2.desktop \
+          -appimage -bundle-non-qt-libs 
+
+      - name: Build AppImage (Type 1, FUSE-less)
+        run: |
+         cd CaptureStream2
+         ./linuxdeploy-x86_64.AppImage \
+           --appdir AppDir \
+           --desktop-file AppDir/CaptureStream2.desktop \
+           --icon-file AppDir/icon.png \
+           --executable AppDir/usr/bin/CaptureStream2 \
+           --output appimage
+#          ./appimagetool --comp gzip AppDir
+
+      - name: Run linuxdeployqt
+        run: |
+         cd CaptureStream2
+         cd build
+         mkdir -p LinCaptureStream2
+         cp ../CaptureStream2-x86_64.AppImage ./LinCaptureStream2/CaptureStream2
+         cp ../qss_files/stylesheet-ubu.qss ./LinCaptureStream2
+         cp -r ../qss_files/License ./LinCaptureStream2
+         wget -qO ffmpeg-static-ubuntu.zip https://github.com/CSReviser/ffmpeg-build/releases/download/7.1.1/ffmpeg-static-ubuntu.zip
+         7z e ffmpeg-static-ubuntu.zip ffmpeg -o./LinCaptureStream2
+         chmod -R 755 ./LinCaptureStream2
+#          ./linuxdeployqt.AppImage AppDir/CaptureStream2.desktop \
+#           -appimage -bundle-non-qt-libs 
       - name: Create ZIP file
         run: |
-          cd build
-          zip -r "CaptureStream2-Windows-x86-qt5-${{ github.event.inputs.yyyymmdd }}.zip" WinCaptureStream2
+          cd CaptureStream2/build
+          zip -r "CaptureStream2-AppImage-x64-${{ github.event.inputs.yyyymmdd }}.zip" LinCaptureStream2
 
-      - name: Install GitHub CLI
-        run: |
-          apt-get update
-          apt-get install -y curl
-          curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | \
-          gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg
-          echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | \
-          tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-          apt-get update
-          apt-get install -y gh
-
-      - name: Upload Windows binary to existing release
+      - name: Upload zip to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: CaptureStream2/build/CaptureStream2-AppImage-x64-${{ github.event.inputs.yyyymmdd }}.zip
+          tag_name: ${{ github.event.inputs.yyyymmdd }}
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          cd build
-          gh release upload "${{ needs.mac_build.outputs.tag }}" \
-            "CaptureStream2-Windows-x86-qt5-${{ github.event.inputs.yyyymmdd }}.zip" \
-            --clobber
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             
   ubuntu_build:
     runs-on: ubuntu-latest
