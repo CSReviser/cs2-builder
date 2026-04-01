@@ -24,7 +24,7 @@ jobs:
           echo "title=$title" >> $GITHUB_OUTPUT
 
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
@@ -94,7 +94,7 @@ jobs:
 
     steps:
       - name: Checkout this repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Mark repo as safe
         run: git config --global --add safe.directory "${GITHUB_WORKSPACE}"
@@ -166,7 +166,7 @@ jobs:
 
     steps:
       - name: Checkout this repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Mark repo as safe
         run: git config --global --add safe.directory "${GITHUB_WORKSPACE}"
@@ -354,7 +354,7 @@ jobs:
       options: --privileged
     steps:
       - name: Checkout source
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Install Dependencies
         run: |
@@ -458,7 +458,7 @@ jobs:
 
     steps:
       - name: Checkout this repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Install GitHub CLI
         run: |
@@ -522,7 +522,7 @@ jobs:
           echo "title=$title" >> $GITHUB_OUTPUT
 
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Mark repo as safe
         run: git config --global --add safe.directory "${GITHUB_WORKSPACE}"
@@ -590,7 +590,7 @@ jobs:
           echo "title=$title" >> $GITHUB_OUTPUT
 
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
