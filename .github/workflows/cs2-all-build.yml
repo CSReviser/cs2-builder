@@ -27,7 +27,7 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Install Qt
-        uses: jurplel/install-qt-action@v5
+        uses: jurplel/install-qt-action@v4
         with:
           version: 6.11.0
           extra: '--external 7z'
@@ -532,7 +532,7 @@ jobs:
           brew install gh || brew upgrade gh
 
       - name: Install Qt
-        uses: jurplel/install-qt-action@v5
+        uses: jurplel/install-qt-action@v4
         with:
           version: 6.2.*
           extra: '--external 7z'
@@ -593,7 +593,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install Qt
-        uses: jurplel/install-qt-action@v5
+        uses: jurplel/install-qt-action@v4
         with:
           version: 6.5.*
           extra: '--external 7z'
