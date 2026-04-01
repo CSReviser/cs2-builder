@@ -77,7 +77,7 @@ jobs:
           echo "title=${yyyy:0:4}/${yyyy:4:2}/${yyyy:6:2}版リリース" >> "$GITHUB_OUTPUT"
 
       - name: Upload DMG to GitHub Release
-        uses: softprops/action-gh-release@v3
+        uses: softprops/action-gh-release@v2
         with:
           files: build/CaptureStream2-MacOS-${{ github.event.inputs.yyyymmdd }}.dmg
           tag_name: ${{ github.event.inputs.yyyymmdd }}
@@ -637,7 +637,7 @@ jobs:
                       "CaptureStream2-MacOS-qt6-5-${{ github.event.inputs.yyyymmdd }}.dmg"
 
       - name: Upload DMG to GitHub Release
-        uses: softprops/action-gh-release@v3
+        uses: softprops/action-gh-release@v2
         with:
           files: build/CaptureStream2-MacOS-qt6-5-${{ github.event.inputs.yyyymmdd }}.dmg
           tag_name: ${{ needs.mac_build.outputs.tag }}
