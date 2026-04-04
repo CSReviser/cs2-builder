@@ -493,6 +493,7 @@ jobs:
       - name: Build using Docker container with Qt static
         run: |
           cd CaptureStream2
+          mkdir -p stylesheet-ubu
           mkdir -p build && cd build
           qt-cmake .. -DQT_DEBUG_FIND_PACKAGE=ON
           cmake --build . --parallel
@@ -503,7 +504,6 @@ jobs:
           wget -qO ffmpeg-static-ubuntu.zip https://github.com/CSReviser/ffmpeg-build/releases/download/7.1.1/ffmpeg-static-ubuntu.zip
           7z e ffmpeg-static-ubuntu.zip ffmpeg -o./LinCaptureStream2
           chmod -R 755 ./LinCaptureStream2
-          mkdir -p stylesheet-ubu
           cp ../qss_files/stylesheet-ubu ./
 
       - name: Create ZIP file
