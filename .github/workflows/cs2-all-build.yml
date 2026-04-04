@@ -136,7 +136,7 @@ jobs:
           cp -r ./CaptureStream2/qss_files/License build/WinCaptureStream2/
           cp /opt/mxe/usr/x86_64-w64-mingw32.static/bin/ffmpeg.exe build/WinCaptureStream2/
           mkdir -p build/stylesheet-win
-          cp ./CaptureStream2/qss_files/stylesheet-win build/
+          cp -r ./CaptureStream2/qss_files/stylesheet-win build/
 
       - name: Install GitHub CLI
         run: |
@@ -504,7 +504,7 @@ jobs:
           wget -qO ffmpeg-static-ubuntu.zip https://github.com/CSReviser/ffmpeg-build/releases/download/7.1.1/ffmpeg-static-ubuntu.zip
           7z e ffmpeg-static-ubuntu.zip ffmpeg -o./LinCaptureStream2
           chmod -R 755 ./LinCaptureStream2
-          cp ../qss_files/stylesheet-ubu ./
+          cp -r ../qss_files/stylesheet-ubu ./
 
       - name: Create ZIP file
         run: |
