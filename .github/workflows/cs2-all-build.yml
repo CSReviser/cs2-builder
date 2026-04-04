@@ -135,7 +135,7 @@ jobs:
           cp ./CaptureStream2/qss_files/stylesheet-win.qss build/WinCaptureStream2/
           cp -r ./CaptureStream2/qss_files/License build/WinCaptureStream2/
           cp /opt/mxe/usr/x86_64-w64-mingw32.static/bin/ffmpeg.exe build/WinCaptureStream2/
-          mkdir -p build/stylesheet-wi
+          mkdir -p build/stylesheet-win
           cp ./CaptureStream2/qss_files/stylesheet-win build/
 
       - name: Install GitHub CLI
