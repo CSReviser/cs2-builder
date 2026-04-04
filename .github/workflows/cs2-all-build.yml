@@ -137,6 +137,7 @@ jobs:
           cp /opt/mxe/usr/x86_64-w64-mingw32.static/bin/ffmpeg.exe build/WinCaptureStream2/
           mkdir -p build/stylesheet-win
           cp -r ./CaptureStream2/qss_files/stylesheet-win build/
+          cp -r ./CaptureStream2/qss_files/stylesheet-mac build/
 
       - name: Install GitHub CLI
         run: |
@@ -154,6 +155,7 @@ jobs:
           cd build
           zip -r "CaptureStream2-Windows-x64-${{ github.event.inputs.yyyymmdd }}.zip" WinCaptureStream2
           zip -r "stylesheet-win.zip" stylesheet-win
+          zip -r "stylesheet-mac.zip" stylesheet-mac
           
       - name: Upload Windows binary to existing release
         env:
@@ -165,6 +167,9 @@ jobs:
             --clobber
           gh release upload "${{ needs.mac_build.outputs.tag }}" \
             "stylesheet-win.zip" \
+            --clobber
+          gh release upload "${{ needs.mac_build.outputs.tag }}" \
+            "stylesheet-mac.zip" \
             --clobber
 
   win32_build:
