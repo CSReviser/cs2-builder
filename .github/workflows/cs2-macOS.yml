@@ -59,16 +59,17 @@ jobs:
 
     - name: Create DMG file
       run: |
-        hdiutil create -volname CaptureStream2 \
-                      -srcfolder build/tmp/MacCaptureStream2 \
+          cd build
+          hdiutil create -volname MacCaptureStream2 \
+                      -srcfolder tmp \
                       -ov -format UDZO \
-                      "build/CaptureStream2-MacOS-AppleSilicon-${{ github.event.inputs.yyyymmdd }}.dmg"
+                      "CaptureStream2-MacOS-AppleSilicon-${{ github.event.inputs.yyyymmdd }}.dmg"
 
     - name: Format release title
       id: format_date
       run: |
-        yyyy=${{ github.event.inputs.yyyymmdd }} 
-        echo "title=${yyyy:0:4}/${yyyy:4:2}/${yyyy:6:2}版リリース" >> "$GITHUB_OUTPUT"
+#        yyyy=${{ github.event.inputs.yyyymmdd }} 
+#       echo "title=${yyyy:0:4}/${yyyy:4:2}/${yyyy:6:2}版リリース" >> "$GITHUB_OUTPUT"
 
     - name: Upload DMG to GitHub Release
       uses: softprops/action-gh-release@v2
