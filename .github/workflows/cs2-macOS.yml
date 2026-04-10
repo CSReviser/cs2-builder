@@ -42,7 +42,7 @@ jobs:
     - name: Prepare CaptureStream2 executable
       run: |
         wget -qO ffmpeg8arm.zip https://www.osxexperts.net/ffmpeg81arm.zip
-        7z e ffmpeg8arm.zip ffmpeg -o./CaptureStream2.app/Contents/MacOS/
+        7z e ffmpeg8arm.zip ffmpeg -o./build/CaptureStream2.app/Contents/MacOS/ 
         cp CaptureStream2/icon.icns ./build/CaptureStream2.app/Contents/Resources/
         cp CaptureStream2/qss_files/stylesheet-mac.qss ./build/CaptureStream2.app/Contents/MacOS/
 
