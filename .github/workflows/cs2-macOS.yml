@@ -41,11 +41,12 @@ jobs:
 
     - name: Prepare CaptureStream2 executable
       run: |
-        wget -qO ffmpeg8arm.zip https://www.osxexperts.net/ffmpeg81arm.zip
+        wget -qO ffmpeg8arm.zip https://www.videohelp.com/download/ffmpeg-8.1-macosarm-static.zip
         7z e ffmpeg8arm.zip ffmpeg -o./build/CaptureStream2.app/Contents/MacOS/ 
         cp CaptureStream2/icon.icns ./build/CaptureStream2.app/Contents/Resources/
         cp CaptureStream2/qss_files/stylesheet-mac.qss ./build/CaptureStream2.app/Contents/MacOS/
 
+#        wget -qO ffmpeg8arm.zip https://www.osxexperts.net/ffmpeg81arm.zip
 #        wget -qO FFmpeg.tar.gz https://github.com/CSReviser/ffmpeg-build/releases/download/8.0/ffmpeg-macos-universal.tar.gz || { echo "Failed to download FFmpeg"; exit 1; }
 #        wget -qO FFmpeg.tar.gz https://github.com/CSReviser/ffmpeg-build/releases/download/8.0/ffmpeg-macos-universal.tar.gz || { echo "Failed to download FFmpeg"; exit 1; }
 #        tar -xzvf FFmpeg.tar.gz ffmpeg
