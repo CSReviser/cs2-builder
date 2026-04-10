@@ -61,7 +61,7 @@ jobs:
         hdiutil create -volname CaptureStream2 \
                       -srcfolder build/MacCaptureStream2 \
                       -ov -format UDZO \
-                      "build/CaptureStream2-MacOS26-${{ github.event.inputs.yyyymmdd }}.dmg"
+                      "build/CaptureStream2-MacOS-AppleSilicon-${{ github.event.inputs.yyyymmdd }}.dmg"
 
     - name: Format release title
       id: format_date
@@ -72,7 +72,7 @@ jobs:
     - name: Upload DMG to GitHub Release
       uses: softprops/action-gh-release@v2
       with:
-        files: build/CaptureStream2-MacOS26-${{ github.event.inputs.yyyymmdd }}.dmg
+        files: build/CaptureStream2-MacOS-AppleSilicon-${{ github.event.inputs.yyyymmdd }}.dmg
         tag_name: ${{ github.event.inputs.yyyymmdd }}
         name: ${{ steps.format_date.outputs.title }}
         body: "Universal Qt 6.9 build for macOS"
