@@ -45,10 +45,6 @@ jobs:
         -o ffmpeg8arm.zip \
         https://www.osxexperts.net/ffmpeg81arm.zip
         7z e ffmpeg8arm.zip ffmpeg -o./build/CaptureStream2.app/Contents/MacOS/ 
-        curl -L -A "Mozilla/5.0" \
-        -o Applications.zip \
-        https://github.com/CSReviser/ffmpeg-build/releases/download/8.1/Applications.zip
-        7z e Applications.zip Applications -o./build/ 
         cp CaptureStream2/icon.icns ./build/CaptureStream2.app/Contents/Resources/
         cp CaptureStream2/qss_files/stylesheet-mac.qss ./build/CaptureStream2.app/Contents/MacOS/
 
@@ -64,7 +60,11 @@ jobs:
           mv build/CaptureStream2.app build/tmp/MacCaptureStream2/
           cp -r CaptureStream2/qss_files/License build/tmp/MacCaptureStream2/
           cp -r build/Applications build/tmp/MacCaptureStream2/
-
+    
+    - name: Create symlink to Applications
+     run: |
+        ln -s /Applications ./build/tmp/MacCaptureStream2/Applications
+        
     - name: Create DMG file
       run: |
           cd build
