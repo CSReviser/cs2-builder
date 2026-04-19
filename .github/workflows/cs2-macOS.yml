@@ -53,6 +53,11 @@ jobs:
 #        wget -qO FFmpeg.tar.gz https://github.com/CSReviser/ffmpeg-build/releases/download/8.0/ffmpeg-macos-universal.tar.gz || { echo "Failed to download FFmpeg"; exit 1; }
 #        tar -xzvf FFmpeg.tar.gz ffmpeg
 #        cp ffmpeg ./build/CaptureStream2.app/Contents/MacOS/ 
+
+    - name: Create Applications alias
+      run: |
+        APPDIR="$(pwd)/build/tmp/MacCaptureStream2"
+        osascript -e 'tell application "Finder" to make alias file to POSIX file "/Applications" at POSIX file "'"$APPDIR"'"'
         
     - name: Create MacCaptureStream2 directory
       run: |
