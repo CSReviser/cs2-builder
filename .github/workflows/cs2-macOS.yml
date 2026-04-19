@@ -61,7 +61,7 @@ jobs:
           cp -r CaptureStream2/qss_files/License build/tmp/MacCaptureStream2/
     
     - name: Create symlink to Applications
-     run: |
+      run: |
         ln -s /Applications ./build/tmp/MacCaptureStream2/Applications
         
     - name: Create DMG file
