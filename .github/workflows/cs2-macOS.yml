@@ -1,4 +1,4 @@
-name: 1. MacOS qt6.11.0 AppleSilicon cmake C/C++ CI
+name: 1. MacOS qt6.11.1 AppleSilicon cmake C/C++ CI
 
 on:
   workflow_dispatch:
