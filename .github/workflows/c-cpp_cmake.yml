@@ -1,11 +1,14 @@
-name: 1. MacOS qt6.9 Univarsal cmake C/C++ CI
+name: 1. MacOS qt6.11.2 Univarsal cmake C/C++ CI
 
 on:
   workflow_dispatch:
-
+    inputs:
+      yyyymmdd:
+        description: 'Date string for release (yyyymmdd)'
+        required: true
 jobs:
   build:
-    runs-on: macos-15
+    runs-on: xcode-27
 
     steps:
     # リポジトリをチェックアウト
@@ -16,7 +19,7 @@ jobs:
     - name: Install Qt
       uses: jurplel/install-qt-action@v4
       with:
-        version: 6.9.*
+        version: 6.11.2
         modules: 'qtcharts'
         extra: '--external 7z'
 
@@ -24,7 +27,9 @@ jobs:
       run: |
           git clone https://github.com/CSReviser/CaptureStream2.git
           cd CaptureStream2
+          git checkout feature 
           git submodule update --init --recursive
+
 #          git checkout feature 
 
     # CMakeでビルド構成を生成
@@ -37,23 +42,48 @@ jobs:
     - name: Build with Make
       run: cmake --build build --parallel
 
-    # CaptureStream2の実行可能ファイルを準備
     - name: Prepare CaptureStream2 executable
       run: |
-        wget -qO FFmpeg.7z https://evermeet.cx/ffmpeg/ffmpeg-7.1.1.7z || { echo "Failed to download FFmpeg"; exit 1; }
-        7z e FFmpeg.7z ffmpeg -o./build/CaptureStream2.app/Contents/MacOS/ || { echo "Failed to extract FFmpeg"; exit 1; }
-        chmod -R 755 build/CaptureStream2.app
-    # 必要なディレクトリを作成
-    - name: Create target directory
-      run: mkdir -p build/MacCaptureStream2
+        wget -qO FFmpeg.tar.gz https://github.com/CSReviser/ffmpeg-build/releases/download/8.0/ffmpeg-macos-universal.tar.gz || { echo "Failed to download FFmpeg"; exit 1; }
+        tar -xzvf FFmpeg.tar.gz ffmpeg
+        cp ffmpeg ./build/CaptureStream2.app/Contents/MacOS/ 
+        cp CaptureStream2/icon.icns ./build/CaptureStream2.app/Contents/Resources/
+        cp CaptureStream2/qss_files/stylesheet-mac.qss ./build/CaptureStream2.app/Contents/MacOS/
+#        wget -qO ffmpeg8arm.zip https://www.osxexperts.net/ffmpeg81arm.zip
+#        wget -qO FFmpeg.tar.gz https://github.com/CSReviser/ffmpeg-build/releases/download/8.0/ffmpeg-macos-universal.tar.gz || { echo "Failed to download FFmpeg"; exit 1; }
+#        wget -qO FFmpeg.tar.gz https://github.com/CSReviser/ffmpeg-build/releases/download/8.0/ffmpeg-macos-universal.tar.gz || { echo "Failed to download FFmpeg"; exit 1; }
+#        tar -xzvf FFmpeg.tar.gz ffmpeg
+#        cp ffmpeg ./build/CaptureStream2.app/Contents/MacOS/ 
+        
+    - name: Create MacCaptureStream2 directory
+      run: |
+          mkdir -p build/tmp/MacCaptureStream2
+          mv build/CaptureStream2.app build/tmp/MacCaptureStream2/
+          cp -r CaptureStream2/qss_files/License build/tmp/MacCaptureStream2/
+    
+    - name: Create symlink to Applications
+      run: |
+        ln -s /Applications ./build/tmp/MacCaptureStream2/Applications
+        
+    - name: Create DMG file
+      run: |
+          cd build
+          hdiutil create -volname MacCaptureStream2 \
+                      -srcfolder tmp \
+                      -ov -format UDZO \
+                      "CaptureStream2-MacOS27-Univarsal-${{ github.event.inputs.yyyymmdd }}.dmg"
+    - name: Format release title
+      id: format_date
+      run: |
+#        yyyy=${{ github.event.inputs.yyyymmdd }} 
+#       echo "title=${yyyy:0:4}/${yyyy:4:2}/${yyyy:6:2}版リリース" >> "$GITHUB_OUTPUT"
 
-    # アプリを圧縮
-    - name: Archive CaptureStream2 app
-      run: tar -cvf build/CaptureStream2.tar -C build CaptureStream2.app
-
-    # アーティファクトをアップロード
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
+    - name: Upload DMG to GitHub Release
+      uses: softprops/action-gh-release@v2
       with:
-        name: CaptureStream2-Universal-macos15
-        path: build/CaptureStream2.tar
+        files: build/CaptureStream2-MacOS27-Univarsal-${{ github.event.inputs.yyyymmdd }}.dmg
+        tag_name: ${{ github.event.inputs.yyyymmdd }}
+        name: ${{ steps.format_date.outputs.title }}
+        body: "Universal Qt 6.9 build for macOS"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
