@@ -1,4 +1,4 @@
-name: 1. MacOS qt6.11.2 Univarsal cmake C/C++ CI
+name: 1. MacOS qt6.11.2 Universal cmake C/C++ CI
 
 on:
   workflow_dispatch:
@@ -71,7 +71,7 @@ jobs:
           hdiutil create -volname MacCaptureStream2 \
                       -srcfolder tmp \
                       -ov -format UDZO \
-                      "CaptureStream2-MacOS27-Univarsal-${{ github.event.inputs.yyyymmdd }}.dmg"
+                      "CaptureStream2-MacOS27-Universal-${{ github.event.inputs.yyyymmdd }}.dmg"
     - name: Format release title
       id: format_date
       run: |
@@ -81,7 +81,7 @@ jobs:
     - name: Upload DMG to GitHub Release
       uses: softprops/action-gh-release@v2
       with:
-        files: build/CaptureStream2-MacOS27-Univarsal-${{ github.event.inputs.yyyymmdd }}.dmg
+        files: build/CaptureStream2-MacOS27-Universal-${{ github.event.inputs.yyyymmdd }}.dmg
         tag_name: ${{ github.event.inputs.yyyymmdd }}
         name: ${{ steps.format_date.outputs.title }}
         body: "Universal Qt 6.9 build for macOS"
