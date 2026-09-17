@@ -41,10 +41,9 @@ jobs:
 
     - name: Prepare CaptureStream2 executable
       run: |
-        curl -L -A "Mozilla/5.0" \
-        -o ffmpeg8arm.zip \
-        https://www.osxexperts.net/ffmpeg81arm.zip
-        7z e ffmpeg8arm.zip ffmpeg -o./build/CaptureStream2.app/Contents/MacOS/ 
+        wget -qO FFmpeg.tar.gz https://github.com/CSReviser/ffmpeg-build/releases/download/9.0.1/ffmpeg-macos-arm64.tar.gz || { echo "Failed to download FFmpeg"; exit 1; }
+        tar -xzvf FFmpeg.tar.gz ffmpeg
+        cp ffmpeg ./build/CaptureStream2.app/Contents/MacOS/ 
         cp CaptureStream2/icon.icns ./build/CaptureStream2.app/Contents/Resources/
         cp CaptureStream2/qss_files/stylesheet-mac.qss ./build/CaptureStream2.app/Contents/MacOS/
 
@@ -53,7 +52,10 @@ jobs:
 #        wget -qO FFmpeg.tar.gz https://github.com/CSReviser/ffmpeg-build/releases/download/8.0/ffmpeg-macos-universal.tar.gz || { echo "Failed to download FFmpeg"; exit 1; }
 #        tar -xzvf FFmpeg.tar.gz ffmpeg
 #        cp ffmpeg ./build/CaptureStream2.app/Contents/MacOS/ 
-        
+#        curl -L -A "Mozilla/5.0" \
+#        -o ffmpeg8arm.zip \
+#        https://www.osxexperts.net/ffmpeg81arm.zip
+#        7z e ffmpeg8arm.zip ffmpeg -o./build/CaptureStream2.app/Contents/MacOS/         
     - name: Create MacCaptureStream2 directory
       run: |
           mkdir -p build/tmp/MacCaptureStream2
