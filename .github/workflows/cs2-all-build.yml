@@ -447,7 +447,7 @@ jobs:
          cp ../CaptureStream2-x86_64.AppImage ./LinCaptureStream2/CaptureStream2
          cp ../qss_files/stylesheet-ubu.qss ./LinCaptureStream2
          cp -r ../qss_files/License ./LinCaptureStream2
-         wget -qO ffmpeg-static-ubuntu.zip https://github.com/CSReviser/ffmpeg-build/releases/download/9.0.2/ffmpeg-static.zipp
+         wget -qO ffmpeg-static-ubuntu.zip https://github.com/CSReviser/ffmpeg-build/releases/download/9.0.2/ffmpeg-static.zip
          7z e ffmpeg-static-ubuntu.zip ffmpeg -o./LinCaptureStream2
          chmod -R 755 ./LinCaptureStream2
 #          ./linuxdeployqt.AppImage AppDir/CaptureStream2.desktop \
