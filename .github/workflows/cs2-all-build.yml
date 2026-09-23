@@ -319,11 +319,11 @@ jobs:
           qt-cmake .. -DQT_DEBUG_FIND_PACKAGE=ON
           cmake --build . --parallel
           mkdir -p LinCaptureStream2
-          mkdir -p LinCaptureStream2/ffmpeg
+          mkdir -p LinCaptureStream2/ffmpeg-ubu
           cp ../qss_files/stylesheet-ubu.qss ./LinCaptureStream2
           cp -r ../qss_files/License ./LinCaptureStream2
           wget -qO ffmpeg-static-ubuntu-arm.zip https://github.com/CSReviser/ffmpeg-build/releases/download/9.0.2/ffmpeg-arm-static.zip
-          7z x ffmpeg-static-ubuntu-arm.zip -o./LinCaptureStream2/ffmpeg
+          7z x ffmpeg-static-ubuntu-arm.zip -o./LinCaptureStream2/ffmpeg-ubu
           chmod -R 755 ./LinCaptureStream2
 #          mv CaptureStream2 ./LinCaptureStream2/
           
@@ -443,12 +443,12 @@ jobs:
          cd CaptureStream2
          cd build
          mkdir -p LinCaptureStream2
-         mkdir -p LinCaptureStream2/ffmpeg
+         mkdir -p LinCaptureStream2/ffmpeg-ubu
          cp ../CaptureStream2-x86_64.AppImage ./LinCaptureStream2/CaptureStream2
          cp ../qss_files/stylesheet-ubu.qss ./LinCaptureStream2
          cp -r ../qss_files/License ./LinCaptureStream2
          wget -qO ffmpeg-static-ubuntu.zip https://github.com/CSReviser/ffmpeg-build/releases/download/9.0.2/ffmpeg-static.zip
-         7z x ffmpeg-static-ubuntu.zip -o./LinCaptureStream2/ffmpeg
+         7z x ffmpeg-static-ubuntu.zip -o./LinCaptureStream2/ffmpeg-ubu
          chmod -R 755 ./LinCaptureStream2
 #          ./linuxdeployqt.AppImage AppDir/CaptureStream2.desktop \
 #           -appimage -bundle-non-qt-libs 
