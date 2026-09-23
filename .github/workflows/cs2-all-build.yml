@@ -323,7 +323,7 @@ jobs:
           cp ../qss_files/stylesheet-ubu.qss ./LinCaptureStream2
           cp -r ../qss_files/License ./LinCaptureStream2
           wget -qO ffmpeg-static-ubuntu-arm.zip https://github.com/CSReviser/ffmpeg-build/releases/download/9.0.2/ffmpeg-arm-static.zip
-          7z e ffmpeg-static-ubuntu-arm.zip ./ffmpeg -o./LinCaptureStream2
+          7z e ffmpeg-static-ubuntu-arm.zip ffmpeg -o./LinCaptureStream2
           chmod -R 755 ./LinCaptureStream2
 #          mv CaptureStream2 ./LinCaptureStream2/
           
