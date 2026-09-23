@@ -72,7 +72,7 @@ jobs:
           hdiutil create -volname MacCaptureStream2 \
                       -srcfolder tmp \
                       -ov -format UDZO \
-                      "CaptureStream2-MacOS-${{ github.event.inputs.yyyymmdd }}.dmg"
+                      "CaptureStream2-MacOS-Universal-${{ github.event.inputs.yyyymmdd }}.dmg"
 
       - name: Format release title
         id: format_date
