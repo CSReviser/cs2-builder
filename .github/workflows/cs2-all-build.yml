@@ -53,7 +53,7 @@ jobs:
 
       - name: Prepare CaptureStream2 executable
         run: |
-          wget -qO FFmpeg.tar.gz https://github.com/CSReviser/ffmpeg-build/releases/download/8.0/ffmpeg-macos-universal.tar.gz || { echo "Failed to download FFmpeg"; exit 1; }
+          wget -qO FFmpeg.tar.gz https://github.com/CSReviser/ffmpeg-build/releases/download/9.0.2/ffmpeg-macos-universal.tar.gz || { echo "Failed to download FFmpeg"; exit 1; }
           tar -xzvf FFmpeg.tar.gz ffmpeg
           cp ffmpeg ./build/CaptureStream2.app/Contents/MacOS/ 
           cp CaptureStream2/icon.icns ./build/CaptureStream2.app/Contents/Resources/
@@ -83,7 +83,7 @@ jobs:
       - name: Upload DMG to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: build/CaptureStream2-MacOS-${{ github.event.inputs.yyyymmdd }}.dmg
+          files: build/CaptureStream2-MacOS-Universal-${{ github.event.inputs.yyyymmdd }}.dmg
           tag_name: ${{ github.event.inputs.yyyymmdd }}
           name: ${{ steps.format_date.outputs.title }}
           body: "Qt 6.11.2 build test"
@@ -319,10 +319,11 @@ jobs:
           qt-cmake .. -DQT_DEBUG_FIND_PACKAGE=ON
           cmake --build . --parallel
           mkdir -p LinCaptureStream2
+          mkdir -p ffmpeg
           cp ../qss_files/stylesheet-ubu.qss ./LinCaptureStream2
           cp -r ../qss_files/License ./LinCaptureStream2
-          wget -qO ffmpeg-static-ubuntu-arm.zip https://github.com/CSReviser/ffmpeg-build/releases/download/7.1.1/ffmpeg-static-ubuntu-arm.zip
-          7z e ffmpeg-static-ubuntu-arm.zip ffmpeg -o./LinCaptureStream2
+          wget -qO ffmpeg-static-ubuntu-arm.zip https://github.com/CSReviser/ffmpeg-build/releases/download/9.0.2/ffmpeg-arm-static.zip
+          7z e ffmpeg-static-ubuntu-arm.zip ./ffmpeg -o./LinCaptureStream2
           chmod -R 755 ./LinCaptureStream2
 #          mv CaptureStream2 ./LinCaptureStream2/
           
@@ -442,10 +443,11 @@ jobs:
          cd CaptureStream2
          cd build
          mkdir -p LinCaptureStream2
+         mkdir -p ffmpe
          cp ../CaptureStream2-x86_64.AppImage ./LinCaptureStream2/CaptureStream2
          cp ../qss_files/stylesheet-ubu.qss ./LinCaptureStream2
          cp -r ../qss_files/License ./LinCaptureStream2
-         wget -qO ffmpeg-static-ubuntu.zip https://github.com/CSReviser/ffmpeg-build/releases/download/7.1.1/ffmpeg-static-ubuntu.zip
+         wget -qO ffmpeg-static-ubuntu.zip https://github.com/CSReviser/ffmpeg-build/releases/download/9.0.2/ffmpeg-static.zipp
          7z e ffmpeg-static-ubuntu.zip ffmpeg -o./LinCaptureStream2
          chmod -R 755 ./LinCaptureStream2
 #          ./linuxdeployqt.AppImage AppDir/CaptureStream2.desktop \
@@ -534,7 +536,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  mac_qt5_build:
+  mac_qt6.85_build:
     runs-on: macos-15
     needs: mac_build
 
