@@ -44,7 +44,7 @@ jobs:
 
     - name: Prepare CaptureStream2 executable
       run: |
-        wget -qO FFmpeg.tar.gz https://github.com/CSReviser/ffmpeg-build/releases/download/8.0/ffmpeg-macos-universal.tar.gz || { echo "Failed to download FFmpeg"; exit 1; }
+        wget -qO FFmpeg.tar.gz https://github.com/CSReviser/ffmpeg-build/releases/download/9.0.2/ffmpeg-macos-universal.tar.gz || { echo "Failed to download FFmpeg"; exit 1; }
         tar -xzvf FFmpeg.tar.gz ffmpeg
         cp ffmpeg ./build/CaptureStream2.app/Contents/MacOS/ 
         cp CaptureStream2/icon.icns ./build/CaptureStream2.app/Contents/Resources/
@@ -84,6 +84,6 @@ jobs:
         files: build/CaptureStream2-MacOS27-Universal-${{ github.event.inputs.yyyymmdd }}.dmg
         tag_name: ${{ github.event.inputs.yyyymmdd }}
         name: ${{ steps.format_date.outputs.title }}
-        body: "Universal Qt 6.9 build for macOS"
+        body: "Universal Qt 6.11.2 build for macOS"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
