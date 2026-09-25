@@ -154,7 +154,7 @@ jobs:
       - name: Create ZIP file
         run: |
           cd build
-          zip -r "CaptureStream2-Windows-x64-${{ github.event.inputs.yyyymmdd }}.zip" WinCaptureStream2
+          zip -r "CaptureStream2-Windows-${{ github.event.inputs.yyyymmdd }}.zip" WinCaptureStream2
           zip -r "stylesheet-win.zip" stylesheet-win
           zip -r "stylesheet-mac.zip" stylesheet-mac
           
@@ -164,7 +164,7 @@ jobs:
         run: |
           cd build
           gh release upload "${{ needs.mac_build.outputs.tag }}" \
-            "CaptureStream2-Windows-x64-${{ github.event.inputs.yyyymmdd }}.zip" \
+            "CaptureStream2-Windows-${{ github.event.inputs.yyyymmdd }}.zip" \
             --clobber
           gh release upload "${{ needs.mac_build.outputs.tag }}" \
             "stylesheet-win.zip" \
