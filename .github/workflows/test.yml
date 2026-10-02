@@ -87,7 +87,7 @@ jobs:
       - name: Inspect executable
         run: |
           file build/WinCaptureStream2/CaptureStream2.exe
-          objdump -f build/CaptureStream2.exe
+          objdump -f build/WinCaptureStream2/CaptureStream2.exe
           objdump --section-headers build/WinCaptureStream2/CaptureStream2.exe | grep -E 'debug|text'
           objdump -x build/WinCaptureStream2/CaptureStream2.exe > build/CaptureStream2-objdump.txt
 
@@ -170,7 +170,7 @@ jobs:
       - name: Inspect executable
         run: |
           file build/WinCaptureStream2/CaptureStream2.exe
-          objdump -f build/CaptureStream2.exe
+          objdump -f build/WinCaptureStream2/CaptureStream2.exe
           objdump --section-headers build/WinCaptureStream2/CaptureStream2.exe | grep -E 'debug|text'
           objdump -x build/WinCaptureStream2/CaptureStream2.exe > build/CaptureStream2-objdump.txt
 
@@ -250,7 +250,7 @@ jobs:
       - name: Inspect executable
         run: |
           file build/WinCaptureStream2/CaptureStream2.exe
-          objdump -f build/CaptureStream2.exe
+          objdump -f build/WinCaptureStream2/CaptureStream2.exe
           objdump --section-headers build/WinCaptureStream2/CaptureStream2.exe | grep -E 'debug|text'
           objdump -x build/WinCaptureStream2/CaptureStream2.exe > build/CaptureStream2-objdump.txt
 
