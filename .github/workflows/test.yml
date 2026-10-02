@@ -70,6 +70,13 @@ jobs:
           apt-get update
           apt-get install -y gh
 
+      - name: Upload build
+        uses: actions/upload-artifact@v4
+        with:
+          name: CaptureStream2-x64
+          path: build/
+
+
       - name: Inspect build environment
         run: |
           echo "=== GCC ==="
@@ -152,6 +159,12 @@ jobs:
           tee /etc/apt/sources.list.d/github-cli.list > /dev/null
           apt-get update
           apt-get install -y gh
+
+      - name: Upload build
+        uses: actions/upload-artifact@v4
+        with:
+          name: CaptureStream2-x64-Qt611
+          path: build/
 
       - name: Inspect build environment
         run: |
