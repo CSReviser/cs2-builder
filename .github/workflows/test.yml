@@ -236,16 +236,16 @@ jobs:
       - name: Inspect build environment
         run: |
           echo "=== GCC ==="
-          /opt/mxe/usr/bin/i386-w64-mingw32.static-gcc --version
+          /opt/mxe/usr/bin/i686-w64-mingw32.static-gcc --version
 
           echo "=== G++ ==="
-          /opt/mxe/usr/bin//i386-w64-mingw32.static-g++ --version
+          /opt/mxe/usr/bin//i686-w64-mingw32.static-g++ --version
 
           echo "=== CMake ==="
           cmake --version
 
           echo "=== Qt ==="
-          /opt/mxe/usr/i386-w64-mingw32.static/qt6/bin/qmake --version
+          /opt/mxe/usr/i686-w64-mingw32.static/qt6/bin/qmake --version
 
       - name: Inspect executable
         run: |
