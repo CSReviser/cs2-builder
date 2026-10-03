@@ -6,12 +6,14 @@ on:
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  QT_VERSION: 6.12.0
 
 jobs:
   win_build:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/csreviser/qt6-mxe-static-path:6.12.0
+      image: "ghcr.io/${USER}/qt6-mxe-static-path:${QT_VERSION}"
+#      image: ghcr.io/csreviser/qt6-mxe-static-path:6.12.0
 #      image: ghcr.io/csreviser/qt6-mxe-static:6.12.0
     steps:
       - name: Checkout this repo
@@ -190,7 +192,8 @@ jobs:
   win32_build:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/csreviser/qt6-mxe-x86-static:6.12.0
+      image: "ghcr.io/${USER}/qt6-mxe-static-path:${QT_VERSION}-32"
+#      image: ghcr.io/csreviser/qt6-mxe-x86-static:6.12.0
 
     steps:
       - name: Checkout this repo
