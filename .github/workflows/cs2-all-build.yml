@@ -93,6 +93,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: build/CaptureStream2-MacOS-Universal-${{ github.event.inputs.yyyymmdd }}.dmg
+          tag_name: ${{ github.event.inputs.yyyymmdd }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
