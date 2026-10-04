@@ -257,11 +257,11 @@ jobs:
             --clobber
 
   appimage:
-    name: Build in Docker
+    name: Build in Docker-arm
     runs-on: ubuntu-22.04-arm
     needs: setup
     container:
-      image: ghcr.io/csreviser/qt6-static-arm:${{ needs.setup.outputs.qt_version }}
+      image: ghcr.io/csreviser/qt6-static-arm:${{ needs.setup.outputs.qt_version }}-ubuntu22.04
       options: --privileged
 
     steps:
