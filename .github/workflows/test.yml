@@ -9,10 +9,22 @@ env:
   QT_VERSION: 6.12.0
 
 jobs:
+
+  setup:
+    runs-on: ubuntu-latest
+    # ジョブ単位で定義する場合はここに env: QT_VERSION: 6.12.0 でも可
+    outputs:
+      qt_version: ${{ env.QT_VERSION }}
+    steps:
+      - run: echo "QT_VERSION=${{ env.QT_VERSION }}"  # ジョブには最低1ステップ必要
+
+
   win_build:
+    needs: setup
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/csreviser/qt6-mxe-static-path:6.12.0
+      image: ghcr.io/csreviser/qt6-mxe-static-path:${{ needs.setup.outputs.qt_version }}
+ #     image: ghcr.io/csreviser/qt6-mxe-static-path:6.12.0
 #      image: "ghcr.io/${USER}/qt6-mxe-static-path:${QT_VERSION}"
 #      image: ghcr.io/csreviser/qt6-mxe-static:6.12.0
     steps:
@@ -101,6 +113,7 @@ jobs:
           objdump -x build/WinCaptureStream2/CaptureStream2.exe > build/CaptureStream2-objdump.txt
 
   win_build-qt611:
+    needs: setup
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/csreviser/qt6-mxe-static:6.11.2
@@ -190,9 +203,11 @@ jobs:
           objdump -x build/WinCaptureStream2/CaptureStream2.exe > build/CaptureStream2-objdump.txt
 
   win32_build:
+    needs: setup
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/csreviser/qt6-mxe-static-path:6.12.0-32
+       image: ghcr.io/csreviser/qt6-mxe-static-path:${{ needs.setup.outputs.qt_version }}-32
+#       image: ghcr.io/csreviser/qt6-mxe-static-path:6.12.0-32
 #      image: "ghcr.io/${USER}/qt6-mxe-static-path:${QT_VERSION}-32"
 #      image: ghcr.io/csreviser/qt6-mxe-x86-static:6.12.0
 
