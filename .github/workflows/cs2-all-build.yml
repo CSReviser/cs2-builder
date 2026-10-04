@@ -99,7 +99,8 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: build/CaptureStream2-MacOS-Universal-${{ github.event.inputs.yyyymmdd }}.dmg
-          tag_name: ${{ github.event.inputs.yyyymmdd }}
+          tag_name: ${{ needs.setup.outputs.tag }}
+          name: ${{ needs.setup.outputs.title }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -620,6 +621,7 @@ jobs:
         with:
           files: build/CaptureStream2-MacOS-qt6-5-${{ github.event.inputs.yyyymmdd }}.dmg
           tag_name: ${{ needs.setup.outputs.tag }}
+          name: ${{ needs.setup.outputs.title }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -688,5 +690,6 @@ jobs:
         with:
           files: build/CaptureStream2-MacOS-AppleSilicon-${{ github.event.inputs.yyyymmdd }}.dmg
           tag_name: ${{ needs.setup.outputs.tag }}
+          name: ${{ needs.setup.outputs.title }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
