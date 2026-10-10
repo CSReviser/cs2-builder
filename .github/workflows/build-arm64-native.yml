@@ -7,7 +7,6 @@ on:
 
 jobs:
   build-windows-arm64:
-    # Windows 11 ARM64 標準ランナーを使用
     runs-on: windows-11-arm
 
     steps:
@@ -19,11 +18,7 @@ jobs:
         with:
           arch: arm64   # ネイティブ ARM64 ツールチェーンを設定
 
-      - name: Setup Ninja & CMake
-        uses: lukka/get-cmake@final
-        with:
-          cmakeVersion: '~3.28.0'
-          ninjaVersion: '~1.11.1'
+      # cmake / ninja はランナーに標準搭載されているため、取得アクションは不要です
 
       # 静的ビルド済みの qtbase をキャッシュ
       - name: Cache Installed Static QtBase
@@ -31,7 +26,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: C:/qt-static-arm64
-          key: qtbase-6.12.0-static-arm64-native-msvc-v1
+          key: qtbase-6.12.0-static-arm64-native-msvc-v2
 
       # キャッシュ未ヒット時のみ qtbase 単体ソースをダウンロード
       - name: Download QtBase 6.12 Source
@@ -53,7 +48,6 @@ jobs:
           mkdir C:\qt-static-build
           cd /d C:\qt-static-build
 
-          :: ネイティブビルドのため -xplatform の指定は不要
           call C:\qtbase-src\configure.bat ^
             -prefix C:\qt-static-arm64 ^
             -static ^
@@ -87,7 +81,6 @@ jobs:
         run: |
           cmake --build build --config Release --parallel
 
-      # ネイティブ環境のため、ビルドした ARM64 バイナリの直接テスト実行が可能
       - name: Run Tests (Optional)
         run: |
           cd build
