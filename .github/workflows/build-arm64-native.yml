@@ -87,14 +87,6 @@ jobs:
           -DCMAKE_SYSTEM_NAME=Windows
           -DCMAKE_INSTALL_PREFIX=install
 
-      # アプリケーション本体のビルド
-      - name: Configure App (CMake, Static Qt)
-        shell: cmd
-        run: |
-          cmake -B build -G Ninja ^
-            -DCMAKE_BUILD_TYPE=Release ^
-            -DCMAKE_PREFIX_PATH=C:\qt-static-arm64
-
       - name: Build App
         run: |
           cmake --build build --config Release --parallel
