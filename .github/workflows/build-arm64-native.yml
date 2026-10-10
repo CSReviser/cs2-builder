@@ -1,0 +1,102 @@
+name: Build Qt App (Windows ARM64 Native, Static Qt 6.12)
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-windows-arm64:
+    # Windows 11 ARM64 標準ランナーを使用
+    runs-on: windows-11-arm
+
+    steps:
+      - name: Checkout App Repository
+        uses: actions/checkout@v4
+
+      - name: Setup MSVC (ARM64 Native Toolchain)
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: arm64   # ネイティブ ARM64 ツールチェーンを設定
+
+      - name: Setup Ninja & CMake
+        uses: lukka/get-cmake@final
+        with:
+          cmakeVersion: '~3.28.0'
+          ninjaVersion: '~1.11.1'
+
+      # 静的ビルド済みの qtbase をキャッシュ
+      - name: Cache Installed Static QtBase
+        id: cache-qt-static
+        uses: actions/cache@v4
+        with:
+          path: C:/qt-static-arm64
+          key: qtbase-6.12.0-static-arm64-native-msvc-v1
+
+      # キャッシュ未ヒット時のみ qtbase 単体ソースをダウンロード
+      - name: Download QtBase 6.12 Source
+        if: steps.cache-qt-static.outputs.cache-hit != 'true'
+        shell: powershell
+        run: |
+          $version = "6.12.0"
+          $url = "https://download.qt.io/official_releases/qt/6.12/${version}/submodules/qtbase-everywhere-src-${version}.zip"
+          Write-Host "Downloading qtbase source from $url..."
+          Invoke-WebRequest -Uri $url -OutFile qtbase-src.zip
+          Expand-Archive -Path qtbase-src.zip -DestinationPath C:\
+          Rename-Item -Path "C:\qtbase-everywhere-src-${version}" -NewName "C:\qtbase-src"
+          Remove-Item qtbase-src.zip -Force
+
+      - name: Configure and Build QtBase Static (Native ARM64)
+        if: steps.cache-qt-static.outputs.cache-hit != 'true'
+        shell: cmd
+        run: |
+          mkdir C:\qt-static-build
+          cd /d C:\qt-static-build
+
+          :: ネイティブビルドのため -xplatform の指定は不要
+          call C:\qtbase-src\configure.bat ^
+            -prefix C:\qt-static-arm64 ^
+            -static ^
+            -release ^
+            -platform win32-msvc ^
+            -GNinja ^
+            -opensource ^
+            -confirm-license ^
+            -nomake examples ^
+            -nomake tests
+
+          cmake --build . --parallel %NUMBER_OF_PROCESSORS%
+          cmake --install .
+
+      - name: Cleanup QtBase Build Tree
+        if: steps.cache-qt-static.outputs.cache-hit != 'true'
+        shell: powershell
+        run: |
+          Remove-Item -Path "C:\qtbase-src" -Recurse -Force -ErrorAction SilentlyContinue
+          Remove-Item -Path "C:\qt-static-build" -Recurse -Force -ErrorAction SilentlyContinue
+
+      # アプリケーション本体のビルド
+      - name: Configure App (CMake, Static Qt)
+        shell: cmd
+        run: |
+          cmake -B build -G Ninja ^
+            -DCMAKE_BUILD_TYPE=Release ^
+            -DCMAKE_PREFIX_PATH=C:\qt-static-arm64
+
+      - name: Build App
+        run: |
+          cmake --build build --config Release --parallel
+
+      # ネイティブ環境のため、ビルドした ARM64 バイナリの直接テスト実行が可能
+      - name: Run Tests (Optional)
+        run: |
+          cd build
+          ctest --output-on-failure
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-windows-arm64-static
+          path: |
+            build/Release/*.exe
+            build/*.exe
