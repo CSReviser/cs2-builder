@@ -18,15 +18,13 @@ jobs:
         with:
           arch: arm64   # ネイティブ ARM64 ツールチェーンを設定
 
-      # cmake / ninja はランナーに標準搭載されているため、取得アクションは不要です
-
       # 静的ビルド済みの qtbase をキャッシュ
       - name: Cache Installed Static QtBase
         id: cache-qt-static
         uses: actions/cache@v4
         with:
           path: C:/qt-static-arm64
-          key: qtbase-6.12.0-static-arm64-native-msvc-v2
+          key: qtbase-6.12.0-static-arm64-native-msvc-v3
 
       # キャッシュ未ヒット時のみ qtbase 単体ソースをダウンロード
       - name: Download QtBase 6.12 Source
@@ -48,12 +46,12 @@ jobs:
           mkdir C:\qt-static-build
           cd /d C:\qt-static-build
 
+          :: -GNinja を削除（環境に Ninja があれば自動選択されます）
           call C:\qtbase-src\configure.bat ^
             -prefix C:\qt-static-arm64 ^
             -static ^
             -release ^
             -platform win32-msvc ^
-            -GNinja ^
             -opensource ^
             -confirm-license ^
             -nomake examples ^
