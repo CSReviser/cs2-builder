@@ -86,6 +86,7 @@ jobs:
           -DCMAKE_PREFIX_PATH=C:\qt-static-arm64
           -DCMAKE_SYSTEM_NAME=Windows
           -DCMAKE_INSTALL_PREFIX=install
+          -DCMAKE_CXX_STANDARD=20
 
       - name: Build App
         run: |
