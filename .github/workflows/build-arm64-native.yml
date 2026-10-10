@@ -87,6 +87,7 @@ jobs:
           -DCMAKE_SYSTEM_NAME=Windows
           -DCMAKE_INSTALL_PREFIX=install
           -DCMAKE_CXX_STANDARD=20
+          -DCMAKE_CXX_STANDARD_REQUIRED=ON
 
       - name: Build App
         run: |
