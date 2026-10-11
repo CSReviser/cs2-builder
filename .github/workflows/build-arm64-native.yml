@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout App Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Setup MSVC (ARM64 Native Toolchain)
         uses: ilammy/msvc-dev-cmd@v1
