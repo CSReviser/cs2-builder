@@ -21,7 +21,7 @@ jobs:
       # 静的ビルド済みの qtbase をキャッシュ
       - name: Cache Installed Static QtBase
         id: cache-qt-static
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: C:/qt-static-arm64
           key: qtbase-6.12.0-static-arm64-native-msvc-v3
@@ -99,7 +99,7 @@ jobs:
           ctest --output-on-failure
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: app-windows-arm64-static
           path: |
