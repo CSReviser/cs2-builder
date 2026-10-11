@@ -1,0 +1,120 @@
+name: 1. Build Qt App (Windows ARM64 Native, Static Qt 6.12)
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-windows-arm64:
+    runs-on: windows-11-arm
+
+    steps:
+      - name: Checkout App Repository
+        uses: actions/checkout@v7
+
+      - name: Setup MSVC (ARM64 Native Toolchain)
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: arm64   # ネイティブ ARM64 ツールチェーンを設定
+
+      # 静的ビルド済みの qtbase をキャッシュ
+      - name: Cache Installed Static QtBase
+        id: cache-qt-static
+        uses: actions/cache@v6
+        with:
+          path: C:/qt-static-arm64
+          key: qtbase-6.12.0-static-arm64-native-msvc-v3
+
+      # キャッシュ未ヒット時のみ qtbase 単体ソースをダウンロード
+      - name: Download QtBase 6.12 Source
+        if: steps.cache-qt-static.outputs.cache-hit != 'true'
+        shell: powershell
+        run: |
+          $version = "6.12.0"
+          $url = "https://download.qt.io/official_releases/qt/6.12/${version}/submodules/qtbase-everywhere-src-${version}.zip"
+          Write-Host "Downloading qtbase source from $url..."
+          Invoke-WebRequest -Uri $url -OutFile qtbase-src.zip
+          Expand-Archive -Path qtbase-src.zip -DestinationPath C:\
+          Rename-Item -Path "C:\qtbase-everywhere-src-${version}" -NewName "C:\qtbase-src"
+          Remove-Item qtbase-src.zip -Force
+
+      - name: Configure and Build QtBase Static (Native ARM64)
+        if: steps.cache-qt-static.outputs.cache-hit != 'true'
+        shell: cmd
+        run: |
+          mkdir C:\qt-static-build
+          cd /d C:\qt-static-build
+
+          :: -GNinja を削除（環境に Ninja があれば自動選択されます）
+          call C:\qtbase-src\configure.bat ^
+            -prefix C:\qt-static-arm64 ^
+            -static ^
+            -release ^
+            -platform win32-msvc ^
+            -opensource ^
+            -confirm-license ^
+            -nomake examples ^
+            -nomake tests
+
+          cmake --build . --parallel %NUMBER_OF_PROCESSORS%
+          cmake --install .
+
+      - name: Cleanup QtBase Build Tree
+        if: steps.cache-qt-static.outputs.cache-hit != 'true'
+        shell: powershell
+        run: |
+          Remove-Item -Path "C:\qtbase-src" -Recurse -Force -ErrorAction SilentlyContinue
+          Remove-Item -Path "C:\qt-static-build" -Recurse -Force -ErrorAction SilentlyContinue
+
+      - name: Clone CaptureStream2
+        run: |
+          git clone https://github.com/CSReviser/CaptureStream2.git
+          cd CaptureStream2
+          git checkout feature
+          git submodule update --init --recursive
+
+      - name: Create build directory
+        run: mkdir -p build
+
+      - name: Configure with CMake
+        run: >
+          cmake -B build -G Ninja
+          -S CaptureStream2
+          -B build
+          -DCMAKE_BUILD_TYPE=Release
+          -DCMAKE_PREFIX_PATH=C:\qt-static-arm64
+          -DCMAKE_SYSTEM_NAME=Windows
+          -DCMAKE_INSTALL_PREFIX=install
+
+      - name: Build App
+        run: |
+          cmake --build build --config Release --parallel
+
+      - name: Run Tests (Optional)
+        run: |
+          cd build
+          ctest --output-on-failure
+
+      - name: Create WinCaptureStream2 directory and move exe
+        shell: bash
+        run: |
+          mkdir -p build/WinCaptureStream2
+          mv build/CaptureStream2.exe build/WinCaptureStream2/
+          cp ./CaptureStream2/qss_files/stylesheet-win.qss build/WinCaptureStream2/
+          cp -r ./CaptureStream2/qss_files/License build/WinCaptureStream2/
+          mkdir -p build/stylesheet-win
+          cp -r ./CaptureStream2/qss_files/stylesheet-win build/
+          cp -r ./CaptureStream2/qss_files/stylesheet-mac build/
+          curl -L -o ffmpeg.zip https://github.com/CSReviser/ffmpeg-build/releases/download/9.0.2/ffmpeg--winarm64.zip
+          7z e ffmpeg.zip ffmpeg.exe -o./build/WinCaptureStream2/
+ #         cp /opt/mxe/usr/x86_64-w64-mingw32.static/bin/ffmpeg.exe build/WinCaptureStream2/
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: app-windows-arm64-static
+          path: |
+            build/Release/*.exe
+            build/*.exe
+            build/WinCaptureStream2/
