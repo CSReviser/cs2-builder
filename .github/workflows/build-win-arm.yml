@@ -118,7 +118,7 @@ jobs:
       - name: Create ZIP file
         run: |
           cd build
-          zip -r "CaptureStream2-Windows-arm-${{ github.event.inputs.yyyymmdd }}.zip" WinCaptureStream2
+          7z a "CaptureStream2-Windows-arm-${{ github.event.inputs.yyyymmdd }}.zip" WinCaptureStream2
 
       - name: Upload Windows binary to existing release
         env:
