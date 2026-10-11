@@ -1,14 +1,20 @@
-name: 1. Build Qt App (Windows ARM64 Native, Static Qt 6.12)
+name: 1. win armBuild Qt App (Windows ARM64 Native, Static Qt 6.12)
+
 
 on:
-  push:
-    branches: [ main ]
   workflow_dispatch:
+    inputs:
+      yyyymmdd:
+        description: 'Release date (yyyymmdd)'
+        required: true
 
 jobs:
-  build-windows-arm64:
+  build-windows-arm64: 
     runs-on: windows-11-arm
-
+    
+    env:
+      QT_VERSION: 6.12.0
+      
     steps:
       - name: Checkout App Repository
         uses: actions/checkout@v7
@@ -109,7 +115,20 @@ jobs:
           curl -L -o ffmpeg.zip https://github.com/CSReviser/ffmpeg-build/releases/download/9.0.2/ffmpeg--winarm64.zip
           7z e ffmpeg.zip ffmpeg.exe -o./build/WinCaptureStream2/
  #         cp /opt/mxe/usr/x86_64-w64-mingw32.static/bin/ffmpeg.exe build/WinCaptureStream2/
+      - name: Create ZIP file
+        run: |
+          cd build
+          zip -r "CaptureStream2-Windows-arm-${{ github.event.inputs.yyyymmdd }}.zip" WinCaptureStream2
 
+      - name: Upload Windows binary to existing release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd build
+          gh release upload "${{ github.event.inputs.yyyymmdd }}" \
+            "CaptureStream2-Windows-arm-${{ github.event.inputs.yyyymmdd }}.zip" \
+            --clobber
+          
       - name: Upload Artifact
         uses: actions/upload-artifact@v7
         with:
