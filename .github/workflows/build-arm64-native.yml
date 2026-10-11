@@ -108,8 +108,6 @@ jobs:
           cp -r ./CaptureStream2/qss_files/stylesheet-mac build/
           curl -L -o ffmpeg.zip https://github.com/CSReviser/ffmpeg-build/releases/download/9.0.2/ffmpeg--winarm64.zip
           7z e ffmpeg.zip ffmpeg.exe -o./build/WinCaptureStream2/
-wget -qO ffmpeg.zip https://github.com/CSReviser/ffmpeg-build/releases/download/9.0.2/ffmpeg--winarm64.zip
-          7z e ffmpeg.zip ffmpeg.exe -o./build/WinCaptureStream2/
  #         cp /opt/mxe/usr/x86_64-w64-mingw32.static/bin/ffmpeg.exe build/WinCaptureStream2/
 
       - name: Upload Artifact
