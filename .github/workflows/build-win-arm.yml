@@ -123,6 +123,7 @@ jobs:
       - name: Upload Windows binary to existing release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
         run: |
           cd build
           gh release upload "${{ github.event.inputs.yyyymmdd }}" \
