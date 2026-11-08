@@ -38,7 +38,7 @@ jobs:
        
   mac_build:
     needs: setup
-    runs-on: macos-26
+    runs-on: xcode-27
 
     steps:
       - name: Checkout
@@ -556,7 +556,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   mac_universal_build:
-    runs-on: macos-14
+    runs-on: macos-15
     needs: setup
 
     steps:
@@ -627,7 +627,7 @@ jobs:
 
 
   mac_apple_build:
-    runs-on: macos-26
+    runs-on: xcode-27
     needs: setup
 
     steps:
