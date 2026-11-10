@@ -30,6 +30,8 @@ jobs:
           git checkout feature 
           git submodule update --init --recursive
           cp ./Resources/icon.icns ./
+          cp ./Resources/icon.ico ./
+          cp ./Resources/icon.png ./
 #          git checkout feature 
 
     # CMakeでビルド構成を生成
