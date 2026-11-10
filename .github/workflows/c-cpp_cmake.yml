@@ -82,7 +82,7 @@ jobs:
       uses: softprops/action-gh-release@v2
       with:
         files: build/CaptureStream2-Red-MacOS-Universal-${{ github.event.inputs.yyyymmdd }}.dmg
-        tag_name: ${{ github.event.inputs.yyymmdd }}
+        tag_name: ${{ github.event.inputs.yyyymmdd }}
         name: ${{ steps.format_date.outputs.title }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
