@@ -80,7 +80,8 @@ jobs:
           mv build/CaptureStream2.app build/tmp/MacCaptureStream2/
           cp -r CaptureStream2/qss_files/License build/tmp/MacCaptureStream2/
           ln -s /Applications build/tmp/MacCaptureStream2/Applications
-        
+          cp -Rp CaptureStream2/qss_files/stylesheet-mac build/tmp/MacCaptureStream2/
+                  
       - name: Create DMG file
         run: |
           cd build
@@ -607,6 +608,7 @@ jobs:
           mv build/CaptureStream2.app build/tmp/MacCaptureStream2/
           cp -r CaptureStream2/qss_files/License build/tmp/MacCaptureStream2/
           ln -s /Applications build/tmp/MacCaptureStream2/Applications
+          cp -Rp CaptureStream2/qss_files/stylesheet-mac build/tmp/MacCaptureStream2/
           
       - name: Create DMG file
         run: |
@@ -676,6 +678,7 @@ jobs:
           mv build/CaptureStream2.app build/tmp/MacCaptureStream2/
           cp -r CaptureStream2/qss_files/License build/tmp/MacCaptureStream2/
           ln -s /Applications build/tmp/MacCaptureStream2/Applications
+          cp -Rp CaptureStream2/qss_files/stylesheet-mac build/tmp/MacCaptureStream2/
 
       - name: Create DMG file
         run: |
