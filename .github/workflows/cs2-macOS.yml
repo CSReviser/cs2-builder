@@ -46,7 +46,7 @@ jobs:
         cp ffmpeg ./build/CaptureStream2.app/Contents/MacOS/ 
         cp CaptureStream2/icon.icns ./build/CaptureStream2.app/Contents/Resources/
         cp CaptureStream2/qss_files/stylesheet-mac.qss ./build/CaptureStream2.app/Contents/MacOS/
-
+        
 #        wget -qO ffmpeg8arm.zip https://www.osxexperts.net/ffmpeg81arm.zip
 #        wget -qO FFmpeg.tar.gz https://github.com/CSReviser/ffmpeg-build/releases/download/8.0/ffmpeg-macos-universal.tar.gz || { echo "Failed to download FFmpeg"; exit 1; }
 #        wget -qO FFmpeg.tar.gz https://github.com/CSReviser/ffmpeg-build/releases/download/8.0/ffmpeg-macos-universal.tar.gz || { echo "Failed to download FFmpeg"; exit 1; }
@@ -61,8 +61,8 @@ jobs:
           mkdir -p build/tmp/MacCaptureStream2
           mv build/CaptureStream2.app build/tmp/MacCaptureStream2/
           cp -r CaptureStream2/qss_files/License build/tmp/MacCaptureStream2/
-          cp -r CaptureStream2/qss_files/stylesheet-mace build/tmp/MacCaptureStream2/
-    
+          cp -Rp CaptureStream2/qss_files/stylesheet-mac build/tmp/MacCaptureStream2/ 
+          
     - name: Create symlink to Applications
       run: |
         ln -s /Applications ./build/tmp/MacCaptureStream2/Applications
