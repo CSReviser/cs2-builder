@@ -66,7 +66,7 @@ jobs:
     - name: Create symlink to Applications
       run: |
         ln -s /Applications ./build/tmp/MacCaptureStream2/Applications
-        ln -s ~/Downloads ./build/tmp/MacCaptureStream2/Applications
+        ln -s ~/Downloads ./build/tmp/MacCaptureStream2/Downloads
         
     - name: Create DMG file
       run: |
