@@ -29,9 +29,9 @@ jobs:
           cd CaptureStream2
           git checkout feature 
           git submodule update --init --recursive
-          cp ./Resources/icon.icns ./
-          cp ./Resources/icon.ico ./
-          cp ./Resources/icon.png ./
+#          cp ./Resources/icon.icns ./
+#          cp ./Resources/icon.ico ./
+#          cp ./Resources/icon.png ./
 #          git checkout feature 
 
     # CMakeでビルド構成を生成
@@ -50,7 +50,10 @@ jobs:
         tar -xzvf FFmpeg.tar.gz ffmpeg
         cp ffmpeg ./build/CaptureStream2.app/Contents/MacOS/ 
         cp CaptureStream2/icon.icns ./build/CaptureStream2.app/Contents/Resources/
-        cp CaptureStream2/qss_files/stylesheet-mac/red/stylesheet-mac.qss ./build/CaptureStream2.app/Contents/MacOS/
+        cp CaptureStream2/qss_files/stylesheet-mac.qss ./build/CaptureStream2.app/Contents/MacOS/
+        cp CaptureStream2/qss_files/stylesheet-mac/red/stylesheet-mac.qss ./build/CaptureStream2.app/Contents/Resources/CaptureStream2-Red.qss
+        cp CaptureStream2/qss_files/stylesheet-mac/green/stylesheet-mac.qss ./build/CaptureStream2.app/Contents/Resources/CaptureStream2-Green.qss
+        cp CaptureStream2/qss_files/stylesheet-mac/blue/stylesheet-mac.qss ./build/CaptureStream2.app/Contents/Resources/CaptureStream2-Blue.qss
 
 #        wget -qO ffmpeg8arm.zip https://www.osxexperts.net/ffmpeg81arm.zip
 #        wget -qO FFmpeg.tar.gz https://github.com/CSReviser/ffmpeg-build/releases/download/8.0/ffmpeg-macos-universal.tar.gz || { echo "Failed to download FFmpeg"; exit 1; }
