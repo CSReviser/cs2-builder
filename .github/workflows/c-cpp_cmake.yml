@@ -55,10 +55,16 @@ jobs:
         cp CaptureStream2/qss_files/stylesheet-mac/green/stylesheet-mac.qss ./build/CaptureStream2.app/Contents/Resources/CaptureStream2-Green.qss
         cp CaptureStream2/qss_files/stylesheet-mac/blue/stylesheet-mac.qss ./build/CaptureStream2.app/Contents/Resources/CaptureStream2-Blue.qss
         cp CaptureStream2/qss_files/stylesheet-mac/brown/stylesheet-mac.qss ./build/CaptureStream2.app/Contents/Resources/CaptureStream2-Brown.qss
+        cp CaptureStream2/qss_files/stylesheet-mac/indigo/stylesheet-mac.qss ./build/CaptureStream2.app/Contents/Resources/CaptureStream2-Indigo.qss
+        cp CaptureStream2/qss_files/stylesheet-mac/purple/stylesheet-mac.qss ./build/CaptureStream2.app/Contents/Resources/CaptureStream2-Purple.qss
+        cp CaptureStream2/qss_files/stylesheet-mac/yellow/stylesheet-mac.qss ./build/CaptureStream2.app/Contents/Resources/CaptureStream2-Yellow.qss
         cp CaptureStream2/Resources/icons/red/icon.png ./build/CaptureStream2.app/Contents/Resources/CaptureStream2-Red.png
         cp CaptureStream2/Resources/icons/green/icon.png ./build/CaptureStream2.app/Contents/Resources/CaptureStream2-Green.png
         cp CaptureStream2/Resources/icons/blue/icon.png ./build/CaptureStream2.app/Contents/Resources/CaptureStream2-Blue.png
         cp CaptureStream2/Resources/icons/brown/icon.png ./build/CaptureStream2.app/Contents/Resources/CaptureStream2-Brown.png
+        cp CaptureStream2/Resources/icons/indigo/icon.png ./build/CaptureStream2.app/Contents/Resources/CaptureStream2-Indigo.png
+        cp CaptureStream2/Resources/icons/purple/icon.png ./build/CaptureStream2.app/Contents/Resources/CaptureStream2-Purple.png
+        cp CaptureStream2/Resources/icons/yellow/icon.png ./build/CaptureStream2.app/Contents/Resources/CaptureStream2-Yellow.png
 
         
 #        wget -qO ffmpeg8arm.zip https://www.osxexperts.net/ffmpeg81arm.zip
