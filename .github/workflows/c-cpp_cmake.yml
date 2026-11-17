@@ -38,11 +38,11 @@ jobs:
     - name: Configure CMake
       run: |
           mkdir build
-          cmake -S CaptureStream2 -B build -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"
+          cmake -S CaptureStream2 -B build -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64" -DCMAKE_OSX_DEPLOYMENT_TARGET=14.4
 
     # Makeでビルド
     - name: Build with Make
-      run: cmake --build build --parallel　-DCMAKE_OSX_DEPLOYMENT_TARGET=14.4
+      run: cmake --build build --parallel
 
     - name: Prepare CaptureStream2 executable
       run: |
