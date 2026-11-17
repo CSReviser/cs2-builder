@@ -42,7 +42,7 @@ jobs:
 
     # Makeでビルド
     - name: Build with Make
-      run: cmake --build build --parallel
+      run: cmake --build build --parallel　-DCMAKE_OSX_DEPLOYMENT_TARGET=14.4
 
     - name: Prepare CaptureStream2 executable
       run: |
