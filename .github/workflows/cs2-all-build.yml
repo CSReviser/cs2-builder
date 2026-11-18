@@ -153,6 +153,7 @@ jobs:
           mkdir -p build/stylesheet-win
           cp -r ./CaptureStream2/qss_files/stylesheet-win build/
           cp -r ./CaptureStream2/qss_files/stylesheet-mac build/
+          cp -r ./CaptureStream2/Resources/icons build/
           wget -qO ffmpeg.zip https://github.com/CSReviser/ffmpeg-build/releases/download/9.0.2/ffmpeg-9.0.2-windows-x64-static.zip
           7z e ffmpeg.zip ffmpeg.exe -o./build/WinCaptureStream2/
  #         cp /opt/mxe/usr/x86_64-w64-mingw32.static/bin/ffmpeg.exe build/WinCaptureStream2/
@@ -174,6 +175,7 @@ jobs:
           zip -r "CaptureStream2-Windows-${{ github.event.inputs.yyyymmdd }}.zip" WinCaptureStream2
           zip -r "stylesheet-win.zip" stylesheet-win
           zip -r "stylesheet-mac.zip" stylesheet-mac
+          zip -r "icons.zip" icons
           
       - name: Upload Windows binary to existing release
         env:
@@ -188,6 +190,9 @@ jobs:
             --clobber
           gh release upload "${{ needs.setup.outputs.tag }}" \
             "stylesheet-mac.zip" \
+            --clobber
+          gh release upload "${{ needs.setup.outputs.tag }}" \
+            "icons.zip" \
             --clobber
 
   win32_build:
