@@ -1,4 +1,4 @@
-name: 1. MacOS qt6.12.0 AppleSilicon cmake C/C++ CI
+name: 1. MacOS qt6.12.1 AppleSilicon cmake C/C++ CI
 
 on:
   workflow_dispatch:
@@ -18,7 +18,7 @@ jobs:
     - name: Install Qt
       uses: jurplel/install-qt-action@v4
       with:
-        version: '6.12.0'
+        version: '6.12.1'
         extra: '--external 7z'
         modules: 'qtimageformats'
         
@@ -46,16 +46,6 @@ jobs:
         cp ffmpeg ./build/CaptureStream2.app/Contents/MacOS/ 
         cp CaptureStream2/icon.icns ./build/CaptureStream2.app/Contents/Resources/
         cp CaptureStream2/qss_files/stylesheet-mac.qss ./build/CaptureStream2.app/Contents/MacOS/
-        cp CaptureStream2/icon.png ./build/CaptureStream2.app/Contents/Resources/CaptureStream2.png
-        cp CaptureStream2/icon.icns ./build/CaptureStream2.app/Contents/Resources/
-        cp CaptureStream2/qss_files/stylesheet-mac.qss ./build/CaptureStream2.app/Contents/MacOS/
-        cp CaptureStream2/qss_files/stylesheet-mac/red/stylesheet-mac.qss ./build/CaptureStream2.app/Contents/Resources/CaptureStream2-Red.qss
-        cp CaptureStream2/qss_files/stylesheet-mac/green/stylesheet-mac.qss ./build/CaptureStream2.app/Contents/Resources/CaptureStream2-Green.qss
-        cp CaptureStream2/qss_files/stylesheet-mac/blue/stylesheet-mac.qss ./build/CaptureStream2.app/Contents/Resources/CaptureStream2-Blue.qss
-        cp CaptureStream2/qss_files/stylesheet-mac/brown/stylesheet-mac.qss ./build/CaptureStream2.app/Contents/Resources/CaptureStream2-Brown.qss
-        cp CaptureStream2/qss_files/stylesheet-mac/indigo/stylesheet-mac.qss ./build/CaptureStream2.app/Contents/Resources/CaptureStream2-Indigo.qss
-        cp CaptureStream2/qss_files/stylesheet-mac/purple/stylesheet-mac.qss ./build/CaptureStream2.app/Contents/Resources/CaptureStream2-Purple.qss
-        cp CaptureStream2/qss_files/stylesheet-mac/yellow/stylesheet-mac.qss ./build/CaptureStream2.app/Contents/Resources/CaptureStream2-Yellow.qss
         
 #        wget -qO ffmpeg8arm.zip https://www.osxexperts.net/ffmpeg81arm.zip
 #        wget -qO FFmpeg.tar.gz https://github.com/CSReviser/ffmpeg-build/releases/download/8.0/ffmpeg-macos-universal.tar.gz || { echo "Failed to download FFmpeg"; exit 1; }
