@@ -28,7 +28,6 @@ jobs:
         cd CaptureStream2
         git checkout feature
         git submodule update --init --recursive
-        ls /Users/runner/work/cs2-builder/Qt/6.12.0/macos/plugins/imageformats/
 #        git checkout feature
 
     - name: Configure CMake
