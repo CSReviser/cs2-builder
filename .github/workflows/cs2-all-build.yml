@@ -9,7 +9,7 @@ on:
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-  QT_VERSION: 6.12.0
+  QT_VERSION: 6.12.1
   
 jobs:
   setup:
@@ -61,7 +61,7 @@ jobs:
       - name: Configure CMake
         run: |
           mkdir build
-          cmake -S CaptureStream2 -B build -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"
+          cmake -S CaptureStream2 -B build -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64" -DCMAKE_OSX_DEPLOYMENT_TARGET=14.4
 
       - name: Build with Make
         run: cmake --build build --parallel
@@ -642,7 +642,6 @@ jobs:
         id: setvars
         run: |
           tag=${{ github.event.inputs.yyyymmdd }}
-          title="${tag:0:4}/${tag:4:2}/${tag:6:2}版リリース"
 
       - name: Checkout
         uses: actions/checkout@v6
@@ -664,7 +663,7 @@ jobs:
       - name: Configure CMake
         run: |
           mkdir build
-          cmake -S CaptureStream2 -B build -DCMAKE_OSX_ARCHITECTURES="arm64"
+          cmake -S CaptureStream2 -B build -DCMAKE_OSX_ARCHITECTURES="arm64" -DCMAKE_OSX_DEPLOYMENT_TARGET=14.4
 
       - name: Build with Make
         run: cmake --build build --parallel
