@@ -13,7 +13,7 @@ jobs:
     runs-on: windows-11-arm
     
     env:
-      QT_VERSION: 6.12.0
+      QT_VERSION: 6.12.1
       
     steps:
       - name: Checkout App Repository
