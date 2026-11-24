@@ -49,6 +49,7 @@ jobs:
         with:
           version: '${{ needs.setup.outputs.qt_version }}'
           extra: '--external 7z'
+          modules: 'qtimageformats'
 #          modules: 'qtcharts'
 
       - name: Clone CaptureStream2
@@ -582,6 +583,7 @@ jobs:
         with:
           version: 6.5.*
           extra: '--external 7z'
+          modules: 'qtimageformats'
  #         modules: 'qtcharts'
  
       - name: Clone CaptureStream2
@@ -651,6 +653,7 @@ jobs:
         with:
           version: '${{ needs.setup.outputs.qt_version }}'
           extra: '--external 7z'
+          modules: 'qtimageformats'
  #         modules: 'qtcharts'
  
       - name: Clone CaptureStream2
